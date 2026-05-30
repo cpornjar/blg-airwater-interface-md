@@ -34,8 +34,9 @@ __pycache__/
 *.pyc
 *.pyo
 
-# ── Generated slide binaries (source is slides/slides.md) ─────────────────────
+# ── Generated slide binaries (source is slides/slides.md + build_presentation.py) ──
 slides/presentation.pptx
+slides/slides_base.pptx
 slides/slides_marp.pptx
 slides/slides_marp.pdf
 slides/slides.html

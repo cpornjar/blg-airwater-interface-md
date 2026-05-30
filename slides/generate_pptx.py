@@ -555,8 +555,21 @@ summary_slide(s,
 prs.save(str(OUT))
 print(f"Saved: {OUT}  ({OUT.stat().st_size // 1024} KB)")
 print(f"Slides: {len(prs.slides)}")
-print()
-print("To open in Keynote on Mac:")
-print("  1. Copy presentation.pptx to macOS")
-print("  2. Open in Keynote → it imports automatically")
-print("  3. File → Save As → .key")
+
+# ── Push to Mac and unhide ─────────────────────────────────────────────────────
+import subprocess, shutil
+MAC_HOST = "cp@100.118.196.110"
+MAC_PATH = "/Users/cp/Documents/CP/COMFHA_Talk_May2026/presentation.pptx"
+if shutil.which("rsync"):
+    r = subprocess.run(
+        ["rsync", "-q", str(OUT), f"{MAC_HOST}:{MAC_PATH}"],
+        capture_output=True)
+    if r.returncode == 0:
+        # Remove macOS hidden flag set by rsync from Linux
+        subprocess.run(["ssh", MAC_HOST, f"chflags nohidden '{MAC_PATH}'"],
+                       capture_output=True)
+        print(f"Pushed to Mac and unhidden: {MAC_PATH}")
+    else:
+        print("rsync failed — copy manually")
+else:
+    print("rsync not found — copy manually")

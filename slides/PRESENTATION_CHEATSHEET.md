@@ -4,7 +4,7 @@
 ---
 
 ## The One-Sentence Story
-> BLG visits the air-water interface constantly but never commits. Calyx SASA and orientation are independent on the µs timescale. Commitment requires enhanced sampling to characterise.
+> BLG visits the air-water interface constantly but never commits. Calyx SASA and orientation are independent on the us timescale. Commitment requires enhanced sampling to characterise.
 
 ---
 
@@ -12,23 +12,23 @@
 
 | What | Value |
 |------|-------|
-| Total MD time | **4.00 µs** (4 × 1000 ns) |
+| Total MD time | **4.00 us** (4 x 1000 ns) |
 | Contact events | **613** total (97 CENTER + 215 R1 + 156 R2 + 145 R3) |
 | Contact fraction | **7.1–23.4%** of frames per trajectory |
 | Max penetration | **0.71 nm** past interface |
-| Long events (≥10 ns) | **6** — none commits |
+| Long events (>= 10 ns) | **6** — none commits |
 | Longest event | **59 ns** (R1) |
-| SASA range | **24–37 nm²** (PBC-corrected) |
-| SASA mean | **28.95 nm²** |
-| p95 threshold | **32.1 nm²** |
+| SASA range | **24–37 nm2** (PBC-corrected) |
+| SASA mean | **28.95 nm2** |
+| p95 threshold | **32.1 nm2** |
 | Pearson r | **+0.006** |
-| Block bootstrap CI | **[−0.09, +0.11]** |
-| Effective N | **≈ 17** (autocorrelation 232 ns) |
-| Rg (R1) | **1.496 ± 0.009 nm** (flat) |
+| Block bootstrap CI | **[-0.09, +0.11]** |
+| Effective N | **~17** (autocorrelation 232 ns) |
+| Rg (R1) | **1.496 +/- 0.009 nm** (flat) |
 | Patch RMSD | **~0.24 nm** (flat, no trend) |
 | Loop BC RMSF (bulk) | **0.54 nm** (residues 30–35) |
-| Loop CD/EF RMSF (AWI) | **0.39 nm** (residues 57–60) ← dominant |
-| PBC artefact SASA | **45–62 nm²** (before fix) |
+| Loop CD/EF RMSF (AWI) | **0.39 nm** (residues 57–60) — dominant |
+| PBC artefact SASA | **45–62 nm2** (before fix) |
 | Gate-open frames | **0** (after PBC fix) |
 
 ---
@@ -52,9 +52,9 @@ S10 Compact         8:45    S20  Summary         19:00
 
 ## Three Takeaways (say exactly these)
 
-1. **Contact frequent, commitment absent** — 613 events, only 6 ≥10 ns, none commits
+1. **Contact frequent, commitment absent** — 613 events, only 6 >= 10 ns, none commits
 2. **Compact globally, loop-mediated locally** — Rg flat; Loop CD/EF dominates near AWI
-3. **SASA ⊥ orientation** — r = +0.006, CI [−0.09, +0.11], rules out |r| > 0.11
+3. **SASA independent of orientation** — r = +0.006, CI [-0.09, +0.11], rules out |r| > 0.11
 
 ---
 
@@ -65,15 +65,16 @@ S10 Compact         8:45    S20  Summary         19:00
 | Why not enhanced sampling first? | Need the pre-commitment baseline first; now we have it |
 | TIP3P appropriate? | Surface tension ~50 vs 72 mN/m; quantitative shift, not qualitative; TIP4P/2005 planned |
 | What about the dimer? | Monomer = single-molecule mechanism baseline; dimer adds steric/kinetic/orientational complexity |
-| Event count vs figure bands? | 613 from full 0.1 ns resolution; figure uses 0.5 ns stride → fewer merged bands; both correct |
-| Why JCIS not Nature? | Scope claim = honest scope; JCIS IF ~9 is the right venue for this community |
-| r = +0.006 with N=17? | Block bootstrap accounts for small N; CI [−0.09, +0.11] rules out strong coupling |
-| Most surprising? | 59 ns contact without commitment — a real kinetic bottleneck, not noise |
+| Event count vs figure bands? | 613 from full 0.1 ns resolution; figure uses 0.5 ns stride — both correct |
+| Why JCIS not Nature? | Scope claim = honest scope; JCIS IF ~9 is right venue for this community |
+| r = +0.006 with N~17? | Block bootstrap accounts for small N; CI [-0.09, +0.11] rules out strong coupling |
+| Most surprising? | 59 ns contact without commitment — real kinetic bottleneck, not noise |
 | Loop CD/EF shift — caused by interface? | Yes — interface-induced conformational preference; proximity selects calyx-opening motions |
 
 ---
 
-## Paper Status (for context if asked)
-- Auto-review Round 12: **10/10, READY** (Gemini 2.5 Flash)
-- Pending: Zenodo DOI + P.P. sign-off → JCIS submission
-- Paper 2 (β-casein): AlphaFold2 structure ready, starting
+## Paper Status (May 30, 2026)
+- Auto-review Round 12: **10/10 READY** (Gemini 2.5 Flash — first READY verdict)
+- GitHub: **github.com/cpornjar/blg-airwater-interface-md**
+- Pending before JCIS submission: Zenodo DOI + P.P. sign-off
+- Paper 2 (beta-Casein): AlphaFold2 structure ready

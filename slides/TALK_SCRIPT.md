@@ -1,7 +1,10 @@
 # Talk Script — Contact without Commitment
-## COMFHA Lab Group Seminar · May 2026 · 20 min + Q&A
+## COMFHA Lab Group Seminar · May 2026 · 20 slides · 20 min + Q&A
+## Paper: 10/10 READY (Round 12, Gemini 2.5 Flash) · github.com/cpornjar/blg-airwater-interface-md
 
 > **How to use this:** Read each slide section aloud during practice. Time yourself per slide. The transitions (→) are your cue to advance the slide. Q&A answers at the end — read them out loud too so the words feel natural.
+>
+> **Note on slide text:** Slides use ASCII approximations (us = µs, beta- = β, -> = →, nm2 = nm²). Speak the real words — microseconds, beta-lactoglobulin, etc.
 
 ---
 

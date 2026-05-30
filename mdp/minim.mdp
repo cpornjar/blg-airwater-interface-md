@@ -1,0 +1,10 @@
+; Energy Minimization for Vacuum (No PBC)
+integrator  = steep         ; Steepest descent algorithm
+emtol       = 1000.0        ; Stop when max force < 1000 kJ/mol/nm
+nsteps      = 50000         ; Max steps
+nstlist     = 20            ; Frequency to update neighbor list
+cutoff-scheme = Verlet      ; Preferred for vacuum runs
+coulombtype = Cut-off       ; No PME needed in vacuum
+rcoulomb    = 1.2           ; Standard CHARMM cutoff
+rvdw        = 1.2           ; Standard CHARMM cutoff
+pbc         = xyz           ; Periodic Boundary Conditions ON (xyz)

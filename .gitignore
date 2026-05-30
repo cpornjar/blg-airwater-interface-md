@@ -1,0 +1,65 @@
+# ── MD trajectories & large binary outputs (never commit) ─────────────────────
+outputs_BLG/
+*.xtc
+*.trr
+*.tpr
+*.gro
+*.edr
+*.cpt
+*.log
+*.mdout
+
+# ── Emacs backup files ─────────────────────────────────────────────────────────
+\#*\#
+*~
+
+# ── LaTeX build artifacts ──────────────────────────────────────────────────────
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+paper/latex/main.out
+paper/latex/OVLF.zip
+# paper/latex/main.pdf is tracked (prebuilt for readers without LaTeX)
+
+# Root-level stray LaTeX artifacts
+main.aux
+main.out
+main.pdf
+
+# ── Python cache ───────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+
+# ── Generated slide binaries (source is slides/slides.md) ─────────────────────
+slides/presentation.pptx
+slides/slides_marp.pptx
+slides/slides_marp.pdf
+slides/slides.html
+slides/slides.pdf
+slides/figures/
+
+# ── Pre-PBC-correction data (superseded) ──────────────────────────────────────
+results/gate_analysis/*.prebpc
+
+# ── Old/superseded figures ────────────────────────────────────────────────────
+results/figures/TWO_FACTOR_GATE_Fig4.png
+
+# ── Old presentations ─────────────────────────────────────────────────────────
+GPU_BENCHMARK_SLIDE.pptx
+results/COMFHA_Research_Presentation.pptx
+results/gpu_benchmark_report.*
+results/GPU_Benchmark_Report_preliminary.pdf
+
+# ── Claude internal settings ──────────────────────────────────────────────────
+paper/.claude/
+.claude/
+
+# ── Screenshots ───────────────────────────────────────────────────────────────
+Screenshots/
+
+# ── macOS ─────────────────────────────────────────────────────────────────────
+.DS_Store

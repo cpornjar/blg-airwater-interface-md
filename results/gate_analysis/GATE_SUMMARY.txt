@@ -1,0 +1,23 @@
+Two-Factor Gate Analysis — All Replicas
+================================================================================
+Thresholds: SASA >= 35.0 nm², angle <= 30.0°, contact <= 0.3 nm, stride = 5 frames (0.5 ns)
+
+   Replica |       N |   Activ% |   Align% |  GateOpen% |   Indep% |  Obs/Ind
+--------------------------------------------------------------------------------
+    CENTER |    2001 |      0.9 |      6.6 |       0.00 |     0.06 |     0.00
+        R1 |    2003 |      0.0 |      3.5 |       0.00 |     0.00 |      inf
+        R2 |    2001 |      0.0 |      4.3 |       0.00 |     0.00 |      inf
+        R3 |    2001 |      0.1 |      6.4 |       0.00 |     0.01 |     0.00
+ AGGREGATE |    8006 |      0.3 |      5.2 |       0.00 |     0.01 |     0.00
+
+
+R3 21.8 ns EVENT VERIFICATION (120.6 – 142.4 ns)
+--------------------------------------------------------------------------------
+  n_event                       : 43
+  activated_in_event            : 0
+  aligned_in_event              : 0
+  gate_open_in_event            : 0
+  sasa_mean                     : 28.54140131223035
+  angle_mean                    : 55.55926538782268
+  dmin_mean                     : -0.13276271522045135
+  verdict                       : GATE-OPEN RARE/ABSENT — narrative must be qualified

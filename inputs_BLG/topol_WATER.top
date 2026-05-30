@@ -1,0 +1,9 @@
+#include "./charmm36-feb2026_ljpme_cgenff-5.0.ff/ions.itp"
+
+[ system ]
+; Name
+Protein in water
+
+[ molecules ]
+; Compound        #mols
+SOL             33094

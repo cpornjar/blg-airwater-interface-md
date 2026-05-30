@@ -1,0 +1,45 @@
+title                   = 1BEB NVT Slab Equilibration - Plan B (Near Interface)
+define                  = -DPOSRES  ; position restrain the protein
+; Run parameters
+integrator              = md
+nsteps                  = 5000000   ; 10 ns
+dt                      = 0.002     ; 2 fs
+; Output control
+nstenergy               = 50000     ; save energies every 100 ps
+nstlog                  = 50000     ; update log every 100 ps
+nstxout-compressed      = 50000     ; save coordinates every 100 ps
+; Bond parameters
+continuation            = no        ; fresh start after box stretch
+constraint_algorithm    = lincs
+constraints             = h-bonds
+lincs_iter              = 1
+lincs_order             = 4
+; Neighbor searching and vdW
+cutoff-scheme           = Verlet
+ns_type                 = grid
+nstlist                 = 20
+rlist                   = 1.2
+vdwtype                 = cutoff
+vdw-modifier            = force-switch
+rvdw-switch             = 1.0
+rvdw                    = 1.2
+; Electrostatics
+coulombtype             = PME
+rcoulomb                = 1.2
+pme_order               = 4
+fourierspacing          = 0.16
+; Temperature coupling
+tcoupl                  = V-rescale
+tc-grps                 = Protein Non-Protein
+tau_t                   = 0.1   0.1
+ref_t                   = 298   298
+; Pressure coupling — ปิดเพื่อรักษา vacuum ใน slab
+pcoupl                  = no
+; Periodic boundary conditions
+pbc                     = xyz
+; Dispersion correction — ปิดตามมาตรฐาน CHARMM36 slab
+DispCorr                = no
+; Velocity generation — สร้างใหม่หลัง box stretch
+gen_vel                 = yes
+gen_temp                = 298
+gen_seed                = -1

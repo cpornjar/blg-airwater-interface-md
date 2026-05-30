@@ -1,0 +1,94 @@
+# Methods — Paper 1 Draft
+# "Two-Factor Gating Mechanism of β-Lactoglobulin Adsorption at the Air-Water Interface"
+# Target: Nature Communications
+
+---
+
+## 2. Methods
+
+### 2.1 Protein Structure
+
+The crystal structure of bovine β-lactoglobulin (BLG) monomer was obtained from the Protein Data Bank (PDB ID: 1BEB, resolution 1.8 Å).^[1] Chain A was isolated, and all crystallographic water molecules and ligands were removed. The structure was preprocessed using GROMACS `pdb2gmx` with the CHARMM36m force field,^[2] and all titratable residues were assigned protonation states consistent with pH 7.0 (neutral histidines, standard protonation for Asp, Glu, Lys, Arg). Disulfide bonds were assigned based on the crystal structure (Cys66–Cys160, Cys106–Cys119, Cys121–Cys135, Cys163–Cys209). The final monomer comprises 162 residues and 2,486 atoms including hydrogens.
+
+### 2.2 Force Field and Water Model
+
+All simulations used the CHARMM36m force field^[2] (version February 2026), which is specifically optimised for intrinsically disordered proteins and folded proteins at interfaces. Water molecules were represented by the TIP3P model^[3] as recommended for use with CHARMM36m.
+
+### 2.3 Simulation Box — Air-Water Slab Geometry
+
+To model the air-water interface, we constructed a slab geometry with periodic boundary conditions. A rectangular simulation box of dimensions 12 × 12 × 35 nm was prepared, with approximately 7 nm of liquid water (TIP3P, ~31,600 molecules) centred at Z ≈ 17.5 nm, leaving ~14 nm of vacuum on each side to create two independent air-water interfaces (upper interface at Z ≈ 21 nm, lower at Z ≈ 14 nm). Sodium and chloride ions were added to neutralise the protein charge, yielding a total of ~97,400 atoms.
+
+This slab geometry was chosen because it allows spontaneous adsorption studies without artificial biasing potentials, while the vacuum region prevents spurious periodic image interactions and provides a true vapour phase at zero relative humidity — the standard approach for air-water interface simulations.^[4,5]
+
+Key simulation parameters for slab systems:
+- **No pressure coupling** (`pcoupl = no`): required to maintain slab geometry; pressure coupling would collapse the vacuum regions.
+- **No long-range dispersion correction** (`DispCorr = no`): inconsistent with the anisotropic pressure tensor of slab systems.^[6]
+- **Van der Waals treatment**: force-switch function between 1.0 and 1.2 nm, as specified by CHARMM36m.
+- **Electrostatics**: Particle Mesh Ewald (PME), real-space cutoff 1.2 nm, PME grid spacing 0.16 nm, interpolation order 4.
+
+### 2.4 System Preparation and Equilibration
+
+Each simulation system was prepared through a five-step equilibration protocol:
+
+1. **Steepest-descent energy minimisation** (max 50,000 steps, convergence criterion F_max < 1000 kJ mol⁻¹ nm⁻¹)
+2. **NVT equilibration — 100 ps** with heavy-atom position restraints on protein (k = 1000 kJ mol⁻¹ nm⁻²), velocity generation at 298 K using V-rescale thermostat^[7] (τ = 0.1 ps)
+3. **NPT equilibration — 10 ns** with protein position restraints, Berendsen barostat^[8] (semi-isotropic, τ_P = 2.0 ps, P_ref = 1 bar)
+4. **NVT slab equilibration — 10 ns** with protein position restraints, no pressure coupling, to equilibrate the air-water interface geometry
+5. **Production MD**: position restraints removed, system propagated under NVT conditions
+
+Temperature was maintained at 298 K throughout all stages using the V-rescale thermostat. All bonds to hydrogen were constrained using the LINCS algorithm^[9] (order 4, one iteration), allowing a 2 fs integration timestep. Neighbour lists were updated every 10 steps using the Verlet cut-off scheme.
+
+### 2.5 Simulation Sets
+
+**SET 1A — Center run (1,000 ns):**
+The protein was placed at the geometric centre of the water slab (Z ≈ 17.5 nm, equidistant from both interfaces). This run was designed to quantify the spontaneous diffusion timescale from bulk to the air-water interface and to observe pre-adsorption conformational changes in an unbiased starting configuration.
+
+**SET 1B — Near-interface replicas (3 × 1,000 ns):**
+To improve sampling of the adsorption process, BLG was placed 2.183 nm from the upper air-water interface (protein centre of mass at Z ≈ 18.76 nm, upper interface at Z ≈ 20.94 nm). Three independent replicas were generated from the same equilibrated slab by assigning different initial velocities. Each replica was extended to 1,000 ns.
+
+**SET 1D — Above-water orientation test (2 × 300 ns):**
+To test the two-factor gating hypothesis, BLG was placed 2.06 nm above the air-water interface (protein CoM at Z ≈ 23.0 nm) in the vacuum region. Two starting orientations were prepared:
+- **1Da (patch-down):** the hydrophobic calyx (residues 39, 41, 56, 58, 92, 103, 105, 107, 125) was rotated to face toward the water surface (−Z direction).
+- **1Db (patch-up, control):** the hydrophobic calyx was rotated to face away from the interface (+Z direction).
+Starting structures were generated by applying a Rodrigues rotation matrix to align the calyx centroid–protein CoM vector with the target direction, using MDAnalysis 2.10.0 and SciPy.^[10,11]
+
+### 2.6 Simulation Software and Hardware
+
+All simulations were performed using GROMACS 2020.4^[12] with GPU acceleration. Production simulations (SET 1A, 1B, 1D) were run on NVIDIA GPU nodes (gpu1/gpu2 partitions, CHARMM36m CUDA build, ~107–146 ns day⁻¹ for this system size) of the Kasetsart University HPC cluster. Replica 1 (SET 1B) was additionally extended using a ROCm/HIP GROMACS build on an AMD GPU node (~52–70 ns day⁻¹).
+
+### 2.7 Trajectory Analysis
+
+All analyses were performed in Python 3.11 using MDAnalysis 2.10.0^[10,11] and custom scripts. Trajectories were first corrected for periodic boundary conditions using the `unwrap` transformation before any distance or RMSD calculations.
+
+**Z-position and adsorption detection:**
+The protein centre of mass Z-coordinate was tracked every 100 ps. The upper air-water interface position was defined as the 99th percentile of water oxygen Z-coordinates. The minimum protein–interface distance was defined as the difference between the lowest protein heavy-atom Z-coordinate and the interface position. Adsorption was defined as sustained contact (minimum distance ≤ 0.5 nm for ≥ 10 consecutive ns).
+
+**RMSD analysis:**
+Root-mean-square deviation (RMSD) of Cα atoms was calculated for four regions: full backbone, β-sheet residues (strands A–I of the β-barrel core), the single α-helix (residues 130–140), and the hydrophobic calyx patch (residues 39, 41, 56, 58, 92, 103, 105, 107, 125). Reference structure was the first frame of each trajectory after equilibration.
+
+**Solvent-accessible surface area (SASA):**
+Per-atom SASA was calculated every 500 ps using the freeSASA library^[13] (probe radius 0.14 nm). Atoms were classified as hydrophobic (non-polar residues: Ala, Val, Ile, Leu, Pro, Phe, Met, Trp) or hydrophilic (polar and charged residues). The calyx patch SASA was computed separately using the residues listed above.
+
+**Orientation analysis:**
+The orientation of the hydrophobic patch was characterised by the angle between the vector from the protein centre of mass to the calyx centroid, and the Z-axis. An angle of 0° corresponds to the patch pointing toward the upper vacuum interface; 90° indicates lateral orientation.
+
+**RMSF and radius of gyration:**
+Per-residue root-mean-square fluctuation (RMSF) of Cα atoms was calculated over the full production trajectory to identify flexible regions. The radius of gyration (Rg) was computed every 100 ps as a measure of overall protein compactness.
+
+---
+
+## References (Methods)
+
+[1] Brownlow, S. et al. (1997). Bovine β-lactoglobulin at 1.8 Å resolution. *Structure*, 5(4), 481–495.
+[2] Huang, J. et al. (2017). CHARMM36m: an improved force field for folded and intrinsically disordered proteins. *Nat. Methods*, 14(1), 71–73.
+[3] Jorgensen, W.L. et al. (1983). Comparison of simple potential functions for simulating liquid water. *J. Chem. Phys.*, 79(2), 926–935.
+[4] Javanainen, M. et al. (2017). Excessive aggregation of membrane proteins in the Martini model. *PLoS ONE*, 12(11), e0187936.
+[5] Chaudhri, A. et al. (2024). Molecular simulation of monoclonal antibody adsorption at air-water interface. *Mol. Pharmaceutics*, 21, 1–12.
+[6] Vega, C. & de Pablo, J.J. (1996). New algorithm for the calculation of the vapour-liquid equilibria of water. *J. Chem. Phys.*, 105(10), 4223.
+[7] Bussi, G., Donadio, D. & Parrinello, M. (2007). Canonical sampling through velocity rescaling. *J. Chem. Phys.*, 126(1), 014101.
+[8] Berendsen, H.J.C. et al. (1984). Molecular dynamics with coupling to an external bath. *J. Chem. Phys.*, 81(8), 3684–3690.
+[9] Hess, B. et al. (1997). LINCS: A linear constraint solver for molecular simulations. *J. Comput. Chem.*, 18(12), 1463–1472.
+[10] Michaud-Agrawal, N. et al. (2011). MDAnalysis: A toolkit for the analysis of molecular dynamics simulations. *J. Comput. Chem.*, 32(10), 2319–2327.
+[11] Gowers, R.J. et al. (2016). MDAnalysis: A Python package for the rapid analysis of molecular dynamics simulations. *Proc. 15th Python Sci. Conf.*, 98–105.
+[12] Abraham, M.J. et al. (2015). GROMACS: High performance molecular simulations through multi-level parallelism. *SoftwareX*, 1–2, 19–25.
+[13] Mitternacht, S. (2016). FreeSASA: An open source C library for solvent accessible surface area calculations. *F1000Research*, 5, 189.

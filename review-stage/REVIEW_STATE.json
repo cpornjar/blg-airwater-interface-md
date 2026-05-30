@@ -1,0 +1,20 @@
+{
+  "round": 12,
+  "status": "completed",
+  "last_score": "10/10 (JCIS)",
+  "last_verdict": "READY — stop condition met (score 10/10 ≥ 6, verdict 'READY')",
+  "reviewer_backend": "Gemini 2.5 Flash via gemini-cli",
+  "stop_condition": "Score 10/10 ≥ 6 AND verdict contains 'READY' → loop terminated",
+  "round12_changes": [
+    "Fig 2: TITLE_CROP=0 (was 80); arrow annotations removed from inside panels; legend anchored below axes",
+    "Fig 3: figsize (6.85, 4.6) in — fonts 7.6pt in PDF (was 4pt); panel (a) fill 22-37 nm²; LaTeX [t]→[htbp]",
+    "Fig 4: KDE legend outside axes (bottom); stats box removed; LaTeX [t]→[htbp]"
+  ],
+  "round12_reviewer_assessment": "No remaining scientific weaknesses. Paper ready for JCIS submission.",
+  "pending_before_submission": [
+    "Zenodo upload → replace DOI placeholder (HARD BLOCKER)",
+    "Co-author (P.P.) review and sign-off"
+  ],
+  "score_progression": "5.5→6→6.5→7→7→7→7→4(NatComm)→7(JCIS)→8(JCIS)→9(JCIS)→10(JCIS)",
+  "timestamp": "2026-05-30T09:30:00+07:00"
+}

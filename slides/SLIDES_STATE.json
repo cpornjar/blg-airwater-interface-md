@@ -1,0 +1,19 @@
+{
+  "phase": 8,
+  "venue": "ACADEMIC_NAVY",
+  "talk_type": "oral",
+  "talk_minutes": 20,
+  "slide_count": 20,
+  "primary_format": "keynote",
+  "aspect_ratio": "16:9",
+  "status": "completed",
+  "outputs": {
+    "marp_markdown": "slides/slides.md",
+    "pptx_script": "slides/generate_pptx.py",
+    "presentation": "slides/presentation.pptx",
+    "speaker_notes": "slides/speaker_notes.md",
+    "outline": "slides/SLIDE_OUTLINE.md"
+  },
+  "keynote_import": "Copy presentation.pptx to macOS → open in Keynote → File → Save As → .key",
+  "timestamp": "2026-05-30T11:00:00+07:00"
+}

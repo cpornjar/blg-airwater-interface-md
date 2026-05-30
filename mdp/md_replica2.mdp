@@ -1,0 +1,42 @@
+title                   = 1BEB Production 500ns Slab - Plan B Replica 2
+; Run parameters
+integrator              = md
+nsteps                  = 250000000  ; 500 ns
+dt                      = 0.002
+; Output control
+nstxout-compressed      = 50000
+nstenergy               = 50000
+nstlog                  = 50000
+; Bond parameters
+continuation            = no         ; สร้าง velocity ใหม่ให้ต่างจาก replica 1
+constraint_algorithm    = lincs
+constraints             = h-bonds
+lincs_iter              = 1
+lincs_order             = 4
+; Nonbonded settings
+cutoff-scheme           = Verlet
+nstlist                 = 20
+rcoulomb                = 1.2
+rvdw                    = 1.2
+vdwtype                 = cutoff
+vdw-modifier            = force-switch
+rvdw-switch             = 1.0
+DispCorr                = no
+; Electrostatics
+coulombtype             = PME
+pme_order               = 4
+fourierspacing          = 0.16
+; Temperature coupling
+tcoupl                  = V-rescale
+tc-grps                 = Protein Non-Protein
+tau_t                   = 0.1   0.1
+ref_t                   = 298   298
+; Pressure coupling
+pcoupl                  = no
+; Periodic boundary conditions
+pbc                     = xyz
+DispCorr                = no
+; Velocity generation — สร้างใหม่ด้วย seed ต่างกัน
+gen_vel                 = yes
+gen_temp                = 298
+gen_seed                = 5678       ; ← ต่างจาก replica 1

@@ -1,0 +1,41 @@
+title                   = 1BEB Production 1000ns Slab
+; Run parameters
+integrator              = md
+nsteps                  = 500000000  ; 1,000 ns
+dt                      = 0.002
+; Output control
+nstxout-compressed      = 50000  
+nstenergy               = 50000
+nstlog                  = 50000
+
+; Bond parameters
+continuation            = yes 
+constraint_algorithm    = lincs
+constraints             = h-bonds
+
+; Nonbonded settings
+cutoff-scheme           = Verlet
+nstlist                 = 20
+rcoulomb                = 1.2
+rvdw                    = 1.2
+vdw-modifier            = force-switch
+rvdw-switch             = 1.0
+DispCorr                = no
+
+; Electrostatics
+coulombtype             = PME
+pme_order               = 4
+fourierspacing          = 0.16
+
+; Temperature coupling
+tcoupl                  = V-rescale
+tc-grps                 = Protein Non-Protein
+tau_t                   = 0.1 0.1
+ref_t                   = 298 298
+
+; Pressure coupling is off
+pcoupl                  = no 
+
+; Periodic boundary conditions
+pbc                     = xyz
+gen_vel                 = no

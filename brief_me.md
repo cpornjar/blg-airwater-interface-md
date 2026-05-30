@@ -20,7 +20,7 @@
 | SASA max | 45–62 nm² | **24–37 nm²** |
 | Gate-open frames | 0.27% (21 events) | **0 events** across 8006 frames |
 | 3.3× suppression | Apparent | **Artifact — entirely gone** |
-| Pearson r (SASA vs θ) | −0.085 | **+0.0057** (p=0.61; CI [−0.016, +0.028]) |
+| Pearson r (SASA vs θ) | −0.085 | **+0.006** (block bootstrap CI [−0.09, +0.11]; N_eff ≈ 17) |
 | R3 event 120–142 ns | "88.4% SASA>35" | **0% SASA>35** (real max 29.9 nm²) |
 
 **The two-factor gate mechanism is not supported by corrected data.**
@@ -31,15 +31,23 @@
 
 | Quantity | Value | Status |
 |----------|-------|--------|
-| Total simulation time | **4.00 µs** (4 replicas × 1000 ns) | ✓ valid |
-| Contact events | **613** (97 CENTER + 516 near-interface) | ✓ valid |
-| Long events (≥ 10 ns) | **6** — all non-activated contact | ✓ verified |
+| Total simulation time | **4.00 µs** (4 × 1000 ns) | ✓ valid |
+| Contact events | **613** total: 97 CENTER + 215 R1 + 156 R2 + 145 R3 | ✓ valid |
+| Contact fraction | **7.1–23.4%** of frames per trajectory | ✓ valid |
+| Max penetration | **0.71 nm** past interface plane | ✓ valid |
+| Long events (≥ 10 ns) | **6** — none commits; longest = **59 ns** (R1) | ✓ verified |
 | Per-event SASA | 28.5–30.5 nm² (event means) | ✓ verified |
 | Per-event angle | 44–75° (well above 30° threshold) | ✓ verified |
-| Rg (compact throughout) | **1.496 ± 0.009 nm** | ✓ valid |
-| SASA (R1, pooled) | **29.08 ± 1.21 nm²; max 32.39 nm²** | ✓ PBC-corrected |
-| Patch RMSD | 0.241 nm at 500 ns, 0.226 nm at 650 ns — **flat** | ✓ valid |
-| Threshold (Fig 3) | **p95 = 32.10 nm²** (top 5% pooled distribution) | distribution-based |
+| Rg (compact throughout) | **1.496 ± 0.009 nm** (R1); no trend | ✓ valid |
+| SASA range (all replicas) | **24–37 nm²** (mean 28.95 nm²) | ✓ PBC-corrected |
+| p95 threshold | **32.10 nm²** (top 5% pooled distribution) | distribution-based |
+| Patch RMSD | 0.241 nm @ 500 ns, 0.226 nm @ 650 ns — **flat** | ✓ valid |
+| Pearson r (SASA vs θ) | **+0.006** | ✓ verified |
+| Block bootstrap CI | **[−0.09, +0.11]** (rules out \|r\| > 0.11) | ✓ |
+| SASA autocorrelation | **232 ns** (range 81–394 ns per replica) | ✓ |
+| Effective N | **≈ 17** independent observations across 4 µs | ✓ |
+| Loop BC RMSF (bulk) | **0.54 nm** — dominant in CENTER | ✓ |
+| Loop CD/EF RMSF (AWI) | **0.39 nm** — dominant in R1 (interface-induced) | ✓ |
 
 ---
 
@@ -119,7 +127,7 @@ Also: R3 panel annotation shows "min −0.38 nm @ 123 ns" (detect, no PBC), but 
 A: 4.00 µs unbiased MD resolves the contact ensemble. The commitment step requires enhanced sampling — that's exactly the scope claim we make.
 
 **Q: Is Pearson r = +0.006 meaningful?**
-A: No — that's the point. Bootstrap CI [−0.016, +0.028] rules out |r| > 0.03 at 95% confidence. SASA and orientation are independent on the µs timescale.
+A: No — that's the point. SASA autocorrelation = 232 ns → N_eff ≈ 17 → block bootstrap CI [−0.09, +0.11] rules out |r| > 0.11 at 95% confidence. SASA and orientation are independent on the µs timescale.
 
 **Q: Is 6 long events enough?**
 A: We don't make a mechanistic claim from the 6 events alone. We report SASA and angle distributions over 8006 contact frames. 6 events confirm the pattern, not the mechanism.
@@ -145,6 +153,41 @@ A: After co-author (P.P.) review of mechanism reframing and SET 1D removal. Targ
   - [ ] Zenodo upload → replace DOI placeholder in Data Availability (**hard blocker**)
   - [ ] Final compile + PDF check
   - [ ] JCIS submission portal
+
+## GitHub Repository
+
+**URL:** `github.com/cpornjar/blg-airwater-interface-md`
+**Contents:** All scripts, paper LaTeX + PDF, figures, MDP parameters, input structures, slides source, review history, analysis results.
+**Push command:** `git push origin main` (SSH key configured, no token needed)
+
+---
+
+## JCIS Submission Checklist
+
+What to prepare after Zenodo + P.P. sign-off:
+
+- [ ] **Zenodo upload** → get DOI → replace `10.5281/zenodo.XXXXXX` in `main.tex` (Data Availability, ~line 828)
+- [ ] **P.P. review** → send `main.pdf` → get explicit sign-off
+- [ ] **Final compile** → `pdflatex main.tex` → zero warnings → 19 pages
+- [ ] **JCIS highlights** → 5 bullets, ≤85 chars each (Claude can draft)
+- [ ] **Cover letter** → `/submission-admin cover-letter` skill (Claude can draft)
+- [ ] **Graphical abstract** → use Fig 4 KDE panel (already publication-quality)
+- [ ] **Submit** → `editorialmanager.com/jcis`
+
+---
+
+## What Comes After Paper 1
+
+| Paper | Topic | Status |
+|-------|-------|--------|
+| **Paper 1** | BLG contact ensemble at AWI | **Submitting to JCIS** |
+| **Paper 2** | β-Casein at AWI | AlphaFold2 structure ready (`inputs_CAS/CASEIN.pdb`) |
+| Paper 3 | BLG + β-Casein + Ca²⁺ bridge | Planned |
+| Enhanced sampling | Metadynamics along (SASA, θ) | SET 1D data = baseline |
+
+**Paper 2 research question:** β-casein is intrinsically disordered and adsorbs much faster than BLG — why? Same slab geometry, same analysis pipeline.
+
+---
 
 ## Scripts Reference
 

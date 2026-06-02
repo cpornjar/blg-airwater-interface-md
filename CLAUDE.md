@@ -14,11 +14,12 @@
 
 ---
 
-## Current Status (May 30, 2026)
+## Current Status (June 2, 2026)
 
 **Paper 1 is READY for submission to JCIS.**
-- Auto-review Round 12: Gemini 2.5 Flash scored **10/10, READY** ✓ (first READY verdict)
-- All LaTeX edits complete. All figures publication-quality (fonts, layout, float placement fixed May 30).
+- Auto-review Round 12: Gemini 2.5 Flash scored **10/10, READY** ✓
+- Round 13 (June 2): dead GitHub URL fixed (`MILK_FROTHING` → `blg-airwater-interface-md`); bib comment updated
+- ARIS installed; gemini-review MCP registered; ready for `/citation-audit` + `/kill-argument`
 - Pending: P.P. co-author review + Zenodo DOI (hard blocker) + JCIS portal.
 
 ---
@@ -73,12 +74,11 @@
 source ~/research-env/bin/activate
 # MDAnalysis 2.10.0, freeSASA, matplotlib, numpy, notebooklm-py 0.5.0
 
-# Gemini CLI (reviewer)
-export PATH="$HOME/.npm-global/bin:$PATH"
-export GEMINI_API_KEY=...   # in ~/.bashrc
-export GEMINI_CLI_TRUST_WORKSPACE=true
-# Usage: gemini -m gemini-2.5-flash -p "prompt"
-# Note: gemini-2.5-pro has 0 free-tier quota; use flash
+# ARIS Gemini reviewer (MCP bridge — replaces Gemini CLI)
+# API key in ~/.gemini/.env (auto-loaded by server.py)
+# MCP registered as: claude mcp add gemini-review -s user
+# Default model: gemini-2.5-pro (set via GEMINI_REVIEW_MODEL env var)
+# Invoke via ARIS skills with: — reviewer: agy
 
 # NotebookLM
 # Auth: ~/.notebooklm/profiles/default/storage_state.json (from MacBook login)
@@ -181,3 +181,11 @@ State: `review-stage/REVIEW_STATE.json`
 | Paper 3 | BLG + β-Casein + Ca²⁺ bridge | Planned |
 | Paper 4 | Fat interaction (triglycerides) | Planned |
 | Enhanced sampling | Metadynamics along (SASA, θ) | SET 1D data = baseline |
+<!-- ARIS:BEGIN -->
+## ARIS Skill Scope
+ARIS skills installed in this project: 79 entries.
+Manifest: `.aris/installed-skills.txt` (lists every skill ARIS installed and its upstream target).
+For ARIS workflows, prefer the project-local skills under `.claude/skills/` over global skills.
+Do not modify or delete files inside any skill that is a symlink (symlinks point into `/Users/cp/aris_repo`).
+Update with: `bash /Users/cp/aris_repo/tools/install_aris.sh`  (re-runnable; reconciles new/removed skills).
+<!-- ARIS:END -->

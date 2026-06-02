@@ -171,8 +171,11 @@ State: `review-stage/REVIEW_STATE.json`
 ## NotebookLM Notebook
 
 **Notebook:** "COMFHA Paper 1 — BLG Adsorption at Air-Water Interface"  
-**Sources:** main.pdf, narrative_summary.md, brief_me.md, AUTO_REVIEW.md  
-**Local outputs:** `notebooklm/study_guide.md`, `notebooklm/overview_podcast.mp3` (when downloaded)  
+**Notebook ID:** `e544cbb8-2640-4ef1-a278-5b5358ef3648`  
+**URL:** https://notebooklm.google.com (find by title or ID above)  
+**Sources (12):** main.pdf, brief_me.md, narrative_summary.md, TALK_SCRIPT.md, speaker_notes.md, PRESENTATION_CHEATSHEET.md, SLIDE_OUTLINE.md, LITERATURE_REVIEW.md, COMFHA_Science_Notes.md, METHODS.md, AUTO_REVIEW.md, CITATION_AUDIT.md  
+**Local symlinks:** all sources linked under `notebooklm/` — edit originals, they auto-reflect  
+**Audio/Study Guide:** generate from web UI (click Generate in notebook)  
 **Recreate:** `python3 notebooklm/upload_to_notebooklm.py` (after deleting old notebook)
 
 ---

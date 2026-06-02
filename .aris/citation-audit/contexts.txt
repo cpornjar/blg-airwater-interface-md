@@ -1,0 +1,194 @@
+CITATION AUDIT — CONTEXTS EXTRACTED FROM main.tex
+Paper: "Contact without Commitment: Atomistic Characterisation of β-Lactoglobulin Adsorption Dynamics at the Air–Water Interface"
+Bib file: paper/latex/references.bib
+Extracted: 2026-06-02
+Total unique cited keys: 42
+
+=== KEY: Dickinson1999 ===
+File: main.tex, Line ~121
+Context: "the molecular identity of the interfacial protein determines both the rate at which the film forms and its long-time mechanical properties \citep{Dickinson1999,BertonCarabin2018,Damodaran2005,Narsimhan2018}"
+Supporting claim: protein identity governs foam film mechanics and kinetics
+
+=== KEY: BertonCarabin2018 ===
+File: main.tex, Line ~121
+Context: (same citation group as Dickinson1999) "the molecular identity of the interfacial protein determines both the rate at which the film forms and its long-time mechanical properties"
+
+=== KEY: Damodaran2005 ===
+File: main.tex, Line ~121
+Context: (same citation group) "the molecular identity of the interfacial protein determines both the rate at which the film forms and its long-time mechanical properties"
+
+=== KEY: Narsimhan2018 ===
+File: main.tex, Line ~121
+Context: (same citation group) "the molecular identity of the interfacial protein determines both the rate at which the film forms and its long-time mechanical properties"
+
+=== KEY: Cornec1999 ===
+File: main.tex, Lines ~124, ~280, ~541, ~612
+Use 1 (Line ~124): "β-lactoglobulin (BLG, ~3 g/L) is the dominant interfacial protein and the principal stabiliser of milk foam \citep{Cornec1999,Barbiroli2022,Huppertz2010}"
+Use 2 (Line ~132): "BLG adsorbs over seconds to minutes, exhibits a kinetic energy barrier that distinguishes it from more flexible whey proteins, and partially unfolds in the adsorbed state \citep{Cornec1999,...}"
+Use 3 (Line ~280): "This empirical dichotomy reframes the kinetic energy barrier inferred from experimental adsorption kinetics \citep{Cornec1999,Gochev2019JPCB} from a transport problem to a residency problem"
+Use 4 (Line ~541): "BLG is manifestly surface-active ... and yet it adsorbs slowly, with a kinetic energy barrier \citep{Cornec1999}"
+Use 5 (Line ~612): "No contact in any replica grows into an irreversibly adsorbed monolayer on the experimentally relevant seconds-to-minutes timescale \citep{Cornec1999,Gochev2019JPCB,Foam4_2020}"
+BIB NOTE: [VERIFY DOI — confirm pages/volume via publisher]
+
+=== KEY: Barbiroli2022 ===
+File: main.tex, Line ~124
+Context: "BLG is the dominant interfacial protein and the principal stabiliser of milk foam \citep{Cornec1999,Barbiroli2022,Huppertz2010}"
+BIB NOTE: "Prior bib key was Bolisetty2022 with wrong authors (Bolisetty & Mezzenga) — corrected to Barbiroli et al."
+
+=== KEY: Huppertz2010 ===
+File: main.tex, Line ~124
+Context: "BLG is the dominant interfacial protein and the principal stabiliser of milk foam \citep{Cornec1999,Barbiroli2022,Huppertz2010}"
+
+=== KEY: Mackie1999 ===
+File: main.tex, Line ~132
+Context: "BLG adsorbs over seconds to minutes, exhibits a kinetic energy barrier that distinguishes it from more flexible whey proteins, and partially unfolds in the adsorbed state \citep{Cornec1999,Mackie1999,Ulaganathan2017a,Ulaganathan2017b,Gochev2019JPCB,Foam4_2020,Perriman2007}"
+
+=== KEY: Ulaganathan2017a ===
+File: main.tex, Line ~132
+Context: (same group as Mackie1999) "BLG adsorbs over seconds to minutes, exhibits a kinetic energy barrier that distinguishes it from more flexible whey proteins, and partially unfolds in the adsorbed state"
+
+=== KEY: Ulaganathan2017b ===
+File: main.tex, Line ~132
+Context: (same group) "BLG adsorbs over seconds to minutes, exhibits a kinetic energy barrier, and partially unfolds in the adsorbed state"
+
+=== KEY: Gochev2019JPCB ===
+File: main.tex, Lines ~132, ~280, ~612
+Use 1 (Line ~132): "BLG adsorbs over seconds to minutes, exhibits a kinetic energy barrier, and partially unfolds in the adsorbed state \citep{...,Gochev2019JPCB,...}"
+Use 2 (Line ~280): "kinetic energy barrier inferred from experimental adsorption kinetics \citep{Cornec1999,Gochev2019JPCB}"
+Use 3 (Line ~612): "No contact in any replica grows into an irreversibly adsorbed monolayer on the experimentally relevant seconds-to-minutes timescale \citep{Cornec1999,Gochev2019JPCB,Foam4_2020}"
+
+=== KEY: Foam4_2020 ===
+File: main.tex, Lines ~132, ~612
+Use 1 (Line ~132): "BLG adsorbs over seconds to minutes, exhibits a kinetic energy barrier, and partially unfolds in the adsorbed state"
+Use 2 (Line ~612): "No contact in any replica grows into an irreversibly adsorbed monolayer on the experimentally relevant seconds-to-minutes timescale"
+
+=== KEY: Perriman2007 ===
+File: main.tex, Line ~132
+Context: "BLG adsorbs over seconds to minutes, exhibits a kinetic energy barrier, and partially unfolds in the adsorbed state \citep{...,Perriman2007}"
+Note: The paper is described in bib comment as "X-ray and neutron reflectometry showing AWI destabilises BLG by ~50 kJ/mol"
+
+=== KEY: Graham1979 ===
+File: main.tex, Lines ~136, ~379, ~554, ~568
+Use 1 (Line ~136): "the classical interpretation --- that adsorption requires global protein unfolding under interfacial tension \citep{Graham1979} --- has never been directly observed at atomistic resolution"
+Use 2 (Line ~379): "not the cooperative global unfolding traditionally invoked to explain protein interfacial activity \citep{Graham1979}"
+Use 3 (Line ~554): "Prior classical and coarse-grained adsorption models typically assumed that any contact event at the interface is either immediately followed by unfolding and adsorption (e.g., the surface-denaturation picture \citep{Graham1979})"
+Use 4 (Line ~568): "This reframing differs sharply from the classical view of Graham and Phillips, in which interfacial proteins adsorb after surface tension induces global unfolding \citep{Graham1979}"
+
+=== KEY: Zare2015 ===
+File: main.tex, Line ~143
+Context: "MD studies of BLG at fluid interfaces have focused exclusively on oil--water systems, in which the protein is pre-positioned near the interface and simulated for tens to hundreds of nanoseconds \citep{Zare2015,Zare2016}"
+
+=== KEY: Zare2016 ===
+File: main.tex, Line ~143
+Context: (same as Zare2015) "MD studies of BLG at fluid interfaces have focused exclusively on oil--water systems, pre-positioned near the interface, simulated for tens to hundreds of nanoseconds"
+BIB NOTE: [VERIFY pages before submission]
+
+=== KEY: Magarkar2014 ===
+File: main.tex, Line ~148
+Context: "Broader simulations of other proteins at the air--water interface have targeted hydrophobins \citep{Magarkar2014}"
+
+=== KEY: Euston2010 ===
+File: main.tex, Line ~148
+Context: "Broader simulations of other proteins at the air--water interface have targeted ... model systems \citep{Euston2010,Cieplak2014}"
+
+=== KEY: Cieplak2014 ===
+File: main.tex, Line ~148
+Context: (same as Euston2010) "model systems \citep{Euston2010,Cieplak2014}"
+
+=== KEY: Alamdari2020 ===
+File: main.tex, Line ~149
+Context: "orientation-resolved dynamics via MD combined with sum-frequency spectroscopy \citep{Alamdari2020}, but none has addressed the native fold of a globular lipocalin starting from bulk solution"
+
+=== KEY: Beierlein2015 ===
+File: main.tex, Line ~154
+Context: "vibrational sum-frequency generation has revealed that BLG orientation at the air--water interface depends on ionic environment and modulates adsorption efficiency \citep{Beierlein2015}, implicating patch orientation as a key variable"
+Note: Bib comment says "SFG + ellipsometry + MD: BLG orientation at AWI depends on ionic environment; carboxylate-cation pairing modulates adsorption."
+
+=== KEY: Saurabh2024 ===
+File: main.tex, Lines ~158, ~584
+Use 1 (Line ~158): "The most closely related study is by Saurabh et al. on a monoclonal antibody at the water/vapour interface over 200 ns, but their work employed thermally pre-stressed conformations rather than the native fold \citep{Saurabh2024}"
+Use 2 (Line ~584): "Our contact-ensemble characterisation also contextualises the study by Saurabh et al. on monoclonal antibody adsorption at the water/vapour interface. Their starting structures were thermally pre-stressed, bypassing the contact regime characterised here and starting in a conformationally perturbed state that native-state BLG does not visit under unbiased dynamics."
+BIB NOTE: "Verified via PubMed 38194618. First author is Saurabh, not Chaudhri (prior bib entry had wrong authors — corrected here)."
+
+=== KEY: Eberini2004 ===
+File: main.tex, Line ~365
+Context: "Notably, protonation of Glu89 --- which occurs near physiological pH --- also triggers Loop~CD/EF reorganisation in BLG \citep{Eberini2004}, suggesting this loop is intrinsically primed for dynamic responses"
+BIB NOTE: "MD simulation of BLG calyx loop dynamics: Glu89 protonation triggers loop EF/CD reorganisation."
+
+=== KEY: Rabe2011 ===
+File: main.tex, Line ~618
+Context: "protein adsorption from bulk to an irreversibly adsorbed monolayer encompasses structural rearrangements and cooperative processes that unfold on timescales from seconds to hours \citep{Rabe2011}"
+BIB NOTE: "Comprehensive review of protein adsorption phenomena at solid surfaces: structural rearrangements, kinetic barriers, cooperative effects."
+NOTE: The paper is at SOLID surfaces; this citation is used for protein adsorption timescales generally.
+
+=== KEY: Mercadante2012 ===
+File: main.tex, Line ~625
+Context: "we simulate the BLG monomer rather than the native dimer, which is the dominant form at neutral pH and concentrations above ~50 μM \citep{Mercadante2012} --- i.e., over essentially the entire range in milk and most food-relevant systems"
+
+=== KEY: Vega2007 ===
+File: main.tex, Line ~647
+Context: "the TIP3P water model underestimates the air--water surface tension by roughly one-third relative to TIP4P/2005 and to experiment \citep{Vega2007}"
+
+=== KEY: Laio2002 ===
+File: main.tex, Line ~656
+Context: "the activation free energy along (SASA, θ) or other commitment coordinates would require metadynamics \citep{Laio2002} or umbrella sampling"
+
+=== KEY: Brownlow1997 ===
+File: main.tex, Lines ~669
+Context: "The crystal structure of bovine β-lactoglobulin was obtained from the Protein Data Bank (PDB ID: 1BEB, resolution 1.8 Å, chain A) \citep{Brownlow1997,Kontopidis2004}"
+
+=== KEY: Kontopidis2004 ===
+File: main.tex, Line ~669
+Context: (same as Brownlow1997) "PDB ID: 1BEB, resolution 1.8 Å, chain A"
+
+=== KEY: Loch2013 ===
+File: main.tex, Line ~672
+Context: "The hydrophobic calyx is the defining lipocalin feature of BLG, normally enclosing fatty acids and other small hydrophobic ligands \citep{Loch2013}"
+
+=== KEY: Huang2017 ===
+File: main.tex, Line ~674
+Context: "The structure was preprocessed using GROMACS pdb2gmx with the CHARMM36m force field \citep{Huang2017}"
+
+=== KEY: Jorgensen1983 ===
+File: main.tex, Line ~679
+Context: "Water was modelled using TIP3P \citep{Jorgensen1983} as recommended for CHARMM36m"
+
+=== KEY: Bussi2007 ===
+File: main.tex, Line ~693
+Context: "NVT, 100 ps, V-rescale thermostat \citep{Bussi2007} at 298 K"
+
+=== KEY: Berendsen1984 ===
+File: main.tex, Line ~697
+Context: "NPT, 10 ns, semi-isotropic Berendsen barostat \citep{Berendsen1984} at 1 bar"
+
+=== KEY: Essmann1995 ===
+File: main.tex, Line ~707
+Context: "PME electrostatics \citep{Essmann1995} with real-space cutoff 1.2 nm, grid spacing 0.16 nm, interpolation order 4"
+
+=== KEY: Hess1997 ===
+File: main.tex, Line ~710
+Context: "all bonds to hydrogen were constrained with LINCS \citep{Hess1997} (order 4, one iteration)"
+
+=== KEY: Abraham2015 ===
+File: main.tex, Line ~731
+Context: "Simulations used GROMACS 2020.4 \citep{Abraham2015} with GPU acceleration"
+
+=== KEY: MichaudAgrawal2011 ===
+File: main.tex, Line ~741
+Context: "All analyses were performed in Python 3.11 with MDAnalysis 2.10.0 \citep{MichaudAgrawal2011,Gowers2016}"
+
+=== KEY: Gowers2016 ===
+File: main.tex, Line ~741
+Context: (same as MichaudAgrawal2011) "MDAnalysis 2.10.0 \citep{MichaudAgrawal2011,Gowers2016}"
+
+=== KEY: Mitternacht2016 ===
+File: main.tex, Line ~777
+Context: "Per-atom SASA was computed every 500 ps using freeSASA \citep{Mitternacht2016} (probe radius 0.14 nm)"
+
+=== KEY: Flower1996 ===
+File: main.tex, Line ~603
+Context: "a quantitative baseline for comparing mutants and variants across the lipocalin family \citep{Flower1996,Papiz1986}"
+
+=== KEY: Papiz1986 ===
+File: main.tex, Line ~603
+Context: (same as Flower1996) "quantitative baseline for comparing mutants and variants across the lipocalin family"

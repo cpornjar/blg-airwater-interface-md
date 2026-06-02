@@ -11,10 +11,26 @@
     "Fig 4: KDE legend outside axes (bottom); stats box removed; LaTeX [t]→[htbp]"
   ],
   "round12_reviewer_assessment": "No remaining scientific weaknesses. Paper ready for JCIS submission.",
+  "citation_audit_june2": {
+    "tool": "/citation-audit",
+    "reviewer": "gemini-2.5-flash (API, 5 batches)",
+    "entries_audited": 42,
+    "verdict": "FAIL → fixed",
+    "changes_applied": [
+      "Removed Gochev2019JPCB from kinetics citation contexts (lines 132, 280, 612); replaced with Ulaganathan2017a",
+      "Removed Foam4_2020 from adsorption-timescale citation (line 612)",
+      "Removed Ulaganathan2017b from kinetics citation group (line 132)",
+      "Fixed TIP3P surface tension text: 'one-third' → 'half' (35.8 vs 72 mN/m)",
+      "Removed resolved [VERIFY] notes from Cornec1999 and Zare2016 in references.bib"
+    ],
+    "commit": "b6af1ff"
+  },
+  "latex_install": "MacTeX (TeX Live 2026) installed 2026-06-02 via brew cask",
+  "final_compile": "2026-06-02 — 19 pages, zero warnings, full bibtex cycle clean",
   "pending_before_submission": [
     "Zenodo upload → replace DOI placeholder (HARD BLOCKER)",
     "Co-author (P.P.) review and sign-off"
   ],
   "score_progression": "5.5→6→6.5→7→7→7→7→4(NatComm)→7(JCIS)→8(JCIS)→9(JCIS)→10(JCIS)",
-  "timestamp": "2026-05-30T09:30:00+07:00"
+  "timestamp": "2026-06-02T14:47:00+07:00"
 }

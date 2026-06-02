@@ -1,5 +1,5 @@
 # Brief Me — COMFHA Research Summary
-*Updated: May 30, 2026 — All figures publication-ready; fonts corrected; float placement fixed; /paper-figure audit complete*
+*Updated: June 2, 2026 — Citation audit complete (42 entries, 2 REPLACE + 1 text fix applied); MacTeX installed; final compile clean (19 pp, zero warnings)*
 
 ---
 
@@ -147,11 +147,17 @@ A: After co-author (P.P.) review of mechanism reframing and SET 1D removal. Targ
 - **Auto-review:** Round 12 complete — Gemini 2.5 Flash: **10/10, READY** ✓ (best score; verdict upgraded from ALMOST to READY)
 - **Round 12 trigger:** Figure quality improvements (May 30) — no remaining scientific weaknesses identified
 - **Round 11 fixes (May 29):** Methods event-count resolution; Discussion pre-commitment framing; monomer/dimer limitation expanded
+- **Citation audit (June 2):** `/citation-audit` — 42 entries × 3 axes (existence, metadata, context). 2 REPLACE + 5 FIX:
+  - `Gochev2019JPCB` was wrong-context for kinetics (Part 3 = neutron reflectometry) → replaced with `Ulaganathan2017a`
+  - `Foam4_2020` wrong-context for timescale claim (Part 4 = foam stability) → removed
+  - `Ulaganathan2017b` wrong-context for kinetics (Part 2 = rheology) → removed from that group
+  - TIP3P surface tension text: "one-third" → **"half"** (factual fix, 35.8 vs 72 mN/m per Vega 2007)
+  - All prior `[VERIFY]` bib notes resolved and removed
 - **Score progression:** 5.5 → 6 → 6.5 → 7 → 7 → 7 → 7 → 4 (NatComm) → 7 → 8 → 9 → **10** (JCIS)
 - **Remaining before submission:**
   - [ ] Co-author (P.P.) review — actual sign-off required
   - [ ] Zenodo upload → replace DOI placeholder in Data Availability (**hard blocker**)
-  - [ ] Final compile + PDF check
+  - [x] Final compile + PDF check — MacTeX installed; 19 pages, zero warnings ✓
   - [ ] JCIS submission portal
 
 ## GitHub Repository

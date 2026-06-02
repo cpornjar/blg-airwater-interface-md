@@ -16,10 +16,15 @@
 
 ## Current Status (June 2, 2026)
 
-**Paper 1 is READY for submission to JCIS.**
+**Paper 1 is READY for submission to JCIS. Citation audit complete. LaTeX installed.**
 - Auto-review Round 12: Gemini 2.5 Flash scored **10/10, READY** ✓
-- Round 13 (June 2): dead GitHub URL fixed (`MILK_FROTHING` → `blg-airwater-interface-md`); bib comment updated
-- ARIS installed; gemini-review MCP registered; ready for `/citation-audit` + `/kill-argument`
+- Round 13 (June 2): dead GitHub URL fixed; bib comment updated
+- **Citation audit (June 2):** 42 entries audited — 2 wrong-context citations fixed, 1 factual error in text fixed:
+  - `Gochev2019JPCB` (neutron reflectometry, not kinetics) removed from kinetics claims; swapped for `Ulaganathan2017a`
+  - `Foam4_2020` (foam stability) removed from adsorption-timescale claim
+  - `Ulaganathan2017b` (rheology) removed from kinetics group
+  - TIP3P surface tension: "one-third" → **"half"** (35.8 vs 72 mN/m)
+- **Final compile (June 2):** MacTeX installed; `pdflatex` clean — **19 pages, zero warnings**
 - Pending: P.P. co-author review + Zenodo DOI (hard blocker) + JCIS portal.
 
 ---
@@ -77,7 +82,7 @@ source ~/research-env/bin/activate
 # ARIS Gemini reviewer (MCP bridge — replaces Gemini CLI)
 # API key in ~/.gemini/.env (auto-loaded by server.py)
 # MCP registered as: claude mcp add gemini-review -s user
-# Default model: gemini-2.5-pro (set via GEMINI_REVIEW_MODEL env var)
+# Default model: gemini-2.5-flash (Pro has 0 free-tier quota on this key)
 # Invoke via ARIS skills with: — reviewer: agy
 
 # NotebookLM

@@ -722,3 +722,42 @@ Difficulty: medium (Gemini 2.5 Flash via gemini-cli)
 **Paper is scientifically ready for JCIS submission pending administrative steps only:**
 1. Zenodo upload → replace DOI placeholder (HARD BLOCKER)
 2. P.P. co-author review and sign-off
+
+---
+
+## Citation Audit — June 2, 2026
+
+**Skill:** `/citation-audit` | **Reviewer:** gemini-2.5-flash (API, 5 parallel batches, fresh threads)  
+**Entries audited:** 42 | **Verdict: FAIL → fixed → PASS**
+
+### Findings Applied
+
+| Key | Issue | Fix |
+|-----|-------|-----|
+| `Gochev2019JPCB` | REPLACE — Part 3 (neutron reflectometry/pH) cited 3× for kinetics/energy-barrier claims | Replaced with `Ulaganathan2017a` at lines 280, 612; removed from line 132 |
+| `Foam4_2020` | REPLACE — Part 4 (foam stability) cited for adsorption-timescale claim | Removed from line 612 |
+| `Ulaganathan2017b` | FIX — Part 2 (rheology) in kinetics citation group | Removed from line 132 |
+| `Vega2007` | FIX — text said "one-third" underestimate; actual ratio is ~half (35.8/72 mN/m) | Changed to "roughly half" in Discussion |
+| `Cornec1999` / `Zare2016` | `[VERIFY]` bib notes — both confirmed clean | Notes removed from references.bib |
+
+### Findings Deferred (manual verification)
+
+- `Ulaganathan2017a/b` author lists — verify against publisher
+- `Rabe2011` — solid-surfaces review cited for AWI timescales; add qualifier or supplement
+- `Gowers2016` — author count (11 in bib vs possibly 17 in proceedings)
+
+### Science Checks Confirmed by Reviewer
+- PDB 1BEB = Brownlow 1997 at 1.8 Å ✓
+- Eberini 2004: Glu89 → Loop CD/EF reorganisation (confirmed in abstract) ✓
+- Mercadante 2012: ~50 µM dimer threshold at neutral pH ✓
+- Saurabh 2024: thermally pre-stressed conformations (confirmed) ✓
+- Graham 1979: surface-denaturation/global-unfolding model (confirmed in abstract) ✓
+- Barbiroli 2022 and Saurabh 2024 author corrections both verified ✓
+
+### LaTeX
+MacTeX (TeX Live 2026) installed via `brew install --cask mactex-no-gui`.  
+Final compile: **19 pages, zero warnings** (`pdflatex` × 4, full bibtex cycle).
+
+### Artifacts
+`CITATION_AUDIT.md` · `CITATION_AUDIT.json` · `.aris/traces/citation-audit/2026-06-02_run01/`  
+Committed: `b6af1ff`

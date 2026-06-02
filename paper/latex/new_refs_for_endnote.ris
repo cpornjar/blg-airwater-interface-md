@@ -1,0 +1,83 @@
+%% RIS export — new references for CONTACT_WITHOUT_COMMITMENT Endnote library
+%% Generated: 2026-06-02
+%% Import: Endnote > File > Import > RIS format
+%% Priority per LITERATURE_REVIEW.md: MEDIUM (Engelhardt, Sun), supporting (Kurz)
+
+TY  - JOUR
+AU  - Engelhardt, Kathrin
+AU  - Rühs, Patrick A.
+AU  - Ulbrich, Timon
+AU  - Hellweg, Thomas
+AU  - Garidel, Patrick
+AU  - Richtering, Walter
+AU  - Fischer, Peter
+AU  - Braunschweig, Björn
+TI  - Protein Adsorption at the Electrified Air-Water Interface: Implications on Foam Stability
+JO  - Langmuir
+VL  - 28
+IS  - 20
+SP  - 7780
+EP  - 7787
+PY  - 2012
+DO  - 10.1021/la301368v
+AB  - SFG spectroscopy + ellipsometry; BSA at AWI. Microscopic surface chemistry (ion-protein interactions) directly controls macroscopic foam stability; BLG and BSA show different orientational preferences. Experimental evidence that AWI protein orientation affects foam stability — supports orientation component of commitment barrier. Note: BSA not BLG.
+KW  - air-water interface
+KW  - protein orientation
+KW  - foam stability
+KW  - SFG spectroscopy
+KW  - BSA
+ER  -
+
+TY  - JOUR
+AU  - Sun, Yuxuan
+AU  - Milea, Daniela
+AU  - Defraeye, Thijs
+AU  - Martini, Simona
+TI  - Enhancing Foam Stability with β-Lactoglobulin Nanoparticles: Insights into Molecular-Level Interactions
+JO  - Food Hydrocolloids
+VL  - 148
+SP  - 109290
+PY  - 2024
+DO  - 10.1016/j.foodhyd.2023.109290
+AB  - Tensiometry, pendant drop, small-angle X-ray. BLG nanoparticles (partially denatured aggregates) form more stable foam than native BLG; hydrophobic surface patches exposed on nanoparticle surface drive enhanced adsorption. Hydrophobic surface exposure as rate-limiting variable for BLG adsorption — supports calyx SASA as the slow intrinsic variable. Note: SASA threshold language from older COMFHA framing is not applicable.
+KW  - beta-lactoglobulin
+KW  - foam stability
+KW  - nanoparticles
+KW  - hydrophobic exposure
+KW  - SASA
+ER  -
+
+TY  - JOUR
+AU  - Kurz, Jennifer
+AU  - Haller, Nicolas
+AU  - Schmitt, Christophe
+TI  - Correlation Between Physico-Chemical Characteristics of Particulated β-Lactoglobulin and Interfacial Behaviour
+JO  - Food Research International
+VL  - 121
+SP  - 783
+EP  - 793
+PY  - 2021
+DO  - 10.1016/j.foodres.2019.04.027
+AB  - BLG particle surface hydrophobicity correlates with interfacial adsorption rate; more hydrophobic -> faster adsorption. Supports calyx SASA as rate-limiting variable. Complements Sun 2024.
+KW  - beta-lactoglobulin
+KW  - surface hydrophobicity
+KW  - interfacial adsorption
+ER  -
+
+TY  - JOUR
+AU  - Hingst, Benedikt
+AU  - Brandl, Florian
+AU  - Garidel, Patrick
+AU  - Blech, Michaela
+TI  - Competitive Adsorption of a Monoclonal Antibody and Amphiphilic Polymers to the Air-Water Interface
+JO  - European Biophysics Journal
+VL  - 54
+PY  - 2025
+DO  - 10.1007/s00249-025-01752-0
+AB  - SFG + tensiometry; mAb competition with polysorbate 80. mAb orientation at AWI is disrupted by polysorbate 80; orientation-dependent adsorption efficiency. Very recent (2025); supports orientation gating as general phenomenon. Priority: LOW.
+KW  - monoclonal antibody
+KW  - air-water interface
+KW  - protein orientation
+KW  - polysorbate 80
+KW  - adsorption
+ER  -

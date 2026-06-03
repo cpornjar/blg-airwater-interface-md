@@ -24,6 +24,7 @@ SOURCES = [
     ROOT / "paper" / "latex" / "main.pdf",          # full manuscript (19 pp)
     ROOT / "brief_me.md",                           # key numbers cheat-sheet
     ROOT / "notebooklm" / "narrative_summary.md",   # plain-language summary
+    ROOT / "notebooklm" / "study_guide.md",         # study guide: findings, Q&A, glossary
 
     # Talk preparation
     ROOT / "slides" / "TALK_SCRIPT.md",             # full speaker script

@@ -14,6 +14,58 @@
 
 ---
 
+## Claude Operating Rules
+
+> These rules apply every session. They exist to keep this workspace clean and prevent the chaos that accumulated on the Linux machine.
+
+### File Placement — enforce strictly, no exceptions
+| Type | Where it goes |
+|------|--------------|
+| Analysis scripts | `scripts/` |
+| Output figures | `results/figures/` |
+| Cached analysis data (.npz, .npy) | `results/gate_analysis/` |
+| Paper files | `paper/latex/` |
+| Science notes, literature | `docs/` |
+| Presentation files | `slides/` |
+| New simulation directories | `outputs_BLG/<NAME>/` or `outputs_CAS/<NAME>/` |
+| Progress reports (PDF/PPTX) | `progress-reports/` |
+
+**Never create files in the repo root.** Only these are allowed there: `CLAUDE.md`, `brief_me.md`, `CITATION_AUDIT.md`, `CITATION_AUDIT.json`, `ABOUT_ME.md`.
+
+### Git Discipline
+- Always run `git status` before any `git add`
+- Stage specific files by name — never `git add .` or `git add -A`
+- These extensions are permanently forbidden from commits: `.xtc .trr .tpr .gro .edr .cpt`
+- Commit message format: `type: short description` where type is `fix` / `feat` / `chore` / `docs` / `analysis` / `paper`
+- Always `git push origin main` after committing — Mac Mini is the single source of truth
+
+### Cluster Discipline
+- Before `sbatch`: always show the full script for review, wait for explicit "yes"
+- Before any `rsync` to cluster: dry-run first (`-n` flag), show what will transfer
+- **Never run `scancel`** — not even your own jobs without checking if they're still needed
+- Your directories only: `/comfha/users/guest/PAO/` (ku-cluster) and `~/PAO/` (ku-ai)
+- Never touch: `TK/`, `dodo/`, `Ben/`, `Prin/`, `S_coco/`, `paii/`, `Nan/`, `NAN/`, `nil/`
+
+### Analysis Discipline
+- Always activate: `conda activate research-env` (Python 3.12, MDAnalysis 2.10.0)
+- Always use `python -u` when piping stdout to tee (prevents silent buffering)
+- Always call `mda_unwrap` before freeSASA (PBC artifact prevention — the inflated 45–62 nm² bug)
+- Never load CENTER + R1 universe simultaneously — 8 GB RAM, guaranteed OOM
+- Key verified numbers — never change without rerunning analysis: 613 contacts, 6 long events, SASA 24–37 nm², Pearson r +0.006
+
+### Slash Commands Available
+| Command | What it does |
+|---------|-------------|
+| `/start-research` | Full session init: health check + cluster status + recommendation |
+| `/check-cluster` | Live squeue from both clusters |
+| `/sync-results <run>` | Dry-run then sync cluster → Mac Mini |
+| `/submit-job <args>` | Generate + review + submit SLURM job |
+| `/analyze <type>` | Run analysis script for gate/rmsd/rmsf/sasa/fig2/fig3/fig4 |
+| `/paper-review <focus>` | Structured review against JCIS checklist |
+| `/new-sim <args>` | Scaffold new simulation on local + cluster |
+
+---
+
 ## Current Status (June 2, 2026)
 
 **Paper 1 is READY for submission to JCIS. Citation audit complete. LaTeX installed.**

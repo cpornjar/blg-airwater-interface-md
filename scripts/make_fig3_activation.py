@@ -182,13 +182,14 @@ ax.set_ylim(bottom=21.5)
 
 # (b) Rg flat ────────────────────────────────────────────────────────────────
 ax = fig.add_subplot(gs[0, 1])
-ax.plot(t_r, rg_r, color="#1ABC9C", lw=1.0, alpha=0.7)
+ax.plot(t_r, rg_r, color="#1ABC9C", lw=1.0, alpha=0.7, label="R$_\\mathrm{g}$")
 # smoothed mean
 window = max(11, len(rg_r)//20 | 1)
 from numpy.lib.stride_tricks import sliding_window_view
 if len(rg_r) > window:
     sm = sliding_window_view(rg_r, window).mean(axis=1)
-    ax.plot(t_r[window//2:window//2+len(sm)], sm, color="#16A085", lw=2)
+    ax.plot(t_r[window//2:window//2+len(sm)], sm, color="#16A085", lw=2,
+            label="Rolling avg.")
 ax.axhline(rg_r.mean(), color="#444", lw=1, ls="--", alpha=0.7)
 ax.set_xlabel("Time (ns)")
 ax.set_ylabel("R$_\\mathrm{g}$ (nm)")
@@ -200,6 +201,8 @@ ax.text(1.01, rg_r.mean(), f"mean {rg_r.mean():.3f} nm",
 # Tight y-axis to show flatness
 y_pad = 0.04
 ax.set_ylim(rg_r.mean() - y_pad, rg_r.mean() + y_pad)
+ax.legend(loc="upper right", fontsize=7, framealpha=0.92, edgecolor="0.75",
+          handlelength=1.5)
 
 # (c) RMSF CENTER vs R1 ─────────────────────────────────────────────────────
 ax = fig.add_subplot(gs[1, 0])

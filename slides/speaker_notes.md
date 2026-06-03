@@ -134,7 +134,7 @@
 Need this baseline to know the right reaction coordinate. Now we have both.
 
 **TIP3P appropriate?**
-Surface tension ~50 vs 72 mN/m; expect quantitative shift, not qualitative change. TIP4P/2005 cross-check planned.
+Surface tension ~36 vs 72 mN/m; expect quantitative shift, not qualitative change. TIP4P/2005 cross-check planned.
 
 **What about the dimer?**
 Monomer = single-molecule mechanism baseline. Dimer adds steric (Loop CD/EF occluded), kinetic (dissociation required), orientational (oblate shape). Next phase.

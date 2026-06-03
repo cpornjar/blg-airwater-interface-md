@@ -63,7 +63,7 @@ S10 Compact         8:45    S20  Summary         19:00
 | Question | Core answer |
 |----------|-------------|
 | Why not enhanced sampling first? | Need the pre-commitment baseline first; now we have it |
-| TIP3P appropriate? | Surface tension ~50 vs 72 mN/m; quantitative shift, not qualitative; TIP4P/2005 planned |
+| TIP3P appropriate? | Surface tension ~36 vs 72 mN/m; quantitative shift, not qualitative; TIP4P/2005 planned |
 | What about the dimer? | Monomer = single-molecule mechanism baseline; dimer adds steric/kinetic/orientational complexity |
 | Event count vs figure bands? | 613 from full 0.1 ns resolution; figure uses 0.5 ns stride — both correct |
 | Why JCIS not Nature? | Scope claim = honest scope; JCIS IF ~9 is right venue for this community |

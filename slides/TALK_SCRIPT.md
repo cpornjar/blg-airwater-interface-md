@@ -288,7 +288,7 @@ Thank you — I'm happy to take questions."
 "Unbiased MD first was the right call. Without it, we wouldn't know what the pre-commitment state looks like, and we'd have no basis for choosing the right collective coordinate to bias. Now we have both: the contact ensemble is characterised, and the SASA-theta plane is the obvious reaction coordinate space."
 
 **Q: Is TIP3P appropriate for the air-water interface?**
-"TIP3P underestimates surface tension by about a third compared to experiment — about 50 versus 72 millinewtons per metre. We expect this shifts the quantitative statistics — contact frequency, event durations — rather than qualitatively changing the contact-commitment picture. A TIP4P/2005 cross-check is in the pipeline."
+"TIP3P underestimates surface tension by roughly half of experiment — about 36 versus 72 millinewtons per metre. We expect this shifts the quantitative statistics — contact frequency, event durations — rather than qualitatively changing the contact-commitment picture. A TIP4P/2005 cross-check is in the pipeline."
 
 **Q: What about the dimer? BLG is mainly dimeric at physiological concentrations.**
 "Completely valid point. The monomer is the right starting point for resolving the single-molecule mechanism. The dimer adds steric, kinetic, and orientational complexity that we'll address in dedicated dimer simulations. The monomer contact ensemble we've characterised is the baseline."

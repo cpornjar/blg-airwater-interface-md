@@ -53,7 +53,7 @@
 - Never load CENTER + R1 universe simultaneously — 8 GB RAM, guaranteed OOM
 - Key verified numbers — never change without rerunning analysis: 613 contacts, 6 long events, SASA 24–37 nm², Pearson r +0.006
 
-### Slash Commands Available
+### Slash Commands (7 custom — `~/.claude/commands/`)
 | Command | What it does |
 |---------|-------------|
 | `/start-research` | Full session init: health check + cluster status + recommendation |
@@ -63,6 +63,41 @@
 | `/analyze <type>` | Run analysis script for gate/rmsd/rmsf/sasa/fig2/fig3/fig4 |
 | `/paper-review <focus>` | Structured review against JCIS checklist |
 | `/new-sim <args>` | Scaffold new simulation on local + cluster |
+
+### ARIS Skills (27 — paper/research, from `~/aris_repo`)
+| Skill | Use |
+|-------|-----|
+| `/auto-review-loop-llm` | Autonomous review loop → Gemini 2.5 Flash (external reviewer) |
+| `/auto-paper-improvement-loop` | Full paper improvement cycle |
+| `/citation-audit` | Audit all bib entries for wrong-context citations |
+| `/paper-write` `/paper-compile` `/paper-figure` | Paper writing/compiling/figure work |
+| `/novelty-check` `/kill-argument` `/rebuttal` | Competitive analysis and defence |
+| `/research-review` `/research-refine` | Research quality improvement |
+| `/semantic-scholar` `/arxiv` `/research-lit` | Literature search |
+| `/analyze-results` `/result-to-claim` `/figure-spec` | Analysis → paper claims |
+| `/idea-creator` `/idea-discovery` | Next paper ideation |
+| `/gemini-search` | Gemini-powered web search |
+
+### 9ARM Skills (4 — engineering discipline, from `~/9arm_repo`)
+| Skill | Use |
+|-------|-----|
+| `/debug-mantra` | 4-step discipline before any bug fix: reproduce → trace → falsify → breadcrumb |
+| `/scrutinize` | Cold outsider review of any script, plan, or change before running |
+| `/post-mortem` | Document a fixed bug: root cause, mechanism, fix, how it slipped through |
+| `/management-talk` | Rewrite technical content for P.P. / committee / non-engineering audience |
+
+### ECC Cherry-picks (3 — from `~/ecc_repo`)
+| Skill | Use |
+|-------|-----|
+| `/mle-workflow` | ML/scientific engineering workflow discipline |
+| `/verification-loop` | Iterative result verification |
+| `/eval-harness` | Structured evaluation framework |
+
+### AI Review Backend
+- Reviewer: **Gemini 2.5 Flash** (external, cross-model — preserves independence)
+- MCP: `gemini-review` server + `llm-chat` server wired to Gemini OpenAI endpoint
+- Advisor model: **Opus 4.8** (set in `~/.claude/settings.json`)
+- For paper review: always use Gemini as external reviewer, not Claude self-review
 
 ---
 

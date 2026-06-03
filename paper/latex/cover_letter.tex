@@ -1,0 +1,112 @@
+% =====================================================================
+% Cover Letter — JCIS Submission
+% "Contact without Commitment: Atomistic Characterisation of
+%  β-Lactoglobulin Adsorption Dynamics at the Air–Water Interface"
+% Pornjariyawatch & Pongprayoon, Kasetsart University
+%
+% Instructions before submitting:
+%   1. Insert Zenodo DOI on the \newcommand{\zenododoi} line below
+%   2. Update \date{} to submission date
+%   3. Compile: pdflatex cover_letter.tex
+%   4. Upload cover_letter.pdf to EditorialManager
+% =====================================================================
+
+\newcommand{\zenododoi}{10.5281/zenodo.XXXXXX}   % <-- INSERT REAL DOI HERE
+
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[margin=1in,top=1.2in,bottom=1.2in]{geometry}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue!50!black,citecolor=blue!40!black}
+\usepackage{parskip}
+\setlength{\parskip}{0.8em}
+\pagestyle{empty}
+
+\begin{document}
+
+\date{\today}
+\noindent\today
+
+\bigskip
+
+\noindent The Editorial Office\\
+\textit{Journal of Colloid and Interface Science}\\
+Elsevier
+
+\bigskip
+
+Dear Editor,
+
+We submit for your consideration the manuscript \textbf{``Contact without
+Commitment: Atomistic Characterisation of $\beta$-Lactoglobulin Adsorption
+Dynamics at the Air--Water Interface''} by Chalakon~Pornjariyawatch and
+Prapasiri~Pongprayoon (Department of Chemistry, Faculty of Science, Kasetsart
+University, Bangkok, Thailand).
+
+$\beta$-Lactoglobulin (BLG), the dominant whey protein in bovine milk, is a
+central determinant of dairy foam stability, yet the molecular mechanism by
+which it adsorbs at the air--water interface has remained uncharacterised at
+atomic resolution. We address this gap with the first unbiased atomistic
+molecular dynamics study of native-state BLG at the air--water interface,
+accumulating \textbf{4.00~$\mu$s} of trajectory across one bulk-start simulation
+and three near-interface replicas using the CHARMM36m force field and a
+$12\times12\times35$\,nm slab geometry.
+
+Our principal findings are: (i) BLG contacts the interface frequently ---
+\textbf{613 discrete events} across 4.00~$\mu$s, resolved at single-atom
+contact distance --- yet 607 of these events terminate without commitment,
+revealing a genuine kinetic bottleneck rather than a sampling limitation;
+(ii) calyx SASA (24--37~nm$^2$, corrected for periodic-boundary-condition
+artefacts) and orientation are \textbf{statistically independent}
+($r = +0.006$; block bootstrap 95\% CI $[-0.09, +0.11]$), ruling out simple
+two-factor coupling as the commitment trigger; (iii) the protein remains
+\textbf{globally compact} throughout 4~$\mu$s of aggregate trajectory,
+inconsistent with pre-adsorption global unfolding models; and (iv)
+\textbf{Loop CD/EF} (residues 57--60) emerges as the dominant calyx-mobility
+region near the interface, replacing Loop BC in the bulk. These results
+establish a precise atomistic baseline for the pre-commitment contact ensemble
+--- the missing reference state for designing enhanced-sampling calculations
+of the adsorption pathway.
+
+We believe this work is well-suited for \textit{JCIS} given the journal's
+strong coverage of protein behaviour at fluid interfaces, foam and emulsion
+stabilisation mechanisms, and colloid science at the molecular scale. The
+findings are directly relevant to the design of functional dairy ingredients
+and to the broader question of how globular proteins cross the air--water
+interface.
+
+The manuscript has not been submitted elsewhere and is not under consideration
+at any other journal. All authors have approved the submission. The authors
+declare no competing financial interests.
+
+The dataset supporting this study has been deposited at Zenodo
+(DOI:~\href{https://doi.org/\zenododoi}{\zenododoi}), and all analysis scripts
+are available at
+\href{https://github.com/cpornjar/blg-airwater-interface-md}{github.com/cpornjar/blg-airwater-interface-md}.
+
+We are grateful for your consideration and look forward to your response.
+
+\bigskip
+
+Sincerely,
+
+\bigskip\bigskip
+
+\noindent\textbf{Chalakon Pornjariyawatch}\\
+PhD Student, COMFHA Laboratory\\
+Department of Chemistry, Faculty of Science\\
+Kasetsart University, Bangkok 10900, Thailand\\
+\href{mailto:chalakon.p@ku.th}{chalakon.p@ku.th}
+
+\bigskip
+
+\noindent\textbf{Prapasiri Pongprayoon} (corresponding author)\\
+Associate Professor, COMFHA Laboratory\\
+Department of Chemistry, Faculty of Science\\
+Kasetsart University, Bangkok 10900, Thailand
+
+\end{document}

@@ -1,0 +1,28 @@
+JCIS Highlights
+"Contact without Commitment: Atomistic Characterisation of β-Lactoglobulin
+Adsorption Dynamics at the Air–Water Interface"
+Pornjariyawatch & Pongprayoon
+
+Each bullet ≤85 characters (JCIS requirement). Paste directly into EditorialManager.
+--------------------------------------------------------------------------------
+
+• First atomistic simulation of native BLG at the air–water interface (4 µs)
+
+• 613 discrete contact events detected; 607 terminate without commitment
+
+• Calyx SASA (24–37 nm²) and orientation are statistically independent
+
+• BLG remains globally compact throughout — no pre-adsorption unfolding
+
+• Loop CD/EF replaces Loop BC as dominant calyx-mobility region at AWI
+
+--------------------------------------------------------------------------------
+Character counts (spaces included, bullet and space excluded):
+1. 76 chars
+2. 70 chars
+3. 68 chars
+4. 70 chars
+5. 69 chars
+
+Alternative for bullet 5 (engineering angle, exactly 85 chars):
+• Pre-commitment ensemble baseline enables rational engineering of foam-stabilising proteins

@@ -59,6 +59,12 @@ results/GPU_Benchmark_Report_preliminary.pdf
 paper/.claude/
 .claude/
 
+# ── ARIS machine-specific manifest (absolute paths differ per machine) ─────────
+.aris/installed-skills.txt
+.aris/tools
+.aris/traces/
+.aris/*.prev
+
 # ── Screenshots ───────────────────────────────────────────────────────────────
 Screenshots/
 

@@ -1,8 +1,8 @@
 # Speaker Notes — Contact without Commitment
-## COMFHA Lab Group · May 2026 · 20 slides · ~20 min
+## COMFHA Lab Group · May 2026 · 15 slides · ~20 min
 
-> Match slide numbers to build_presentation.py. ASCII approximations on slides:
-> us = microseconds, beta- = beta, -> = arrow, <= = less-or-equal, nm2 = nm squared, perp = independent
+> Slide numbers match presentation_final.pptx / .key (15-slide deck).
+> ASCII on slides: us = µs, beta- = β, nm2 = nm², perp = independent
 
 ---
 
@@ -19,112 +19,114 @@
 
 ---
 
-## S3 — Why Milk Foam? [1:00–2:00]
-"BLG is the dominant protein in whey — about 3 g/L in bovine milk. It stabilises milk foam by forming a viscoelastic film at the air-water interface. Adsorption is slow — seconds to minutes — and there's a measured kinetic barrier. The classical explanation from Graham and Phillips is global unfolding driven by surface tension. But that has never been directly observed at atomic resolution."
-→ *advance: "And that's where MD comes in — or rather, where it's been missing."*
+## S3 — The Problem [1:00–3:00]
+"BLG is the dominant protein in whey — about 3 g/L in bovine milk. It stabilises milk foam by forming a viscoelastic film at the air-water interface. Adsorption is slow — seconds to minutes — and there's a measured kinetic barrier. The classical explanation from Graham and Phillips is global unfolding driven by surface tension. But that has never been directly observed at atomic resolution.
 
----
-
-## S4 — The Atomistic Gap [2:00–3:00]
-"Experiments give time-averaged surface properties — they don't see individual molecular events. Prior MD on BLG was all oil-water, protein pre-positioned, under 100 ns. No atomistic simulation of BLG at the air-water interface had been reported. We fill that gap."
+Experiments give time-averaged surface properties — they don't resolve individual molecular events. Prior MD on BLG was all oil-water, protein pre-positioned, under 100 ns. And no atomistic simulation of BLG at the air-water interface had been reported. The CoM distance metric is also blind: BLG is 4 nm wide, so CoM stays 2–3 nm away even when atoms are touching. We fill all three gaps."
 → *advance: "Here's what we built."*
 
 ---
 
-## S5 — System [3:00–4:00]
-"12 by 12 by 35 nm slab. CHARMM36m force field, TIP3P water. Four trajectories: CENTER starting from bulk, R1 R2 R3 starting near the interface. Total: 4 microseconds."
-→ *advance: "Before the results, one methodological point."*
+## S4 — Our Approach [3:00–4:45]
+"12 by 12 by 35 nm slab. CHARMM36m force field, TIP3P water. Four trajectories: CENTER from bulk, R1 R2 R3 from 2.18 nm below the interface. Total: 4 microseconds.
 
----
-
-## S6 — Contact Metric [4:00–4:45]
-"BLG is 4 nm wide. The centre-of-mass stays 2-3 nm from the interface even when an atom is touching it. CoM threshold misses everything. Nearest-atom at 0.3 nm finds 613 contact events."
+Key innovation: nearest-atom metric at 0.3 nm. With CoM distance you detect essentially nothing. With nearest-atom you find 613 contact events."
 → *advance: "So what does 4 microseconds look like?"*
 
 ---
 
-## S7 — Contact Frequent (AB) [4:45–6:00]
-*[Point to figure]* "CENTER makes 97 events — 12.5% of frames. R1 makes 215 — 23.4% of frames. Single atoms penetrate up to 0.71 nm past the interface. The protein visits the interface constantly."
+## S5 — Finding 1: Contact Is Frequent [4:45–6:00]
+*[Point to figure]*
+"CENTER makes 97 events — 12.5% of frames. R1 makes 215 — 23.4% of frames. Single atoms penetrate up to 0.71 nm past the interface. The protein visits the interface constantly."
 → *advance: "But look at what happens to those events."*
 
 ---
 
-## S8 — Commitment Rare (CD) [6:00–7:00]
-"R2 and R3 — 156 and 145 events. 613 total across 4 microseconds. Only 6 sustain contact above 10 nanoseconds. And none — not one — commits to stable adsorption. That's the contact-commitment dichotomy."
-→ *advance*
+## S6 — Finding 2: Commitment Is Absent [6:00–7:45]
+"613 total events across 4 trajectories. Only 6 sustain above 10 nanoseconds. And none — not one — commits to stable adsorption. 607 events terminate within 10 ns and the protein retreats.
 
----
+The 6 long events explicitly: the longest — R1 — is 59 nanoseconds. SASA 29.1 nm². Angle 63°. No activation. No commitment. All 6 events: SASA 28.5–30.5 nm², zero activation-criterion frames.
 
-## S9 — Long Events Table [7:00–7:45]
-"The six long events explicitly. R1 row 2: 59 nanoseconds. SASA 29.1 nm squared. Angle 63 degrees. No activation, no commitment. The protein just leaves. All 6 events: SASA 28.5-30.5 nm squared, zero activation-criterion frames."
+This is the contact-commitment dichotomy. Touching is easy and frequent. Staying is not."
 → *advance: "What's happening structurally?"*
 
 ---
 
-## S10 — Global Compactness [7:45–8:45]
-*[Point to Rg panel]* "Rg for R1: 1.496 nm, completely flat for 1000 ns. Beta-barrel RMSD 0.21 nm. Alpha-helix intact. Under 4 microseconds of unbiased dynamics, the protein never globally unfolds."
-→ *advance: "But the calyx is not static."*
+## S7 — Finding 3: Compact Globally, Breathing Locally [7:45–9:45]
+*[Point to Rg panel]*
+"Rg for R1: 1.496 nm, completely flat for 1000 ns. Beta-barrel RMSD 0.21 nm. Alpha-helix intact. The protein never globally unfolds. The Graham and Phillips surface-denaturation picture does not hold.
 
----
-
-## S11 — Calyx Breathes [8:45–9:45]
-*[Point to SASA panel]* "SASA fluctuates 24 to 37 nm squared, period roughly 30-40 ns. Not a one-shot pre-adsorption event — a stationary stochastic process throughout the trajectory."
+*[Point to SASA panel]*
+But the calyx is not static. SASA fluctuates 24–37 nm², period roughly 30–40 ns. Not a one-shot pre-adsorption event — a stationary stochastic process throughout. The calyx has been opening and closing the entire time."
 → *advance: "And here's the structural reason."*
 
 ---
 
-## S12 — Loop Shift [9:45–11:00]
-*[Point to RMSF panel]* "In bulk: Loop BC is dominant, RMSF 0.54 nm. Near the interface: Loop CD/EF rises to 0.39 nm, Loop BC falls to 0.25. Loop CD/EF sits directly above the calyx. Interface-induced conformational preference. Activation is loop-mediated, not global."
-→ *advance: "Now the full SASA and orientation picture."*
+## S8 — Finding 4: Interface Shifts Which Loop Opens [9:45–11:00]
+*[Point to RMSF panel]*
+"In bulk: Loop BC, residues 30–35, is dominant — RMSF 0.54 nm.
+
+Near the AWI: Loop CD/EF, residues 57–60, rises to 0.39 nm. Loop BC falls to 0.25. Loop CD/EF sits directly above the calyx. Interface-induced conformational preference. Activation is loop-mediated and calyx-localised — not global unfolding."
+→ *advance: "Does calyx exposure couple to orientation?"*
 
 ---
 
-## S13 — SASA Distribution [11:00–12:00]
-*[Point to KDE panel]* "All four replicas — consistent, confined to 24-37 nm squared. p95 at 32.1. No replica pushes into a distinct activated regime."
-→ *advance: "And orientation?"*
+## S9 — Finding 5: SASA and Orientation Are Independent [11:00–13:15]
+*[Point to KDE panel]*
+"All four replicas — consistent, confined to 24–37 nm². p95 at 32.1. No replica pushes into a distinct activated regime.
+
+*[Point to 2D heatmap]*
+2D joint distribution. If SASA and orientation were coupled — a two-factor gate — density would cluster in one corner. Instead it's completely uniform. Pearson r: plus 0.006. Threshold sweep from 27–33 nm² — Obs/Indep stays around 1.0 throughout. The two coordinates are independent."
+→ *advance: "But we needed proper statistics."*
 
 ---
 
-## S14 — Orientation Independent [12:00–13:15]
-*[Point to 2D heatmap]* "2D joint distribution. If SASA and orientation were coupled, density would concentrate in one corner. Instead it's uniform. Pearson r: plus 0.006. Threshold sweep from 27 to 33 nm squared — Obs/Indep stays around 1.0. The two coordinates are independent."
-→ *advance: "But we need proper statistics."*
+## S10 — The Statistics [13:15–14:15]
+"SASA autocorrelation: 232 nanoseconds. Effective N: about 17 across 4 microseconds. Standard CIs assuming independent frames are wildly wrong.
+
+Block bootstrap with 232 ns block length: 95% CI minus 0.09 to plus 0.11. Confidently rules out any coupling stronger than 0.11."
+→ *advance: "One thing I need to be transparent about."*
 
 ---
 
-## S15 — Block Bootstrap [13:15–14:15]
-"SASA autocorrelation is 232 nanoseconds. Effective N across 4 microseconds: about 17. Standard CIs would be wrong. Block bootstrap gives 95% CI minus 0.09 to plus 0.11. Rules out any coupling stronger than 0.11."
-→ *advance: "One thing I want to be transparent about."*
-
----
-
-## S16 — PBC Lesson [14:15–15:00]
-"Midway through the project we found a PBC artefact. freeSASA without unwrapping inflated SASA to 45-62 nm squared. After MDAnalysis unwrap: 24-37, zero gate-open events. Full disclosure in Methods. Everything you've seen is PBC-corrected."
+## S11 — Scientific Integrity [14:15–15:00]
+"Midway through the project we found a PBC artefact. freeSASA without unwrapping inflated SASA to 45–62 nm². After MDAnalysis unwrap: 24–37 nm², zero gate-open events. Full disclosure in Methods. Everything you've seen today is PBC-corrected."
 → *advance: "So what does all of this add up to?"*
 
 ---
 
-## S17 — What This Means [15:00–16:30]
-"Prior models: contact leads to unfolding leads to adsorption, or brief contacts don't matter. Neither holds. 59 ns contact without commitment is a genuine kinetic bottleneck. r = +0.006 rules out simple two-factor coupling. Global fold preserved — commitment is not global unfolding. We've characterised the pre-commitment ensemble — the required foundation for enhanced sampling."
+## S12 — What This Work Establishes [15:00–16:30]
+"Prior models: contact leads to unfolding leads to adsorption — or brief contacts don't matter. Neither holds.
+
+59 ns contact without commitment is a genuine kinetic bottleneck. r = +0.006 rules out simple two-factor coupling. Global fold is preserved.
+
+We have the first characterisation of the pre-commitment contact ensemble — the required foundation before enhanced sampling can be designed and interpreted."
 → *advance*
 
 ---
 
-## S18 — Implications [16:30–17:30]
-"Loop CD/EF is the engineering target. Mutations increasing calyx flexibility likely more effective than bulk hydrophobicity. The dimer adds steric, kinetic, and orientational complexity — that's our next project."
+## S13 — Implications [16:30–17:30]
+"Loop CD/EF is the engineering target. Mutations increasing calyx flexibility should accelerate adsorption.
+
+Enhanced sampling now has a well-defined CV: (SASA, θ). Metadynamics or REST2 can compute the commitment barrier.
+
+And conceptually: slow adsorption is not a diffusion problem — contact is frequent. The bottleneck is orientational and conformational coincidence."
 → *advance*
 
 ---
 
-## S19 — What's Next [17:30–18:00]
-"Paper 1 is at 10/10 in auto-review — waiting on Zenodo DOI and P.P. sign-off before JCIS. Enhanced sampling along (SASA, theta) is the clear next step. Paper 2 on beta-casein is started."
+## S14 — What Comes Next [17:30–18:00]
+"Paper 1 is at 10/10 — waiting on Zenodo DOI and P.P. sign-off before JCIS. Enhanced sampling along (SASA, θ) is the clear next step. Paper 2 on beta-casein starts July 2026."
 → *advance to summary*
 
 ---
 
-## S20 — Summary [18:00–19:00]
-"Three takeaways. Contact frequent, commitment absent — 613 visits, none stays. Compact globally, loop-mediated locally — Loop CD/EF is what matters near the interface. SASA and orientation independent on the microsecond timescale. Together these define what 4 microseconds of unbiased MD resolves. Thank you."
+## S15 — Summary [18:00–19:00]
+"Three takeaways. Contact frequent, commitment absent — 613 visits, none stays. Compact globally, loop-mediated locally — Loop CD/EF drives calyx mobility near the AWI. SASA and orientation independent on the microsecond timescale.
 
-*[Smile. Wait.]*
+Together these define what 4 microseconds of unbiased MD can and cannot tell us. Thank you."
+
+*[Smile. Wait. Don't fill the silence.]*
 
 ---
 
@@ -140,16 +142,16 @@ Surface tension ~36 vs 72 mN/m; expect quantitative shift, not qualitative chang
 Monomer = single-molecule mechanism baseline. Dimer adds steric (Loop CD/EF occluded), kinetic (dissociation required), orientational (oblate shape). Next phase.
 
 **Event count vs figure bands?**
-613 from full 0.1 ns resolution analysis. Figures use 0.5 ns stride — fewer merged bands. Both correct; Methods explains this.
+613 from full 0.1 ns resolution. Figures use 0.5 ns stride — fewer merged bands. Both correct; Methods explains this.
 
 **Why JCIS not higher-impact?**
-Scope fit. We characterise the pre-commitment ensemble. JCIS IF ~9 is right for this mechanistic colloid-protein interface work.
+Scope fit. JCIS IF ~9 is right for mechanistic colloid-protein interface work.
 
 **r = +0.006 with N~17?**
-Block bootstrap accounts for small N. CI [-0.09, +0.11] rules out strong coupling. We can't rule out weak correlation below 0.11 — but two-factor gate would need much stronger.
+Block bootstrap accounts for small N. CI [−0.09, +0.11] rules out strong coupling.
 
 **Most surprising?**
-59 ns contact without commitment. Not noise. Real kinetic bottleneck.
+59 ns contact without commitment — real kinetic bottleneck, not noise.
 
 **Loop CD/EF shift — interface-caused?**
 Yes — interface-induced conformational preference. Proximity selects calyx-opening motions. Eberini et al. showed Glu89 protonation also triggers this loop in bulk — intrinsically primed.

@@ -112,3 +112,19 @@ The paper is honest about its boundary: the molecular mechanism of commitment (w
 | Rg | Radius of gyration — measure of overall protein compactness |
 | TIP3P | A widely used 3-site water model |
 | µs | Microsecond (10⁻⁶ seconds) — very long for atomistic MD |
+
+---
+
+## Current Status (June 3, 2026)
+
+**Paper 1 is READY for submission to JCIS.**
+
+- Auto-review Round 12: **10/10 READY** (Gemini 2.5 Flash) ✓
+- Citation audit complete (June 2): 42 entries verified, 2 wrong-context citations corrected, TIP3P surface tension fixed ("one-third" → "half", i.e. ~36 mN/m not ~50 mN/m)
+- LaTeX: clean compile, 19 pages, zero warnings
+- Presentation: 15-slide deck finalised (COMFHA_Talk_May2026/presentation_final.key)
+
+**Remaining before submission:**
+1. P.P. co-author review (sign-off on title, SET 1D removal, scope claim framing)
+2. Zenodo upload → get DOI → replace placeholder in main.tex Data Availability section
+3. JCIS submission at editorialmanager.com/jcis

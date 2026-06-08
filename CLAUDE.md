@@ -101,7 +101,12 @@
 
 ---
 
-## Current Status (June 2, 2026)
+## Current Status (June 8, 2026)
+
+**Paper 1:** Awaiting P.P. co-author review + Zenodo DOI. Presentation in progress.  
+**Paper 2:** β-Casein plan started — see `docs/paper2_plan.md`. Literature phase this week.  
+
+*(Previous: June 2 — Paper 1 scored 10/10 READY, citation audit complete, LaTeX clean compile.)*
 
 **Paper 1 is READY for submission to JCIS. Citation audit complete. LaTeX installed.**
 - Auto-review Round 12: Gemini 2.5 Flash scored **10/10, READY** ✓
@@ -272,7 +277,7 @@ State: `review-stage/REVIEW_STATE.json`
 | Paper | Topic | Status |
 |-------|-------|--------|
 | Paper 1 | BLG contact ensemble at AWI | **Submitting to JCIS** |
-| Paper 2 | β-Casein at AWI | AlphaFold2 structure ready (`inputs_CAS/`) |
+| Paper 2 | β-Casein at AWI | **Phase 0 — Literature.** Plan: `docs/paper2_plan.md`. Structure: `inputs_CAS/CASEIN.pdb` |
 | Paper 3 | BLG + β-Casein + Ca²⁺ bridge | Planned |
 | Paper 4 | Fat interaction (triglycerides) | Planned |
 | Enhanced sampling | Metadynamics along (SASA, θ) | SET 1D data = baseline |

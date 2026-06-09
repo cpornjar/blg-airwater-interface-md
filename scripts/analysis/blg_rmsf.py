@@ -13,7 +13,7 @@ import MDAnalysis as mda
 from MDAnalysis.analysis import align, rms
 from MDAnalysis.transformations import unwrap
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 CACHE_DIR = ROOT / "results" / "gate_analysis"
 
 CENTER_TPR  = ROOT / "outputs_BLG/CENTER/MD1000/md_1000ns.tpr"

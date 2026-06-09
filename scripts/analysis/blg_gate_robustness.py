@@ -18,7 +18,7 @@ import json
 import numpy as np
 from scipy import stats
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 GATE_DIR = ROOT / "results" / "gate_analysis"
 OUT_DIR = ROOT / "results" / "gate_robustness"
 OUT_DIR.mkdir(parents=True, exist_ok=True)

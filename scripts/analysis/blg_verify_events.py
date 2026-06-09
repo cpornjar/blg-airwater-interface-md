@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 from scipy.stats import pearsonr
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 GATE_DIR = ROOT / "results" / "gate_analysis"
 
 # Long residency events (≥10 ns) from original analysis

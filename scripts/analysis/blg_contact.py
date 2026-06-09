@@ -37,7 +37,7 @@ import matplotlib.pyplot as plt
 import MDAnalysis as mda
 
 import sys
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 from plot_style import apply_style, COLORS, double_width, savefig, smooth_sg
 
 apply_style()

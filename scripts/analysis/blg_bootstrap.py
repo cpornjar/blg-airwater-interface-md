@@ -7,7 +7,7 @@ Block length = autocorrelation time of SASA (estimated via first zero crossing).
 import numpy as np
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 GATE_DIR = ROOT / "results" / "gate_analysis"
 
 LABELS = ["CENTER", "R1", "R2", "R3"]

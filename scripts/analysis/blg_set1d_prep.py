@@ -23,7 +23,7 @@ import MDAnalysis as mda
 from scipy.spatial.transform import Rotation as R
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 NVT_TPR = ROOT / "outputs_BLG/REPLICA/NVT_SLAB_REPLICA/nvt_slab_replica.tpr"

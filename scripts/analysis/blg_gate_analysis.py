@@ -22,7 +22,7 @@ import MDAnalysis as mda
 from MDAnalysis.transformations import unwrap as mda_unwrap
 import freesasa
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 OUT_DIR = ROOT / "results" / "gate_analysis"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 

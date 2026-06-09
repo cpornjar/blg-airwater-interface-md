@@ -101,14 +101,14 @@
 
 ---
 
-## Current Status (June 8, 2026)
+## Current Status (June 9, 2026)
 
-**Paper 1:** Awaiting P.P. co-author review + Zenodo DOI. Presentation in progress.  
-**Paper 2:** β-Casein plan started — see `docs/paper2_plan.md`. Literature phase this week.  
+**Paper 1:** SCOPE EXPANDED — now BLG + β-Casein comparative study. Submission on hold.  
+Full expansion plan: `docs/paper1_expansion_plan.md` (P.P. meeting notes, open decisions, pipeline).
 
-*(Previous: June 2 — Paper 1 scored 10/10 READY, citation audit complete, LaTeX clean compile.)*
+*(June 2 — BLG-only version scored 10/10 READY, citation audit complete, LaTeX clean compile. BLG core remains valid — do not discard any results.)*
 
-**Paper 1 is READY for submission to JCIS. Citation audit complete. LaTeX installed.**
+**Paper 1 BLG core is solid. Expanding to include β-Casein per P.P. direction (June 9).**
 - Auto-review Round 12: Gemini 2.5 Flash scored **10/10, READY** ✓
 - Round 13 (June 2): dead GitHub URL fixed; bib comment updated
 - **Citation audit (June 2):** 42 entries audited — 2 wrong-context citations fixed, 1 factual error in text fixed:

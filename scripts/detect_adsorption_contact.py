@@ -163,7 +163,8 @@ def plot(data, label, out_dir):
     ax1.plot(t, smooth_sg(zl), color=COLORS["interface"], lw=1.0, ls="--",
              alpha=0.65)
     ax1.set_ylabel("Z position (nm)")
-    # Legend removed — traces described in figure caption
+    ax1.legend(loc="upper right", fontsize=6.5, framealpha=0.92,
+               edgecolor="0.75", handlelength=1.5, ncol=2)
 
     # ── Panel 2: nearest-atom distance ──────────────────────────────────
     ax2 = axes[1]

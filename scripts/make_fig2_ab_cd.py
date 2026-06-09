@@ -66,6 +66,11 @@ PANELS = [
 
 def _font(size, bold=False):
     candidates = [
+        # macOS (Arial — available in /System/Library/Fonts/Supplemental/)
+        "/System/Library/Fonts/Supplemental/Arial Bold.ttf" if bold else
+        "/System/Library/Fonts/Supplemental/Arial.ttf",
+        "/System/Library/Fonts/Helvetica.ttc",
+        # Linux (Liberation / DejaVu)
         "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf" if bold else
         "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
         "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold else

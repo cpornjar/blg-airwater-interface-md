@@ -151,18 +151,21 @@ ax.annotate(stats_text,
 ax.text(0.01, 0.82, "In bulk water", transform=ax.transAxes,
         fontsize=8.5, color=SUB, va="top", ha="left", style="italic")
 
-# ── Deepest penetration annotation — BELOW the minimum point ─────────────────
+# ── Deepest penetration annotation — ABOVE the minimum point to avoid clipping ─
 idx_min = int(np.argmin(d1))
 t_min   = t1[idx_min]
 d_min   = d1[idx_min]
-# Place label text BELOW the line (at y = d_min - 0.15), offset left slightly
-ax.annotate("−0.71 nm\nPast interface\n@ ~0.40 µs",
+# xytext placed above and left of minimum (d_min ~ −0.71 nm is near ylim −0.95,
+# so text below the point would be clipped; anchor bottom of text at y=−0.45 instead).
+# Use paper-verified depth (−0.71 nm from detect_adsorption_contact.py full resolution);
+# gate data argmin uses stride 5 frames and may capture a slightly more negative frame.
+ax.annotate(f"−0.71 nm  ·  past interface  @  ~{t_min:.2f} µs",
             xy=(t_min, d_min),
-            xytext=(t_min + 0.06, d_min - 0.14),
-            fontsize=7.5, color=RED,
-            ha="left", va="top",
+            xytext=(t_min - 0.12, -0.45),
+            fontsize=8, color=RED,
+            ha="center", va="bottom",
             arrowprops=dict(arrowstyle="-|>", color=RED, lw=1.0),
-            bbox=dict(boxstyle="round,pad=0.2", fc=PLOT_BG, ec=RED, alpha=0.85, lw=0.7))
+            bbox=dict(boxstyle="round,pad=0.25", fc=PLOT_BG, ec=RED, alpha=0.85, lw=0.7))
 
 ax.set_xlabel("Time (µs)", labelpad=6)
 ax.set_ylabel("Distance to interface (nm)", labelpad=6)
@@ -184,8 +187,8 @@ P95 = 32.10  # nm²
 fig, ax = plt.subplots(figsize=(15, 5.5))
 ax.set_facecolor(PLOT_BG)
 
-# Extra bottom margin for legend
-fig.subplots_adjust(bottom=0.22)
+# Small bottom margin for x-axis label and teal annotation
+fig.subplots_adjust(bottom=0.12)
 
 for rep, col in REP_COL.items():
     d = gdata[rep]
@@ -201,12 +204,12 @@ ax.set_title("Calyx SASA — All Four Replicas (PBC-corrected, 4.00 µs total)",
 ax.set_ylim(22, 38.5)
 ax.set_xlim(0, 1.0)
 
-# ── Legend BELOW x-axis — completely outside plot area ────────────────────────
-ax.legend(bbox_to_anchor=(0.5, -0.22), loc="upper center", ncol=5,
-          fontsize=9, framealpha=0.90, handlelength=1.8)
+# ── Legend INSIDE axes — top-center sparse zone (data ceiling ~36.7 nm², ylim 38.5) ──
+ax.legend(loc="upper center", ncol=5,
+          fontsize=9, framealpha=0.90, handlelength=1.5)
 
-# ── Annotation BELOW the axes (in figure margin) ─────────────────────────────
-fig.text(0.5, 0.04,
+# ── Summary annotation at figure bottom margin ────────────────────────────────
+fig.text(0.5, 0.01,
          "Recurring bursts every ~30–40 ns  │  Stationary stochastic process  │  NOT a one-shot activation",
          ha="center", va="bottom", fontsize=8.5, color=TEAL,
          bbox=dict(boxstyle="round,pad=0.35", fc="#091525", ec=TEAL, alpha=0.90, lw=0.8))
@@ -252,12 +255,12 @@ ax.annotate("Loop CD/EF\n(AWI dominant)",
             arrowprops=dict(arrowstyle="-|>", color=TEAL, lw=0.9),
             bbox=dict(boxstyle="round,pad=0.25", fc=PLOT_BG, ec=TEAL, alpha=0.85, lw=0.7))
 
-# "Interface proximity" summary — far right, no arrow, no overlap
-ax.text(0.99, 0.97,
+# "Interface proximity" summary — upper right; legend anchored below it to avoid overlap
+ax.text(0.99, 0.98,
         "Interface proximity\nshifts dominant loop",
         transform=ax.transAxes, fontsize=8.5, color=TEXT,
         ha="right", va="top", style="italic",
-        bbox=dict(boxstyle="round,pad=0.3", fc=PLOT_BG, ec=SUB, alpha=0.80, lw=0.6))
+        bbox=dict(boxstyle="round,pad=0.3", fc=PLOT_BG, ec=SUB, alpha=0.90, lw=0.6))
 
 ax.set_xlabel("Residue number", labelpad=6)
 ax.set_ylabel("RMSF (nm)", labelpad=6)
@@ -266,8 +269,9 @@ ax.set_title("RMSF per Residue — Bulk (CENTER) vs Near Interface (R1)",
 ax.set_xlim(rc.min(), rc.max())
 ax.set_ylim(0.0, 0.65)
 
-# legend — upper right, away from peaks (peaks are in left half of residue range)
-ax.legend(loc="upper right", fontsize=9, framealpha=0.90, handlelength=1.8)
+# legend — upper right but anchored below the summary text box (~15% headroom)
+ax.legend(loc="upper right", fontsize=9, framealpha=0.90, handlelength=1.8,
+          bbox_to_anchor=(0.99, 0.78))
 
 save(fig, "slide_fig3_rmsf.png")
 

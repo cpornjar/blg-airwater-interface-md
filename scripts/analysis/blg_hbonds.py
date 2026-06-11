@@ -163,9 +163,10 @@ def analyse_label(label):
             return counts
         frame_col = hba_result[:, 0].astype(int)
         unique, cnts = np.unique(frame_col, return_counts=True)
-        for f, c in zip(unique, cnts):
-            if f < n_frames_sampled:
-                counts[f] = c
+        idx = unique // STRIDE   # raw trajectory frame number -> sampled-frame index
+        for i, c in zip(idx, cnts):
+            if i < n_frames_sampled:
+                counts[i] = c
         return counts
 
     n_pp  = count_per_frame(hba_pp.results.hbonds, n_sampled)

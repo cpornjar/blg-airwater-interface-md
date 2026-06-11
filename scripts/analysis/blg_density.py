@@ -114,7 +114,7 @@ def analyse_label(label):
         return
 
     print(f"\n=== {label} ===")
-    with tempfile.TemporaryDirectory(dir="/var/folders") as tmpdir:
+    with tempfile.TemporaryDirectory() as tmpdir:
         prot_xvg  = Path(tmpdir) / f"{label}_prot_density.xvg"
         water_xvg = Path(tmpdir) / f"{label}_water_density.xvg"
 

@@ -100,11 +100,11 @@ def analyse_label(label):
     n_res   = protein.n_residues
     print(f"  Frames: {u.trajectory.n_frames}  Residues: {n_res}  Stride: {STRIDE}")
 
-    ds = DSSP(protein, verbose=True)
-    ds.run(step=STRIDE)
+    ds = DSSP(protein)
+    ds.run(step=STRIDE, verbose=True)
 
-    # ds.results.dssp_ndarray: (n_sampled_frames, n_residues) char array
-    codes = ds.results.dssp_ndarray  # shape (n_frames, n_res)
+    # ds.results.dssp: (n_sampled_frames, n_residues) single-char array ('H','E','-')
+    codes = ds.results.dssp  # shape (n_frames, n_res)
 
     # Compute per-frame fractions
     n_sampled = codes.shape[0]

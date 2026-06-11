@@ -192,7 +192,7 @@ def analyse_label(label, target, cutoff):
 
     print(f"\n=== {label} — {target} clustering (cutoff={cutoff} nm) ===")
 
-    with tempfile.TemporaryDirectory(dir="/var/folders") as tmpdir:
+    with tempfile.TemporaryDirectory() as tmpdir:
         if target == "contact":
             work_xtc, contact_times = extract_contact_frames(label, xtc, tpr, tmpdir)
             if work_xtc is None:

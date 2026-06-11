@@ -144,7 +144,7 @@ def structural_pca(label):
         print(f"[CACHED] {label}: {out_npz.name} — skipping")
         return
 
-    with tempfile.TemporaryDirectory(dir="/var/folders") as tmpdir:
+    with tempfile.TemporaryDirectory() as tmpdir:
         tmpdir = Path(tmpdir)
 
         # Step 1: gmx covar — compute covariance matrix on backbone Cα

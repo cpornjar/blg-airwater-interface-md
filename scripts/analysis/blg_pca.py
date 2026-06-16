@@ -162,7 +162,7 @@ def structural_pca(label):
         ]
         result = subprocess.run(
             cmd_covar,
-            input="Backbone\n",   # select Backbone (Cα + N + C)
+            input="Backbone\nBackbone\n",   # 1st: fitting group; 2nd: covariance group
             capture_output=True, text=True, cwd=str(tmpdir),
         )
         if result.returncode != 0:

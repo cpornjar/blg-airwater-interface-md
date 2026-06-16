@@ -46,6 +46,7 @@ OUT.mkdir(parents=True, exist_ok=True)
 
 GATE_DIR = ROOT / "results" / "gate_analysis"
 CONTACT_THRESH_NM = 0.30
+TRAJ_DT_PS = 100.0   # CENTER/replica xtc output frequency (ps per frame)
 
 TRAJS = {
     "CENTER": {
@@ -112,11 +113,12 @@ def extract_contact_frames(label, xtc_path, tpr_path, tmpdir):
 
     contact_times = time_ps_gate[in_contact]
 
-    # Write frame-times file for gmx trjconv
-    time_file = Path(tmpdir) / f"{label}_contact_times.dat"
-    with open(time_file, 'w') as f:
-        for t in contact_times:
-            f.write(f"{t:.1f}\n")
+    # Write ndx file for gmx trjconv -fr (GROMACS 2020 requires .ndx extension).
+    # GROMACS reads the group integers as frame times in ps — write contact times.
+    ndx_file = Path(tmpdir) / f"{label}_contact_frames.ndx"
+    with open(ndx_file, 'w') as f:
+        f.write("[ contact_frames ]\n")
+        f.write(" ".join(str(int(t)) for t in contact_times) + "\n")
 
     # Extract contact frames to a sub-trajectory
     contact_xtc = Path(tmpdir) / f"{label}_contact.xtc"
@@ -124,7 +126,7 @@ def extract_contact_frames(label, xtc_path, tpr_path, tmpdir):
         GMX, "trjconv",
         "-f", str(xtc_path), "-s", str(tpr_path),
         "-o", str(contact_xtc),
-        "-fr", str(time_file),
+        "-fr", str(ndx_file),
         "-nobackup",
     ]
     result = subprocess.run(

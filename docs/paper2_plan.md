@@ -39,6 +39,19 @@
 4. **Holt & Sawyer 1993** — β-Casein sequence and structure  
    Note: know the protein. Which regions are hydrophobic? Where are the phosphoserines?
 
+**Supporting refs (BLG-side methods/context — not Casein-specific, not main thesis refs):**
+
+5. **Zhang, Arrighi, Campbell, Lonchamp & Euston 2023** — "Molecular simulation of
+   partially denatured β-lactoglobulin", *Food Hydrocolloids* 142, 108811.
+   PDB 3BLG, GROMOS96 53A6/SPC, 500K unfold → quench to 5 metastable conformations
+   (QI–QV), hydration-shell water density/HB/diffusion analysis (FEL via Rg/RMSD).
+   Relevance: their GROMACS HB definition (H···A < 0.35 nm, angle > 150°) matches
+   `blg_hbonds.py` exactly — citable for HB-cutoff justification. Also useful
+   background on hydration-shell H-bonding "forming capacity" (C[HB]=N[HB]/N[H2O]_shell)
+   and bulk thermal-denaturation context. NOT an interfacial study (bulk solution
+   only) and NOT about the calyx — use as a supporting methods citation, not a
+   thesis anchor for this paper.
+
 **Task L2 — Know your protein:**
 - What does AlphaFold2 give you for a disordered protein?
   Answer: one low-confidence conformation, NOT the ensemble. pLDDT < 70 for most residues.

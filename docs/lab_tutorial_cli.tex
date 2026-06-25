@@ -1,0 +1,1252 @@
+% ============================================================
+%  COMFHA Lab --- Command Line & HPC Cluster Tutorial
+%  For new lab members | Kasetsart University
+% ============================================================
+\documentclass[12pt,a4paper]{article}
+
+% -- Packages ------------------------------------------------
+\usepackage[top=2.5cm,bottom=2.5cm,left=3cm,right=3cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable,listings}
+\usepackage{parskip}
+\usepackage{setspace}
+
+% -- Colors --------------------------------------------------
+\definecolor{kugreen}{RGB}{0,104,56}
+\definecolor{kugold}{RGB}{187,148,0}
+\definecolor{codebg}{RGB}{245,247,250}
+\definecolor{codeframe}{RGB}{180,195,215}
+\definecolor{tipbg}{RGB}{232,247,235}
+\definecolor{tipframe}{RGB}{0,140,80}
+\definecolor{warnbg}{RGB}{255,248,220}
+\definecolor{warnframe}{RGB}{200,150,0}
+\definecolor{terminalBG}{RGB}{30,30,30}
+\definecolor{terminalFG}{RGB}{204,204,204}
+\definecolor{promptgreen}{RGB}{80,200,120}
+\definecolor{commentgray}{RGB}{130,130,130}
+\definecolor{keywordblue}{RGB}{86,156,214}
+\definecolor{stringorange}{RGB}{206,145,120}
+
+% -- Hyperref ------------------------------------------------
+\hypersetup{
+  colorlinks = true,
+  linkcolor  = kugreen,
+  urlcolor   = kugreen,
+  citecolor  = kugreen,
+  pdfauthor  = {COMFHA Lab, Kasetsart University},
+  pdftitle   = {Command Line and HPC Cluster Tutorial},
+}
+
+% -- Section styling -----------------------------------------
+\titleformat{\section}
+  {\large\bfseries\color{kugreen}}
+  {\thesection.}{0.8em}{}[\titlerule]
+
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{kugreen!80!black}}
+  {\thesubsection.}{0.6em}{}
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries}
+  {\thesubsubsection.}{0.5em}{}
+
+% -- Header / Footer -----------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[L]{\small\color{kugreen}\textbf{COMFHA Lab} --- Command Line \& HPC Tutorial}
+\fancyhead[R]{\small\color{gray}Kasetsart University}
+\fancyfoot[C]{\small\thepage}
+\fancyfoot[R]{\small\color{gray}For internal use}
+
+% -- Terminal box (dark theme) --------------------------------
+\lstdefinestyle{terminal}{
+  backgroundcolor  = \color{terminalBG},
+  basicstyle       = \ttfamily\small\color{terminalFG},
+  breaklines       = true,
+  breakatwhitespace= true,
+  frame            = single,
+  rulecolor        = \color{terminalBG!70!black},
+  framesep         = 6pt,
+  xleftmargin      = 8pt,
+  xrightmargin     = 8pt,
+  aboveskip        = 8pt,
+  belowskip        = 8pt,
+  showstringspaces = false,
+  moredelim        = [is][\color{promptgreen}\bfseries]{<G>}{</G>},
+  moredelim        = [is][\color{commentgray}\itshape]{<C>}{</C>},
+  moredelim        = [is][\color{stringorange}]{<O>}{</O>},
+  moredelim        = [is][\color{keywordblue}]{<B>}{</B>},
+}
+
+\lstdefinestyle{code}{
+  backgroundcolor  = \color{codebg},
+  basicstyle       = \ttfamily\small,
+  breaklines       = true,
+  frame            = single,
+  rulecolor        = \color{codeframe},
+  framesep         = 5pt,
+  xleftmargin      = 8pt,
+  xrightmargin     = 8pt,
+  aboveskip        = 6pt,
+  belowskip        = 6pt,
+  showstringspaces = false,
+}
+
+\lstdefinestyle{bash}{
+  style            = code,
+  morekeywords     = {ssh,scp,rsync,sbatch,squeue,scancel,sinfo,module,source,
+                      conda,ls,cd,pwd,mkdir,rm,cp,mv,cat,less,head,tail,nano,
+                      chmod,ssh-keygen,ssh-copy-id,grep,find,echo,export},
+  keywordstyle     = \color{kugreen!80!black}\bfseries,
+  commentstyle     = \color{commentgray}\itshape,
+  comment          = [l]{\#},
+}
+
+% -- Tip / Warning boxes -------------------------------------
+\tcbset{
+  tipstyle/.style={
+    enhanced, breakable,
+    colback=tipbg, colframe=tipframe,
+    fonttitle=\bfseries\small,
+    title={Tip},
+    left=6pt, right=6pt, top=4pt, bottom=4pt,
+    before upper={\setlength\parskip{4pt}},
+  },
+  warnstyle/.style={
+    enhanced, breakable,
+    colback=warnbg, colframe=warnframe,
+    fonttitle=\bfseries\small\color{warnframe!80!black},
+    title={$\bigtriangleup$\ Important},
+    left=6pt, right=6pt, top=4pt, bottom=4pt,
+    before upper={\setlength\parskip{4pt}},
+  },
+  exercisestyle/.style={
+    enhanced, breakable,
+    colback=white, colframe=kugreen,
+    fonttitle=\bfseries\small\color{kugreen},
+    title={Exercise},
+    left=6pt, right=6pt, top=4pt, bottom=4pt,
+    before upper={\setlength\parskip{4pt}},
+  },
+  defstyle/.style={
+    enhanced, breakable,
+    colback=blue!5, colframe=blue!40,
+    fonttitle=\bfseries\small,
+    left=6pt, right=6pt, top=4pt, bottom=4pt,
+    before upper={\setlength\parskip{4pt}},
+  },
+}
+
+\newcommand{\tip}[1]{%
+  \begin{tcolorbox}[tipstyle]
+    #1
+  \end{tcolorbox}
+}
+
+\newcommand{\warn}[1]{%
+  \begin{tcolorbox}[warnstyle]
+    #1
+  \end{tcolorbox}
+}
+
+\newcommand{\exercise}[1]{%
+  \begin{tcolorbox}[exercisestyle]
+    #1
+  \end{tcolorbox}
+}
+
+\newcommand{\defbox}[2]{%
+  \begin{tcolorbox}[defstyle, title={#1}]
+    #2
+  \end{tcolorbox}
+}
+
+% -- Inline code ----------------------------------------------
+\newcommand{\cmd}[1]{\texttt{\textcolor{kugreen!70!black}{#1}}}
+\newcommand{\key}[1]{\fbox{\small\ttfamily #1}}
+
+% -- Misc ----------------------------------------------------
+\setlength{\parskip}{6pt}
+\onehalfspacing
+
+% ============================================================
+\begin{document}
+
+% -- Title page ----------------------------------------------
+\begin{titlepage}
+  \centering
+  \vspace*{2cm}
+
+  {\huge\bfseries\color{kugreen}
+    Command Line \& HPC Cluster\\[0.4em]
+    Tutorial for New Lab Members}
+
+  \vspace{1.5cm}
+
+  {\large\color{gray} From Zero to Running Your First Cluster Job}
+
+  \vspace{2.5cm}
+
+  \begin{tabular}{ll}
+    \textbf{Lab}        & COMFHA Computational Lab \\[4pt]
+    \textbf{Department} & Kasetsart University \\[4pt]
+    \textbf{Audience}   & New lab members with no prior terminal experience \\[4pt]
+    \textbf{Version}    & 1.0 (2026)
+  \end{tabular}
+
+  \vspace{2.5cm}
+
+  \begin{tcolorbox}[enhanced, colback=kugreen!8, colframe=kugreen,
+      left=12pt, right=12pt, top=8pt, bottom=8pt]
+    \small
+    This tutorial guides you step by step from opening a terminal for the
+    first time to submitting your own job on the KU Cluster and Nontri HPC.
+    No prior programming or Linux experience is required.
+    Complete each section in order and attempt every exercise before moving on.
+  \end{tcolorbox}
+
+  \vfill
+  {\small\color{gray} COMFHA Lab $\cdot$ Kasetsart University $\cdot$
+   \url{comfha.ku.ac.th}}
+\end{titlepage}
+
+% -- TOC -----------------------------------------------------
+\tableofcontents
+\clearpage
+
+% ============================================================
+\part*{Part I \quad The Command Line}
+\addcontentsline{toc}{part}{Part I: The Command Line}
+% ============================================================
+
+% -------------------------------------------------------------
+\section{What Is a Terminal?}
+% -------------------------------------------------------------
+
+When you open a program like a file manager or a web browser, you interact with
+it through icons and menus. A \textbf{terminal} (also called a \emph{shell},
+\emph{command line}, or \emph{command prompt}) is a text-based way to interact
+with your computer. Instead of clicking, you type instructions and the computer
+responds.
+
+\defbox{Why scientists use the terminal}{
+  \begin{itemize}[noitemsep]
+    \item Run programs that have no graphical interface (e.g.\ GROMACS, Python scripts)
+    \item Automate repetitive tasks with a single command
+    \item Connect to remote supercomputers (clusters)
+    \item Work faster once you know a few commands
+  \end{itemize}
+}
+
+\subsection{The Shell}
+
+The program that reads your commands and runs them is called a \textbf{shell}.
+The most common shell is \textbf{Bash} (Bourne Again SHell), which is the
+default on most Linux systems and clusters. macOS uses \textbf{Zsh} (Z Shell)
+by default, which is nearly identical for everyday use.
+
+\subsection{Opening a Terminal}
+
+\begin{center}
+\begin{tabular}{>{\bfseries}lp{9cm}}
+\toprule
+Operating System & How to open a terminal \\
+\midrule
+macOS & \texttt{Cmd + Space} $\to$ type \texttt{Terminal} $\to$ press \texttt{Enter} \\
+Ubuntu/Debian & \texttt{Ctrl + Alt + T} \\
+Windows & Install \textit{Git Bash} or use \textit{Windows Subsystem for Linux (WSL)} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+When the terminal opens you will see something like this:
+
+\begin{lstlisting}[style=terminal]
+yourusername@computername ~ %
+\end{lstlisting}
+
+This is the \textbf{prompt}. It tells you who you are, which machine you are
+on, and where you are in the file system. The \texttt{\%} (or \texttt{\$}) is
+where you type your command.
+
+\warn{
+  Never close the terminal mid-task by just clicking the X. Type \cmd{exit}
+  or press \key{Ctrl+D} to close it properly.
+}
+
+% -------------------------------------------------------------
+\section{Your First Commands}
+% -------------------------------------------------------------
+
+Every command follows the same basic structure:
+
+\begin{lstlisting}[style=code]
+command  [options]  [arguments]
+\end{lstlisting}
+
+\begin{itemize}
+  \item \textbf{command} --- the program you want to run
+  \item \textbf{options} --- flags that change behavior, usually start with \texttt{-}
+  \item \textbf{arguments} --- the target (file, directory, etc.)
+\end{itemize}
+
+\subsection{whoami, date, echo}
+
+\begin{lstlisting}[style=bash]
+whoami          # prints your username
+date            # prints today's date and time
+echo "Hello!"   # prints whatever you write
+\end{lstlisting}
+
+\begin{lstlisting}[style=terminal]
+$ whoami
+pao
+$ date
+Mon Jun 23 10:05:42 +07 2026
+$ echo "Hello, lab!"
+Hello, lab!
+\end{lstlisting}
+
+\tip{
+  Text after a \texttt{\#} in a command is a \textbf{comment} --- the shell
+  ignores it. Comments are used in this tutorial to explain what a line does.
+}
+
+\exercise{
+  Open your terminal and run all three commands above. What is your username?
+  What is today's date?
+}
+
+% -------------------------------------------------------------
+\section{Navigating the File System}
+% -------------------------------------------------------------
+
+The file system is organized as a tree of folders (called \textbf{directories}).
+On Linux and macOS the root of the tree is \texttt{/}. Your personal folder is
+called the \textbf{home directory} and is written as \texttt{\textasciitilde}
+(a tilde).
+
+\begin{lstlisting}[style=bash]
+/
++-- home/
+|   \-- pao/          <- your home directory (~)
+|       +-- Documents/
+|       +-- Workspace/
+|       \-- scripts/
++-- etc/
+\-- usr/
+\end{lstlisting}
+
+\subsection{pwd --- Print Working Directory}
+
+\cmd{pwd} tells you where you currently are.
+
+\begin{lstlisting}[style=bash]
+pwd
+\end{lstlisting}
+\begin{lstlisting}[style=terminal]
+/Users/pao
+\end{lstlisting}
+
+\subsection{ls --- List Files}
+
+\begin{lstlisting}[style=bash]
+ls              # list files in current directory
+ls -l           # long format (shows permissions, size, date)
+ls -lh          # same but sizes in human-readable form (KB, MB)
+ls -la          # include hidden files (names starting with .)
+ls Documents/   # list a specific directory
+\end{lstlisting}
+
+\begin{lstlisting}[style=terminal]
+$ ls -lh
+total 48K
+drwxr-xr-x  3 pao  staff   96B Jun 23 09:00 Documents
+drwxr-xr-x  5 pao  staff  160B Jun 22 14:30 Workspace
+-rw-r--r--  1 pao  staff  2.4K Jun 20 11:00 notes.txt
+\end{lstlisting}
+
+\subsection{cd --- Change Directory}
+
+\begin{lstlisting}[style=bash]
+cd Documents        # go into the Documents folder
+cd ..               # go up one level (parent directory)
+cd ../..            # go up two levels
+cd ~                # go to your home directory (always works)
+cd -                # go back to the previous directory
+\end{lstlisting}
+
+\tip{
+  \textbf{Tab completion} is your best friend. Start typing a folder or file
+  name and press \key{Tab} --- the shell will complete it for you. Press
+  \key{Tab} twice to see all possible matches.
+}
+
+\exercise{
+  \begin{enumerate}[noitemsep]
+    \item Run \cmd{pwd} to see where you are.
+    \item Run \cmd{ls -lh} to list your files.
+    \item Navigate into one of the folders shown, then use \cmd{cd ..} to come back.
+    \item Try typing \texttt{cd Doc} then press \key{Tab}. What happens?
+  \end{enumerate}
+}
+
+% -------------------------------------------------------------
+\section{Working with Files and Directories}
+% -------------------------------------------------------------
+
+\subsection{mkdir --- Make Directory}
+
+\begin{lstlisting}[style=bash]
+mkdir my_project             # create a folder
+mkdir -p data/raw/outputs    # create nested folders at once
+\end{lstlisting}
+
+\subsection{touch --- Create an Empty File}
+
+\begin{lstlisting}[style=bash]
+touch notes.txt              # create an empty file called notes.txt
+touch run.sh analysis.py     # create multiple files at once
+\end{lstlisting}
+
+\subsection{cp --- Copy}
+
+\begin{lstlisting}[style=bash]
+cp notes.txt notes_backup.txt        # copy a file
+cp -r my_project/ my_project_old/    # copy a directory (-r = recursive)
+\end{lstlisting}
+
+\subsection{mv --- Move or Rename}
+
+\begin{lstlisting}[style=bash]
+mv notes.txt Documents/              # move file to Documents/
+mv notes.txt summary.txt             # rename a file (same directory)
+mv my_project/ Workspace/            # move a folder
+\end{lstlisting}
+
+\subsection{rm --- Remove (Delete)}
+
+\warn{
+  There is no Recycle Bin on the command line. Once you run \cmd{rm}, the
+  file is gone permanently. Be very careful, especially with \cmd{rm -r}.
+}
+
+\begin{lstlisting}[style=bash]
+rm notes.txt               # delete a file
+rm -r old_data/            # delete a directory and everything inside it
+rm -i file.txt             # ask for confirmation before deleting
+\end{lstlisting}
+
+\subsection{Quick Reference}
+
+\begin{center}
+\begin{tabular}{>{\ttfamily}lp{8cm}}
+\toprule
+\normalfont\textbf{Command} & \textbf{What it does} \\
+\midrule
+mkdir \textit{name}   & Create a directory \\
+touch \textit{file}   & Create an empty file \\
+cp \textit{a} \textit{b}    & Copy \textit{a} to \textit{b} \\
+mv \textit{a} \textit{b}    & Move or rename \textit{a} to \textit{b} \\
+rm \textit{file}      & Delete a file \\
+rm -r \textit{dir}    & Delete a directory \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\exercise{
+  \begin{enumerate}[noitemsep]
+    \item Create a directory called \texttt{lab\_practice}.
+    \item Inside it, create a file called \texttt{hello.txt}.
+    \item Copy \texttt{hello.txt} to \texttt{hello\_copy.txt}.
+    \item Rename \texttt{hello\_copy.txt} to \texttt{greeting.txt}.
+    \item List the directory to confirm both files exist.
+    \item Delete \texttt{greeting.txt}.
+  \end{enumerate}
+}
+
+% -------------------------------------------------------------
+\section{Viewing File Contents}
+% -------------------------------------------------------------
+
+\subsection{cat}
+
+\cmd{cat} prints the entire file to the screen. Best for short files.
+
+\begin{lstlisting}[style=bash]
+cat notes.txt
+\end{lstlisting}
+
+\subsection{less}
+
+\cmd{less} opens a file for scrolling --- press \key{Space} to go forward,
+\key{b} to go back, \key{q} to quit. Best for long files.
+
+\begin{lstlisting}[style=bash]
+less trajectory_log.txt
+\end{lstlisting}
+
+\subsection{head and tail}
+
+\begin{lstlisting}[style=bash]
+head notes.txt         # show first 10 lines
+head -n 20 notes.txt   # show first 20 lines
+tail notes.txt         # show last 10 lines
+tail -f output.log     # keep watching a file as it grows (useful for job logs)
+\end{lstlisting}
+
+\subsection{grep --- Search Inside Files}
+
+\begin{lstlisting}[style=bash]
+grep "error" output.log          # find lines containing "error"
+grep -i "warning" output.log     # case-insensitive search
+grep -n "Step" md.log            # show line numbers
+\end{lstlisting}
+
+\tip{
+  \cmd{tail -f} is extremely useful when you have a simulation running --- it
+  lets you watch the progress in real time without opening a new connection.
+}
+
+% -------------------------------------------------------------
+\section{Editing Files with nano}
+% -------------------------------------------------------------
+
+\textbf{nano} is a simple text editor that runs inside the terminal.
+
+\begin{lstlisting}[style=bash]
+nano notes.txt          # open (or create) notes.txt for editing
+\end{lstlisting}
+
+Once inside nano, you can type normally. The keyboard shortcuts shown at the
+bottom of the screen use \texttt{\^{}} to mean \key{Ctrl}:
+
+\begin{center}
+\begin{tabular}{lp{7cm}}
+\toprule
+\textbf{Shortcut} & \textbf{Action} \\
+\midrule
+\key{Ctrl+O} then \key{Enter} & Save (Write Out) \\
+\key{Ctrl+X} & Exit nano \\
+\key{Ctrl+K} & Cut the current line \\
+\key{Ctrl+U} & Paste \\
+\key{Ctrl+W} & Search \\
+\key{Ctrl+\textbackslash} & Find and Replace \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\exercise{
+  \begin{enumerate}[noitemsep]
+    \item Open \texttt{nano hello.txt} inside your \texttt{lab\_practice} folder.
+    \item Type: \texttt{My name is [your name] and I am learning the terminal.}
+    \item Save with \key{Ctrl+O} then \key{Enter}.
+    \item Exit with \key{Ctrl+X}.
+    \item Verify with \cmd{cat hello.txt}.
+  \end{enumerate}
+}
+
+% -------------------------------------------------------------
+\section{Productivity Tips}
+% -------------------------------------------------------------
+
+\subsection{Command History}
+
+Press the \key{$\uparrow$} arrow key to cycle through previous commands.
+You do not need to retype them.
+
+\begin{lstlisting}[style=bash]
+history            # show all recent commands
+history | grep cd  # find all times you used cd
+\end{lstlisting}
+
+\subsection{Ctrl Shortcuts}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Shortcut} & \textbf{What it does} \\
+\midrule
+\key{Ctrl+C}  & Cancel the currently running command \\
+\key{Ctrl+Z}  & Pause the running command (resume with \texttt{fg}) \\
+\key{Ctrl+L}  & Clear the screen \\
+\key{Ctrl+A}  & Jump to beginning of the line \\
+\key{Ctrl+E}  & Jump to end of the line \\
+\key{Ctrl+D}  & Log out / close the terminal \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{The Pipe Operator \texttt{|}}
+
+The pipe \texttt{|} sends the output of one command as input to another.
+It is one of the most powerful features of the shell.
+
+\begin{lstlisting}[style=bash]
+ls -lh | grep ".txt"    # list only .txt files
+cat data.log | tail -20 | grep "STEP"  # last 20 lines containing "STEP"
+\end{lstlisting}
+
+\subsection{Wildcards}
+
+\begin{lstlisting}[style=bash]
+ls *.txt          # list all files ending in .txt
+rm output_*.log   # delete all files matching the pattern
+cp *.py scripts/  # copy all Python files into scripts/
+\end{lstlisting}
+
+% ============================================================
+\clearpage
+\part*{Part II \quad SSH --- Connecting to Remote Computers}
+\addcontentsline{toc}{part}{Part II: SSH --- Connecting to Remote Computers}
+% ============================================================
+
+% -------------------------------------------------------------
+\section{What Is SSH?}
+% -------------------------------------------------------------
+
+\defbox{SSH (Secure Shell)}{
+  SSH is a protocol that lets you log in to a remote computer over the
+  network and use its terminal as if you were sitting in front of it.
+  All communication is encrypted --- no one can intercept your commands
+  or data.
+}
+
+In our lab you will use SSH to connect to two systems:
+
+\begin{enumerate}
+  \item \textbf{KU Cluster} (\texttt{ku-cluster}) --- general-purpose cluster
+        at Kasetsart University. Used for MD simulations with GROMACS.
+  \item \textbf{Nontri HPC} (\texttt{ku-ai}) --- GPU cluster (Nontri)
+        at Kasetsart University. Used for GPU-accelerated jobs.
+\end{enumerate}
+
+\subsection{Basic SSH Syntax}
+
+\begin{lstlisting}[style=bash]
+ssh username@hostname
+\end{lstlisting}
+
+For example:
+
+\begin{lstlisting}[style=bash]
+ssh pao@158.108.25.40      # connect to KU Cluster
+ssh pao@br1.paas.ku.ac.th  # connect to Nontri HPC
+\end{lstlisting}
+
+The first time you connect, SSH will ask you to verify the server's
+fingerprint. Type \texttt{yes} and press \key{Enter}.
+
+% -------------------------------------------------------------
+\section{SSH Keys --- Password-Free Login}
+% -------------------------------------------------------------
+
+Typing a password every time is tedious and less secure. \textbf{SSH keys}
+are a pair of files:
+
+\begin{itemize}
+  \item \textbf{Private key} --- stays on \emph{your} computer, never share it.
+  \item \textbf{Public key} --- placed on the remote server. Anyone with the
+        matching private key can log in.
+\end{itemize}
+
+\subsection{Step 1 --- Generate a Key Pair}
+
+Run this on your \textbf{local machine} (your laptop or desktop):
+
+\begin{lstlisting}[style=bash]
+ssh-keygen -t ed25519 -C "your_email@example.com"
+\end{lstlisting}
+
+\begin{lstlisting}[style=terminal]
+Generating public/private ed25519 key pair.
+Enter file in which to save the key (/Users/pao/.ssh/id_ed25519):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /Users/pao/.ssh/id_ed25519
+Your public key has been saved in /Users/pao/.ssh/id_ed25519.pub
+\end{lstlisting}
+
+\begin{itemize}
+  \item Press \key{Enter} to accept the default file location.
+  \item You may set a passphrase for extra security, or leave it empty.
+\end{itemize}
+
+This creates two files in \texttt{\textasciitilde/.ssh/}:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{File} & \textbf{Description} \\
+\midrule
+\texttt{id\_ed25519}     & Your \textbf{private} key --- \textbf{never share this} \\
+\texttt{id\_ed25519.pub} & Your \textbf{public} key --- this goes to the server \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Step 2 --- Copy Your Public Key to the Server}
+
+\begin{lstlisting}[style=bash]
+# Easiest method (if ssh-copy-id is available):
+ssh-copy-id -i ~/.ssh/id_ed25519.pub username@hostname
+
+# Manual method:
+cat ~/.ssh/id_ed25519.pub
+# Copy the output, then on the remote server run:
+# echo "PASTE_KEY_HERE" >> ~/.ssh/authorized_keys
+\end{lstlisting}
+
+After this you can log in without a password:
+
+\begin{lstlisting}[style=bash]
+ssh username@158.108.25.40   # no password prompt!
+\end{lstlisting}
+
+\warn{
+  If you generate a \emph{separate} key pair for each cluster, give them
+  different names during \cmd{ssh-keygen} (e.g.\ \texttt{id\_ed25519\_ku}).
+  Use the \texttt{-i} flag with SSH to specify which key to use:\\[4pt]
+  \texttt{ssh -i \textasciitilde/.ssh/id\_ed25519\_ku username@158.108.25.40}
+}
+
+\subsection{Step 3 --- Create an SSH Config File (Recommended)}
+
+Instead of typing long commands, you can create a shortcut file at
+\texttt{\textasciitilde/.ssh/config}:
+
+\begin{lstlisting}[style=bash]
+nano ~/.ssh/config
+\end{lstlisting}
+
+Add the following (replace \texttt{your\_username} with your actual username):
+
+\begin{lstlisting}[style=code]
+# KU Cluster
+Host ku-cluster
+    HostName 158.108.25.40
+    User your_username
+    IdentityFile ~/.ssh/id_ed25519_ku
+
+# Nontri HPC
+Host ku-ai
+    HostName br1.paas.ku.ac.th
+    User your_username
+    IdentityFile ~/.ssh/id_ed25519
+\end{lstlisting}
+
+Save and exit nano (\key{Ctrl+O}, \key{Enter}, \key{Ctrl+X}).
+
+Now you can connect with just:
+
+\begin{lstlisting}[style=bash]
+ssh ku-cluster      # instead of ssh -i ... username@158.108.25.40
+ssh ku-ai           # instead of ssh -i ... username@br1.paas.ku.ac.th
+\end{lstlisting}
+
+% -------------------------------------------------------------
+\section{Connecting to the KU Cluster}
+% -------------------------------------------------------------
+
+\subsection{Overview}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Property} & \textbf{Details} \\
+\midrule
+Hostname    & \texttt{158.108.25.40} \\
+Short name  & \texttt{ku-cluster} (after SSH config is set up) \\
+Scheduler   & SLURM \\
+Recommended key & \texttt{id\_ed25519\_ku} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Logging In}
+
+\begin{lstlisting}[style=bash]
+ssh ku-cluster
+\end{lstlisting}
+
+You will see a welcome message followed by the cluster prompt:
+
+\begin{lstlisting}[style=terminal]
+Last login: Mon Jun 23 09:30:00 2026 from 10.31.74.100
+
+[your_username@ku-cluster ~]$
+\end{lstlisting}
+
+\subsection{First Things to Do After Login}
+
+\begin{lstlisting}[style=bash]
+pwd                  # confirm your home directory path
+ls                   # see what is already there
+df -h ~              # check how much disk space you have
+\end{lstlisting}
+
+\subsection{Loading GROMACS}
+
+Software on clusters is managed with the \cmd{module} system. You load the
+software you need before running it:
+
+\begin{lstlisting}[style=bash]
+module avail                   # list all available software
+module avail gromacs           # search for GROMACS specifically
+module load gromacs/2020.4     # load a specific version
+gmx --version                  # confirm it loaded
+\end{lstlisting}
+
+\tip{
+  To avoid loading modules manually every time, add the \cmd{module load}
+  line to your \texttt{\textasciitilde/.bashrc} file on the cluster.
+}
+
+\subsection{Logging Out}
+
+\begin{lstlisting}[style=bash]
+exit
+\end{lstlisting}
+
+% -------------------------------------------------------------
+\section{Connecting to Nontri HPC (ku-ai)}
+% -------------------------------------------------------------
+
+\subsection{Overview}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Property} & \textbf{Details} \\
+\midrule
+Hostname     & \texttt{br1.paas.ku.ac.th} \\
+Short name   & \texttt{ku-ai} (after SSH config is set up) \\
+Scheduler    & SLURM \\
+GPU queue    & \texttt{gpuq} \\
+GROMACS      & 2022.6, 2024.1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Logging In}
+
+\begin{lstlisting}[style=bash]
+ssh ku-ai
+\end{lstlisting}
+
+\begin{lstlisting}[style=terminal]
+[your_username@nontri ~]$
+\end{lstlisting}
+
+\subsection{Loading GROMACS on Nontri}
+
+\begin{lstlisting}[style=bash]
+module avail gromacs
+module load gromacs/2024.1    # GPU-enabled version
+gmx --version
+\end{lstlisting}
+
+\warn{
+  Nontri uses GPU nodes for GROMACS. Always request a \texttt{gpuq} partition
+  in your SLURM script (see Section~\ref{sec:slurm}). Running a
+  GPU-optimized binary on CPU-only nodes will either fail or run very slowly.
+}
+
+% -------------------------------------------------------------
+\section{Transferring Files Between Your Computer and a Cluster}
+% -------------------------------------------------------------
+
+\subsection{scp --- Secure Copy}
+
+\cmd{scp} works like \cmd{cp} but over SSH.
+
+\begin{lstlisting}[style=bash]
+# Upload: local -> cluster
+scp my_script.py ku-cluster:~/Workspace/
+
+# Download: cluster -> local
+scp ku-cluster:~/outputs/result.xvg ./
+
+# Copy a whole directory (recursive)
+scp -r local_folder/ ku-cluster:~/Workspace/
+
+# Same for Nontri
+scp analysis.py ku-ai:~/project/
+\end{lstlisting}
+
+\subsection{rsync --- Smart Sync (Recommended)}
+
+\cmd{rsync} only transfers files that have changed, making it much faster
+for large directories.
+
+\begin{lstlisting}[style=bash]
+# Sync a local folder to the cluster
+rsync -avz --progress local_folder/ ku-cluster:~/Workspace/local_folder/
+
+# Download results back to your machine
+rsync -avz ku-cluster:~/outputs/ ./outputs/
+\end{lstlisting}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Flag} & \textbf{Meaning} \\
+\midrule
+\texttt{-a} & Archive mode (preserves timestamps, permissions, etc.) \\
+\texttt{-v} & Verbose (show what is being transferred) \\
+\texttt{-z} & Compress data during transfer (faster on slow networks) \\
+\texttt{--progress} & Show transfer progress \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\tip{
+  Always use \cmd{rsync} instead of \cmd{scp} when syncing simulation output
+  folders --- trajectory files are large and rsync avoids re-sending what
+  already arrived.
+}
+
+% ============================================================
+\clearpage
+\part*{Part III \quad Running Jobs on the Cluster (SLURM)}
+\addcontentsline{toc}{part}{Part III: Running Jobs on the Cluster}
+\label{sec:slurm}
+% ============================================================
+
+% -------------------------------------------------------------
+\section{What Is a Job Scheduler?}
+% -------------------------------------------------------------
+
+A cluster is a shared resource --- many researchers use it at the same time.
+A \textbf{scheduler} (our clusters use \textbf{SLURM}) manages the queue of
+jobs and decides which job runs on which node and when.
+
+You submit a \textbf{job script} --- a text file that describes what resources
+you need and what commands to run. SLURM puts your job in the queue and runs
+it when resources are available.
+
+\defbox{Key concepts}{
+  \begin{description}[noitemsep]
+    \item[Node] One physical computer in the cluster.
+    \item[Core / CPU] A single processing unit on a node.
+    \item[Partition] A group of nodes (e.g.\ GPU nodes, high-memory nodes).
+    \item[Job] Your submitted work unit.
+    \item[Queue] The list of waiting jobs.
+    \item[Walltime] The maximum time your job is allowed to run.
+  \end{description}
+}
+
+% -------------------------------------------------------------
+\section{Checking the Cluster Status}
+% -------------------------------------------------------------
+
+\begin{lstlisting}[style=bash]
+sinfo                        # see all partitions and node status
+squeue                       # see all jobs currently in the queue
+squeue -u your_username      # see only YOUR jobs
+squeue --start               # see estimated start times
+\end{lstlisting}
+
+\begin{lstlisting}[style=terminal]
+$ squeue -u pao
+JOBID  PARTITION  NAME       USER  ST  TIME        NODES NODELIST
+12345  main       run_nvt    pao   R   0:05:23     1     node04
+12346  gpuq       run_gpu    pao   PD  0:00:00     1     (Priority)
+\end{lstlisting}
+
+Common \textbf{ST} (state) values:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{State} & \textbf{Meaning} \\
+\midrule
+\texttt{R}  & Running \\
+\texttt{PD} & Pending (waiting in queue) \\
+\texttt{CG} & Completing \\
+\texttt{F}  & Failed \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% -------------------------------------------------------------
+\section{Writing a SLURM Job Script}
+% -------------------------------------------------------------
+
+A job script is a regular shell script with special comments at the top
+that start with \texttt{\#SBATCH}. These tell SLURM what resources you need.
+
+\subsection{Template for KU Cluster (CPU job)}
+
+\begin{lstlisting}[style=bash]
+#!/bin/bash
+#SBATCH --job-name=my_simulation     # name shown in squeue
+#SBATCH --output=slurm_%j.out        # stdout log (%j = job ID)
+#SBATCH --error=slurm_%j.err         # stderr log
+#SBATCH --nodes=1                    # number of nodes
+#SBATCH --ntasks=1                   # number of MPI tasks
+#SBATCH --cpus-per-task=6            # CPU cores per task
+#SBATCH --mem=8G                     # total memory
+#SBATCH --time=24:00:00              # max walltime (HH:MM:SS)
+#SBATCH --partition=main             # partition name
+
+# -- Environment setup --------------------------------------
+module load gromacs/2020.4
+
+# -- Change to the directory you submitted from -------------
+cd $SLURM_SUBMIT_DIR
+
+# -- Your commands ------------------------------------------
+echo "Job started on $(hostname) at $(date)"
+
+gmx mdrun -v -deffnm run -ntmpi 1 -ntomp 6
+
+echo "Job finished at $(date)"
+\end{lstlisting}
+
+Save this file as, for example, \texttt{submit.sh}.
+
+\subsection{Template for Nontri HPC (GPU job)}
+
+\begin{lstlisting}[style=bash]
+#!/bin/bash
+#SBATCH --job-name=gpu_simulation
+#SBATCH --output=slurm_%j.out
+#SBATCH --error=slurm_%j.err
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --gres=gpu:1                 # request 1 GPU
+#SBATCH --mem=16G
+#SBATCH --time=48:00:00
+#SBATCH --partition=gpuq             # GPU partition on Nontri
+
+module load gromacs/2024.1
+
+cd $SLURM_SUBMIT_DIR
+
+echo "Job started on $(hostname) at $(date)"
+
+# GPU-enabled GROMACS run
+gmx mdrun -v -deffnm run -ntmpi 1 -ntomp 4 -gpu_id 0
+
+echo "Job finished at $(date)"
+\end{lstlisting}
+
+\subsection{Common \#SBATCH Options}
+
+\begin{center}
+\begin{tabular}{>{\ttfamily}lp{8cm}}
+\toprule
+\normalfont\textbf{Option} & \textbf{Description} \\
+\midrule
+--job-name=\textit{name}       & Job name (appears in squeue) \\
+--output=\textit{file}         & Standard output log file \\
+--error=\textit{file}          & Error log file \\
+--nodes=\textit{N}             & Number of nodes \\
+--ntasks=\textit{N}            & Number of parallel tasks (MPI) \\
+--cpus-per-task=\textit{N}     & CPU cores per task (OpenMP) \\
+--mem=\textit{size}            & Total memory (e.g.\ 8G) \\
+--time=\textit{HH:MM:SS}       & Maximum runtime \\
+--partition=\textit{name}      & Which partition to use \\
+--gres=gpu:\textit{N}          & Number of GPUs to request \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% -------------------------------------------------------------
+\section{Submitting and Managing Jobs}
+% -------------------------------------------------------------
+
+\begin{lstlisting}[style=bash]
+# Submit your job script
+sbatch submit.sh
+
+# Check the status of your jobs
+squeue -u your_username
+
+# Cancel a job (use the JOBID from squeue)
+scancel 12345
+
+# Cancel ALL your jobs
+scancel -u your_username
+
+# See details and resource usage of a completed job
+sacct -j 12345 --format=JobID,JobName,State,Elapsed,MaxRSS
+
+# See estimated start time
+squeue --start -u your_username
+\end{lstlisting}
+
+\begin{lstlisting}[style=terminal]
+$ sbatch submit.sh
+Submitted batch job 12345
+
+$ squeue -u pao
+JOBID  PARTITION  NAME           USER  ST  TIME      NODES
+12345  main       my_simulation  pao   R   0:01:45   1
+\end{lstlisting}
+
+\subsection{Monitoring Your Running Job}
+
+Your job writes output to the log files you specified in the script.
+Watch them in real time with:
+
+\begin{lstlisting}[style=bash]
+tail -f slurm_12345.out      # replace 12345 with your actual job ID
+\end{lstlisting}
+
+Press \key{Ctrl+C} to stop watching the file.
+
+\exercise{
+  \begin{enumerate}[noitemsep]
+    \item Log in to one of the clusters.
+    \item Create a file called \texttt{test\_job.sh} using nano.
+    \item Paste a simple job script that runs \texttt{echo "Hello from the cluster!"}.
+    \item Submit it with \cmd{sbatch test\_job.sh}.
+    \item Watch the queue with \cmd{squeue -u your\_username}.
+    \item When the job finishes, read the output file with \cmd{cat}.
+  \end{enumerate}
+}
+
+% -------------------------------------------------------------
+\section{Keeping Jobs Running After You Log Out}
+% -------------------------------------------------------------
+
+Jobs submitted with \cmd{sbatch} continue running even after you disconnect ---
+this is the whole point of a scheduler. However, if you run a program
+\emph{directly} in the terminal (not via sbatch) and you disconnect,
+it will be killed.
+
+\begin{tcolorbox}[defstyle, title={Use screen or tmux for interactive sessions}]
+  If you need an interactive session that survives disconnection, use
+  \texttt{screen} or \texttt{tmux}:
+\begin{lstlisting}[style=bash]
+screen -S mysession     # start a named screen session
+# ... run your commands ...
+# Detach: Ctrl+A then D
+screen -r mysession     # reattach after reconnecting
+\end{lstlisting}
+  However, for all production jobs in our lab, always use \texttt{sbatch}.
+\end{tcolorbox}
+
+% ============================================================
+\clearpage
+\part*{Appendix \quad Quick Reference Card}
+\addcontentsline{toc}{part}{Appendix: Quick Reference Card}
+% ============================================================
+
+\section*{A.1 --- Essential Commands}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{>{\ttfamily}lp{9cm}}
+\toprule
+\normalfont\textbf{Command} & \textbf{What it does} \\
+\midrule
+pwd              & Print current directory \\
+ls -lh           & List files (human-readable sizes) \\
+cd \textit{dir}        & Change to directory \\
+cd ..            & Go up one level \\
+mkdir \textit{name}    & Create directory \\
+touch \textit{file}    & Create empty file \\
+cp \textit{a} \textit{b}     & Copy a to b \\
+mv \textit{a} \textit{b}     & Move/rename a to b \\
+rm \textit{file}       & Delete file \\
+cat \textit{file}      & Print file contents \\
+less \textit{file}     & Scroll through file (q to quit) \\
+tail -f \textit{file}  & Watch file in real time \\
+grep \textit{pat} \textit{file} & Search for pattern in file \\
+nano \textit{file}     & Open text editor \\
+history          & Show command history \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{A.2 --- SSH \& File Transfer}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{>{\ttfamily}lp{8cm}}
+\toprule
+\normalfont\textbf{Command} & \textbf{What it does} \\
+\midrule
+ssh ku-cluster                        & Connect to KU Cluster \\
+ssh ku-ai                             & Connect to Nontri HPC \\
+ssh-keygen -t ed25519                 & Generate SSH key pair \\
+ssh-copy-id user@host                 & Install public key on server \\
+scp file.txt ku-cluster:\textasciitilde/        & Upload file to cluster \\
+scp ku-cluster:\textasciitilde/file.txt .       & Download file from cluster \\
+rsync -avz dir/ ku-cluster:\textasciitilde/dir/ & Sync directory to cluster \\
+exit                                  & Log out \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{A.3 --- SLURM Job Management}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{>{\ttfamily}lp{8cm}}
+\toprule
+\normalfont\textbf{Command} & \textbf{What it does} \\
+\midrule
+sbatch submit.sh              & Submit a job script \\
+squeue -u \textit{username}          & Check your jobs \\
+squeue --start                & See estimated start times \\
+scancel \textit{JOBID}               & Cancel a specific job \\
+scancel -u \textit{username}         & Cancel all your jobs \\
+sinfo                         & Show partition/node status \\
+sacct -j \textit{JOBID}              & Show finished job details \\
+module avail                  & List available software \\
+module load \textit{name/version}    & Load software \\
+module list                   & List currently loaded modules \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{A.4 --- Cluster Connection Details}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{llll}
+\toprule
+\textbf{Cluster} & \textbf{SSH alias} & \textbf{Hostname} & \textbf{Scheduler} \\
+\midrule
+KU Cluster   & \texttt{ku-cluster} & \texttt{158.108.25.40}     & SLURM \\
+Nontri HPC   & \texttt{ku-ai}      & \texttt{br1.paas.ku.ac.th} & SLURM (\texttt{gpuq}) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{2em}
+\begin{tcolorbox}[enhanced, colback=kugreen!8, colframe=kugreen,
+    title={\bfseries Getting Help}]
+  \begin{itemize}[noitemsep]
+    \item \textbf{Manual pages:} type \texttt{man command} (e.g.\ \texttt{man ls}) for full documentation
+    \item \textbf{Quick help:} type \texttt{command --help} for a short summary
+    \item \textbf{SLURM docs:} \url{https://slurm.schedmd.com/documentation.html}
+    \item \textbf{GROMACS docs:} \url{https://manual.gromacs.org}
+    \item \textbf{Ask your supervisor or senior lab members} --- we are here to help!
+  \end{itemize}
+\end{tcolorbox}
+
+\end{document}

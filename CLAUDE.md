@@ -276,11 +276,10 @@ State: `review-stage/REVIEW_STATE.json`
 
 | Paper | Topic | Status |
 |-------|-------|--------|
-| Paper 1 | BLG contact ensemble at AWI | **Submitting to JCIS** |
-| Paper 2 | β-Casein at AWI | **Phase 0 — Literature.** Plan: `docs/paper2_plan.md`. Structure: `inputs_CAS/CASEIN.pdb` |
-| Paper 3 | BLG + β-Casein + Ca²⁺ bridge | Planned |
-| Paper 4 | Fat interaction (triglycerides) | Planned |
-| Enhanced sampling | Metadynamics along (SASA, θ) | SET 1D data = baseline |
+| Paper 1 | BLG vs β-Casein @ AWI — *"An Accessible Calyx and an Open Chain"* | **In progress** — CENTER validation 4/6 done. Plans: `docs/paper1_expansion_plan.md` + `docs/paper2_plan.md` |
+| Paper 2 | BLG + β-Casein + Ca²⁺ bridge | Planned — needs Paper 1's individual AWI characterization as prerequisite |
+| Paper 3 | Fat interaction (triglycerides) | Planned — ordering vs Paper 2 TBD |
+| Paper 4 | Enhanced sampling (metadynamics along SASA, orientation) | Reframed (June 12) — tests what committed adsorption looks like, given Paper 1's accessible-but-uncommitted finding. SET 1D data = baseline |
 <!-- ARIS:BEGIN -->
 ## ARIS Skill Scope
 ARIS skills installed in this project: 79 entries.

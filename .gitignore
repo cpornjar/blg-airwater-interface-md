@@ -1,5 +1,6 @@
 # ── MD trajectories & large binary outputs (never commit) ─────────────────────
 outputs_BLG/
+outputs_CAS/
 *.xtc
 *.trr
 *.tpr
@@ -20,13 +21,13 @@ outputs_BLG/
 *.fdb_latexmk
 *.fls
 *.synctex.gz
-paper/latex/main.out
+*.out
+*.toc
 paper/latex/OVLF.zip
 # paper/latex/main.pdf is tracked (prebuilt for readers without LaTeX)
 
 # Root-level stray LaTeX artifacts
 main.aux
-main.out
 main.pdf
 
 # ── Python cache ───────────────────────────────────────────────────────────────
@@ -59,11 +60,8 @@ results/GPU_Benchmark_Report_preliminary.pdf
 paper/.claude/
 .claude/
 
-# ── ARIS machine-specific manifest (absolute paths differ per machine) ─────────
-.aris/installed-skills.txt
-.aris/tools
-.aris/traces/
-.aris/*.prev
+# ── ARIS internal manifests/tooling (machine-specific) ──────────────────────────
+.aris/
 
 # ── Screenshots ───────────────────────────────────────────────────────────────
 Screenshots/

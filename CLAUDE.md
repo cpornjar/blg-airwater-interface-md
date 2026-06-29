@@ -53,10 +53,11 @@
 - Never load CENTER + R1 universe simultaneously — 8 GB RAM, guaranteed OOM
 - Key verified numbers — never change without rerunning analysis: 613 contacts, 6 long events, SASA 24–37 nm², Pearson r +0.006
 
-### Slash Commands (7 custom — `~/.claude/commands/`)
+### Slash Commands (8 custom — `~/.claude/commands/`)
 | Command | What it does |
 |---------|-------------|
 | `/start-research` | Full session init: health check + cluster status + recommendation |
+| `/journey` | Complete research journey board — milestones ✓/→/○ from actual files |
 | `/check-cluster` | Live squeue from both clusters |
 | `/sync-results <run>` | Dry-run then sync cluster → Mac Mini |
 | `/submit-job <args>` | Generate + review + submit SLURM job |

@@ -64,14 +64,14 @@
 
 **Task S1 — Decide simulation parameters (discuss with Claude before touching cluster):**
 
-| Parameter | BLG choice | β-Casein proposal |
+| Parameter | BLG choice (actual, verified June 25) | β-Casein (decided June 25) |
 |---|---|---|
-| Box geometry | Slab, 15×15×10 nm | Same — discuss |
-| Force field | CHARMM36m | CHARMM36m (optimised for IDPs ✓) |
+| Box geometry | Bulk 12×12×7 nm → stretched to 12×12×35 nm slab | **Bulk 16×14×9 nm → will stretch to ?×?×35 nm.** Forced larger: AlphaFold's single extended IDP conformation has a 12.9×10.0×5.2 nm bounding box after principal-axis alignment (diameter ~13.4 nm) — does not fit in BLG's 12 nm box without self-interaction across periodic images. CASEIN solvated system is ~2x BLG's atom count (198,773 atoms) as a result. Flag to P.P.: box sizes differ between proteins, not by choice. |
+| Force field | CHARMM36m (`charmm36-feb2026_ljpme_cgenff-5.0.ff`) | Same .ff, includes SEP (phosphoserine) residue — confirmed working |
 | Water model | TIP3P | TIP3P |
-| Simulation length | 1 µs × 4 replicas | TBD — 1 µs × 3? |
-| Starting orientation | Random | TBD — discuss with P.P. |
-| NPT equilibration | SKIPPED (slab geometry) | Same rule applies |
+| Simulation length | 1000 ns × 4 (CENTER+R1+R2+R3) | **Locked: 2 replicas (CENTER+R1), 1000 ns each** — see project memory "Locked decisions" |
+| Starting orientation | Random | Random (mirrors BLG; no other decision criterion identified) |
+| NPT equilibration | NOT skipped for bulk phase — runs at bulk box (10ns) BEFORE the Z-stretch to slab; only the post-stretch NVT_SLAB/production skip pressure coupling | Same pipeline: EM → NVT_bulk(100ps) → NPT(10ns) → stretch Z → NVT_SLAB(10ns) → production |
 
 **Task S2 — Study BLG mdp files before writing β-Casein inputs:**
 ```bash

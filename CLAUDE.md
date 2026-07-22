@@ -5,6 +5,28 @@
 
 ---
 
+## Last Session — read this first
+
+> Auto-updated by `/end-session`. This is the handoff between machines/sessions — whichever
+> machine (Mac Mini or MacBook) pulls latest `main` next should read this before doing anything else.
+
+**Closed:** 2026-07-22, Mac Mini
+**Done:**
+  - Fixed passwordless SSH Mac Mini → MacBook (stale DHCP IP in `~/.ssh/config`)
+  - Built this handoff section + wired `/end-session` to keep it updated
+  - Ran `/start-research`; discovered CASEIN `NPT_v2` (corrected phosphoserine topology) finished cleanly on the cluster 2026-07-16 17:58, unnoticed until now
+  - Confirmed the 2026-07-02 cancellation of CENTER production (job 6275) was intentional (wrong topology), not a crash — no orphaned bad run
+**Next action:** Z-stretch `outputs_CAS/CENTER/NPT_v2/confout.gro` to 35 nm, then grompp `NVT_SLAB_v2` on the corrected topology (do not reuse the June 30 `NVT_SLAB/` — pre-fix, wrong topology). Show sbatch script, wait for explicit yes before submitting.
+**Pending:**
+  1. Z-stretch + NVT_SLAB_v2 (CENTER) — see above
+  2. CENTER production resubmit (1000 ns) once NVT_SLAB_v2 validates
+  3. R1's own NVT_SLAB/production chain — hasn't started at all yet
+  4. Decide whether to commit the 2026-07-16 P.P. meeting-prep files (`progress-reports/Abstract_17th-IFSC_2026_Template.docx`, `for_PP_2026-07-13/`, `session_report_2026-07-16_1026.pdf`) and `results/figures/pubready/` — currently untracked
+**Open questions for P.P.:** none new this session
+**Git at close:** 5 modified (`CLAUDE.md` this session; `inputs_CAS/topol.top`, `cover_letter.tex/pdf`, `blg_rg.py` predate this session, untouched), 10 untracked paths — see `git status` for full list. Only `CLAUDE.md` committed this session.
+
+---
+
 ## Project Identity
 
 **Lab:** COMFHA — Computational Modelling in Food, Health, and Agriculture  
@@ -57,7 +79,7 @@
 | Command | What it does |
 |---------|-------------|
 | `/start-research` | Full session init: health check + cluster status + recommendation |
-| `/journey` | Complete research journey board — milestones ✓/→/○ from actual files |
+| `/journey` | Research journey board (milestones ✓/→/○ from actual files) + narrative session-recap PDF to `progress-reports/`. Use at end of session: start-research → work → journey → end-session |
 | `/check-cluster` | Live squeue from both clusters |
 | `/sync-results <run>` | Dry-run then sync cluster → Mac Mini |
 | `/submit-job <args>` | Generate + review + submit SLURM job |

@@ -58,7 +58,13 @@ results/GPU_Benchmark_Report_preliminary.pdf
 
 # ── Claude internal settings ──────────────────────────────────────────────────
 paper/.claude/
-.claude/
+.claude/*
+!.claude/commands/
+.claude/commands/*
+!.claude/commands/pub-figure.md
+# ^ everything else under .claude/ stays ignored (mostly symlinks into
+# ~/aris_repo, ~/9arm_repo etc. that wouldn't resolve on another machine) —
+# pub-figure.md is real project content, carved out so it syncs via git.
 
 # ── ARIS internal manifests/tooling (machine-specific) ──────────────────────────
 .aris/

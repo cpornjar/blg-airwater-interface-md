@@ -36,6 +36,22 @@ COLORS = {
     "replica3"   : "#1B7837",
     "center"     : "#5E4FA2",   # purple for CENTER run
     "smoothed"   : None,        # use same color as raw, full opacity
+
+    # Dedicated, non-overlapping roles for the publication figure suite —
+    # additive only, does not change any key above (other scripts rely on
+    # those). Added because the four blg_fig_publication figures are read
+    # as a set (paper/slides/report together), so a color must mean the
+    # same thing in every panel a reader sees them side by side: replica
+    # identity (replica1/2/3/center, above) is the only categorical-hue
+    # role; everything else below is deliberately outside that hue family.
+    "summary_ink": "#3D4C53",   # inferential/summary markers (fit lines,
+                                 # binned means, criterion boxes) — never a
+                                 # data category, so it stays off the
+                                 # replica-color hue family entirely
+    "dssp_accent": "#B8860B",   # single narratively-important DSSP trace
+                                 # (goldenrod; distinct from every replica hue)
+    "neutral_dark": "#4A4A4A",  # secondary DSSP trace / neutral reference
+    "neutral_light": "#B0B0B0", # tertiary DSSP trace / marginal histograms
 }
 
 # ── Known activation windows in CENTER run (ns) ──────────────────────────────

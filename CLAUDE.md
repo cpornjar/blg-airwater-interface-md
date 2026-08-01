@@ -10,20 +10,26 @@
 > Auto-updated by `/end-session`. This is the handoff between machines/sessions — whichever
 > machine (Mac Mini or MacBook) pulls latest `main` next should read this before doing anything else.
 
-**Closed:** 2026-07-22, Mac Mini
+**Closed:** 2026-08-01, Mac Mini
 **Done:**
-  - Fixed passwordless SSH Mac Mini → MacBook (stale DHCP IP in `~/.ssh/config`)
-  - Built this handoff section + wired `/end-session` to keep it updated
-  - Ran `/start-research`; discovered CASEIN `NPT_v2` (corrected phosphoserine topology) finished cleanly on the cluster 2026-07-16 17:58, unnoticed until now
-  - Confirmed the 2026-07-02 cancellation of CENTER production (job 6275) was intentional (wrong topology), not a crash — no orphaned bad run
-**Next action:** Z-stretch `outputs_CAS/CENTER/NPT_v2/confout.gro` to 35 nm, then grompp `NVT_SLAB_v2` on the corrected topology (do not reuse the June 30 `NVT_SLAB/` — pre-fix, wrong topology). Show sbatch script, wait for explicit yes before submitting.
+  - Set a Tue/Thu progress-meeting cadence with P.P. (first one 2026-08-04) — anchoring one concrete pipeline step to each meeting so work doesn't sit idle like CASEIN's 16-day gap did
+  - Found+fixed stale CASEIN topology: `outputs_CAS/CENTER/topol_CASEIN.top` was still the pre-fix June 25 monoanionic version; `inputs_CAS/topol.top` (the real SP2-corrected one) had also sat uncommitted since July 4. Both fixed, committed (`ed9399c`)
+  - Z-stretched `NPT_v2/confout.gro` → 35nm slab, grompp'd cleanly, submitted `NVT_SLAB_v2` — **job 6407, gpu1, still PENDING (queued) as of session end**
+  - Found+fixed a second real bug: 7 BLG analysis scripts (density/rg/pca/cluster/hbonds/dssp/calyx_sasa) referenced `_ext.tpr` files unreadable by the local GROMACS 2020.4 install (newer tpx version from the cluster) — patched to the compatible base `.tpr`; `blg_gate_analysis.py` deliberately left as-is (its R2/R3 outputs are already locked/committed, don't rerun without reason)
+  - Extended 5 of 8 CENTER-only BLG analyses to R1/R2/R3 — density, DSSP, surface tension, calyx SASA, Rg. All consistent across replicas, no red flags (e.g. Rg: CENTER 1.504±0.022, R1 1.497±0.009, R2 1.493±0.008, R3 1.499±0.012 nm)
+  - Completed `blg_rg.py`'s TODO stubs (user's own June Python learning exercise) at his explicit request; verified against the locked CENTER value before trusting it on R1–R3
+  - Fable-brainstormed candidate answers to P.P.'s 3 open June-9 questions (secondary-SASA definition, lab-experiment correlation, "modify to adsorb" prescriptiveness) — see `docs/paper1_expansion_plan.md`
+  - Caught+corrected a citation error: the Gochev/Schneck/Miller 2024 DOI was never actually in `references.bib`; independently verified via the real abstract that it's about D2O/H2O isotope effects, not general adsorption timescales — don't use it for the "minutes-to-hours" claim
+**Next action:** Check job 6407 — `ssh ku-cluster "squeue -j 6407"`. If done: validate (T≈298K, box 16×14×35nm) then grompp CENTER production, show sbatch script, wait for explicit yes before submitting.
 **Pending:**
-  1. Z-stretch + NVT_SLAB_v2 (CENTER) — see above
-  2. CENTER production resubmit (1000 ns) once NVT_SLAB_v2 validates
-  3. R1's own NVT_SLAB/production chain — hasn't started at all yet
-  4. Decide whether to commit the 2026-07-16 P.P. meeting-prep files (`progress-reports/Abstract_17th-IFSC_2026_Template.docx`, `for_PP_2026-07-13/`, `session_report_2026-07-16_1026.pdf`) and `results/figures/pubready/` — currently untracked
-**Open questions for P.P.:** none new this session
-**Git at close:** 5 modified (`CLAUDE.md` this session; `inputs_CAS/topol.top`, `cover_letter.tex/pdf`, `blg_rg.py` predate this session, untouched), 10 untracked paths — see `git status` for full list. Only `CLAUDE.md` committed this session.
+  1. NVT_SLAB_v2 validation + CENTER production submit (see above)
+  2. R1's own NVT_SLAB/production chain — not started at all yet
+  3. PCA, clustering, H-bonds for BLG R1/R2/R3 (H-bonds is slow, ~3hr+/replica on this machine — run as background/overnight job)
+  4. RMSF cache only has CENTER+R1 — `blg_rmsf.py` hardcodes those paths, needs R2/R3 added (not parameterized like the other scripts)
+  5. No RMSD script exists yet — needs writing to complete the paper's Figure 2 (RMSD/RMSF/Rg replica-averaged)
+  6. Bring the 3 P.P. questions + Fable's candidate answers to Tuesday's meeting
+**Open questions for P.P.:** the 3 items from her June 9 note — secondary-SASA definition, which lab experiments to correlate against (candidate: published literature, not in-house — no wet-lab evidence found in repo), how prescriptive "modify to adsorb" should be. Candidate answers drafted, need her confirmation 2026-08-04.
+**Git at close:** committing 7 script fixes + 15 new R1/R2/R3 analysis `.npz` files + this update now. Left untouched (pre-existing, not this session's concern): `cover_letter.tex/pdf` (intentionally uncommitted), `progress-reports/*` meeting-prep files, the old Kat `drive-download-*` folder, `inputs_CAS/SEP_monoanion_wrong_2026-07-02/` backup, `acs-main_v1_langmuir.bib` (stale template), `scripts/figures/blg_fig_rg.py` (still homework).
 
 ---
 

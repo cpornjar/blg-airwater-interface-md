@@ -44,7 +44,7 @@ TRAJS = {
         "xtc": [ROOT / "outputs_BLG/CENTER/MD1000/traj_comp.xtc"],
     },
     "R1": {
-        "tpr": ROOT / "outputs_BLG/REPLICA/MD/MD1/md_replica1_ext.tpr",
+        "tpr": ROOT / "outputs_BLG/REPLICA/MD/MD1/md_replica1.tpr",
         "xtc": [
             ROOT / "outputs_BLG/REPLICA/MD/MD1/traj_comp.xtc",
             ROOT / "outputs_BLG/REPLICA/MD/MD1/md_replica1_amd.part0002.xtc",
@@ -56,14 +56,14 @@ TRAJS = {
         ],
     },
     "R2": {
-        "tpr": ROOT / "outputs_BLG/REPLICA/MD/MD2/md_replica2_ext.tpr",
+        "tpr": ROOT / "outputs_BLG/REPLICA/MD/MD2/md_replica2.tpr",
         "xtc": [
             ROOT / "outputs_BLG/REPLICA/MD/MD2/traj_comp.xtc",
             ROOT / "outputs_BLG/REPLICA/MD/MD2/md_replica2_ext.part0002.xtc",
         ],
     },
     "R3": {
-        "tpr": ROOT / "outputs_BLG/REPLICA/MD/MD3/md_replica3_ext.tpr",
+        "tpr": ROOT / "outputs_BLG/REPLICA/MD/MD3/md_replica3.tpr",
         "xtc": [
             ROOT / "outputs_BLG/REPLICA/MD/MD3/traj_comp.xtc",
             ROOT / "outputs_BLG/REPLICA/MD/MD3/md_replica3_ext.part0002.xtc",

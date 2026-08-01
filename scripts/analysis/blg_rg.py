@@ -3,7 +3,6 @@ blg_rg.py
 =========
 Radius of gyration (Rg) over time for BLG, all replicas, via gmx gyrate.
 
-LEARNING EXERCISE — fill in the 3 TODOs below.
 Validation target for CENTER: Rg = 1.496 +/- 0.009 nm (locked value, CLAUDE.md)
 
 Usage:
@@ -34,66 +33,48 @@ TRAJS = {
         "xtc": ROOT / "outputs_BLG/CENTER/MD1000/traj_comp.xtc",
     },
     "R1": {
-        "tpr": ROOT / "outputs_BLG/REPLICA/MD/MD1/md_replica1_ext.tpr",
+        "tpr": ROOT / "outputs_BLG/REPLICA/MD/MD1/md_replica1.tpr",
         "xtc": ROOT / "outputs_BLG/REPLICA/MD/MD1/traj_comp.xtc",
     },
     "R2": {
-        "tpr": ROOT / "outputs_BLG/REPLICA/MD/MD2/md_replica2_ext.tpr",
+        "tpr": ROOT / "outputs_BLG/REPLICA/MD/MD2/md_replica2.tpr",
         "xtc": ROOT / "outputs_BLG/REPLICA/MD/MD2/traj_comp.xtc",
     },
     "R3": {
-        "tpr": ROOT / "outputs_BLG/REPLICA/MD/MD3/md_replica3_ext.tpr",
+        "tpr": ROOT / "outputs_BLG/REPLICA/MD/MD3/md_replica3.tpr",
         "xtc": ROOT / "outputs_BLG/REPLICA/MD/MD3/traj_comp.xtc",
     },
 }
 
 
 def parse_xvg(path):
-    """
-    Read an xvg file and return (time, data):
-      - time: 1D array, column 0 of every data line
-      - data: 2D array, all remaining columns (Rg, Rg_x, Rg_y, Rg_z)
-    """
-    times, rows = [], []                  # plain Python lists — cheap to grow
-    with open(path) as f:                 # open the file, auto-closes when done
-        for line in f:                    # read one line at a time
+    times, rows = [], []
+    with open(path) as f:
+        for line in f:
             if line.startswith(('#', '@')):
-                continue                  # skip xvg header/metadata lines
-            parts = line.split()          # "0.000  1.234  1.1  1.2  1.3" -> ['0.000','1.234','1.1','1.2','1.3']
-            if len(parts) >= 2:           # ignore blank lines
-                times.append(float(parts[0]))               # first number = time
-                rows.append([float(v) for v in parts[1:]])  # rest = Rg, Rg_x, Rg_y, Rg_z
-    return np.array(times), np.array(rows)   # convert lists -> numpy arrays for math later
+                continue
+            parts = line.split()
+            if len(parts) >= 2:
+                times.append(float(parts[0]))
+                rows.append([float(v) for v in parts[1:]])
+    return np.array(times), np.array(rows)
 
 
 def run_gyrate(tpr, xtc, out_xvg, tmpdir):
-    """Call `gmx gyrate` on the Protein group and parse its output."""
-    # This list IS the command line. Equivalent to typing in a terminal:
-    #   gmx gyrate -f traj.xtc -s topol.tpr -o gyrate.xvg -nobackup
-    cmd = [
-        GMX, "gyrate",
-        "-f", str(xtc),
-        "-s", str(tpr),
-        "-o", str(out_xvg),
-        "-nobackup",
-    ]
-
-    # gmx gyrate asks (interactively) "which group?" — we answer via stdin.
-    # "Protein\n" == typing "Protein" then pressing Enter.
+    cmd = [GMX, "gyrate", "-f", str(xtc), "-s", str(tpr),
+           "-o", str(out_xvg), "-nobackup"]
     result = subprocess.run(
         cmd,
         input="Protein\n",
-        capture_output=True,   # capture stdout/stderr instead of printing live
-        text=True,             # give us str, not bytes
-        cwd=tmpdir,            # run inside the scratch directory
+        capture_output=True,
+        text=True,
+        cwd=tmpdir,
     )
-
-    if result.returncode != 0:        # non-zero = gmx hit an error
+    if result.returncode != 0:
         print(f"  [ERROR] gmx gyrate failed")
-        print(result.stderr[-2000:])  # last 2000 chars — usually enough to diagnose
+        print(result.stderr[-2000:])
         return None
-
-    return parse_xvg(out_xvg)         # success -> read the .xvg it just wrote
+    return parse_xvg(out_xvg)
 
 
 def analyse_label(label):
@@ -121,11 +102,10 @@ def analyse_label(label):
     rg_nm = vals[:, 0]
     time_ns = time_ps / 1000.0
 
-    # numpy arrays have built-in statistics methods:
-    rg_mean = rg_nm.mean()   # average over all frames
-    rg_std  = rg_nm.std()    # standard deviation (spread/fluctuation) over all frames
+    rg_mean = float(np.mean(rg_nm))
+    rg_std = float(np.std(rg_nm))
 
-    print(f"  Rg = {rg_mean:.3f} +/- {rg_std:.3f} nm  (expected: 1.496 +/- 0.009)")
+    print(f"  Rg = {rg_mean} +/- {rg_std} nm  (expected: 1.496 +/- 0.009)")
     print(f"  Time range: {time_ns[0]:.1f}-{time_ns[-1]:.1f} ns ({len(time_ns)} frames)")
 
     np.savez(

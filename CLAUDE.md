@@ -10,26 +10,40 @@
 > Auto-updated by `/end-session`. This is the handoff between machines/sessions — whichever
 > machine (Mac Mini or MacBook) pulls latest `main` next should read this before doing anything else.
 
-**Closed:** 2026-08-01, Mac Mini
+**Closed:** 2026-08-06, Mac Mini
 **Done:**
-  - Set a Tue/Thu progress-meeting cadence with P.P. (first one 2026-08-04) — anchoring one concrete pipeline step to each meeting so work doesn't sit idle like CASEIN's 16-day gap did
-  - Found+fixed stale CASEIN topology: `outputs_CAS/CENTER/topol_CASEIN.top` was still the pre-fix June 25 monoanionic version; `inputs_CAS/topol.top` (the real SP2-corrected one) had also sat uncommitted since July 4. Both fixed, committed (`ed9399c`)
-  - Z-stretched `NPT_v2/confout.gro` → 35nm slab, grompp'd cleanly, submitted `NVT_SLAB_v2` — **job 6407, gpu1, still PENDING (queued) as of session end**
-  - Found+fixed a second real bug: 7 BLG analysis scripts (density/rg/pca/cluster/hbonds/dssp/calyx_sasa) referenced `_ext.tpr` files unreadable by the local GROMACS 2020.4 install (newer tpx version from the cluster) — patched to the compatible base `.tpr`; `blg_gate_analysis.py` deliberately left as-is (its R2/R3 outputs are already locked/committed, don't rerun without reason)
-  - Extended 5 of 8 CENTER-only BLG analyses to R1/R2/R3 — density, DSSP, surface tension, calyx SASA, Rg. All consistent across replicas, no red flags (e.g. Rg: CENTER 1.504±0.022, R1 1.497±0.009, R2 1.493±0.008, R3 1.499±0.012 nm)
-  - Completed `blg_rg.py`'s TODO stubs (user's own June Python learning exercise) at his explicit request; verified against the locked CENTER value before trusting it on R1–R3
-  - Fable-brainstormed candidate answers to P.P.'s 3 open June-9 questions (secondary-SASA definition, lab-experiment correlation, "modify to adsorb" prescriptiveness) — see `docs/paper1_expansion_plan.md`
-  - Caught+corrected a citation error: the Gochev/Schneck/Miller 2024 DOI was never actually in `references.bib`; independently verified via the real abstract that it's about D2O/H2O isotope effects, not general adsorption timescales — don't use it for the "minutes-to-hours" claim
-**Next action:** Check job 6407 — `ssh ku-cluster "squeue -j 6407"`. If done: validate (T≈298K, box 16×14×35nm) then grompp CENTER production, show sbatch script, wait for explicit yes before submitting.
+  - Confirmed job 6407 (NVT_SLAB_v2, CENTER) finished; grompp'd CENTER production
+  - Ran an independent Fable-model review as a methodology/direction checkpoint (per explicit
+    user request) before committing an 18-day GPU run — checked the BLG→CAS pivot against P.P.'s
+    actual June 9 meeting notes, not just prior assumptions
+  - Fable review caught two real bugs: (1) `outputs_CAS/CENTER/MD1000/md_1000ns.tpr` was still on
+    the pre-fix monoanionic SEP topology, sitting next to the correct `md_1000ns_v2.tpr` (SP2) with
+    no safeguard — quarantined as `.tpr.bak`; (2) same bug independently in
+    `outputs_CAS/R1/NVT_SLAB/nvt_slab.tpr` — quarantined, rebuilt as `nvt_slab_r1_v2.tpr`
+  - Added `-cpi state.cpt` to all three CASEIN sbatch scripts (CENTER MD1000, R1 NVT_SLAB, R1
+    MD1000) for auto-resume protection on the long production runs
+  - First CENTER production submission (job 6411) failed immediately — the new `-cpi` flag
+    correctly refused to resume against orphaned checkpoint files left over from the June 25
+    cancelled job (6275, wrong topology) that were never cleaned up. Moved to a quarantine folder
+    on the cluster, resubmitted cleanly as **job 6413** (gpu1, RUNNING)
+  - Submitted R1's NVT_SLAB in parallel as **job 6412** (gpu2) — finished cleanly 2026-08-06, no
+    LINCS/NaN warnings. Pulled the output down, grompp'd R1 production (`md_1000ns_r1_v2.tpr`,
+    verified SP2 + matching residue counts), submitted as **job 6416** (gpu2, PENDING)
+  - **Both CASEIN replicas are now in production** — 6413 (CENTER) and 6416 (R1), ~18 days out
+  - Built and published a research-status dashboard Artifact (BLG results, live CAS pipeline, open
+    P.P. decisions, cluster jobs, paper roadmap) and a session-narrative recap PDF
+    (`progress-reports/session_report_2026-08-05_1349.pdf`, also published as an Artifact)
+**Next action:** Check `ssh ku-cluster "squeue -j 6413,6416"`. If both still running/pending,
+there is nothing to do — wait for one to finish or fail before touching the CASEIN pipeline again.
+CASEIN analysis (6 scripts written, 0 outputs) is entirely blocked on this trajectory data.
 **Pending:**
-  1. NVT_SLAB_v2 validation + CENTER production submit (see above)
-  2. R1's own NVT_SLAB/production chain — not started at all yet
-  3. PCA, clustering, H-bonds for BLG R1/R2/R3 (H-bonds is slow, ~3hr+/replica on this machine — run as background/overnight job)
-  4. RMSF cache only has CENTER+R1 — `blg_rmsf.py` hardcodes those paths, needs R2/R3 added (not parameterized like the other scripts)
-  5. No RMSD script exists yet — needs writing to complete the paper's Figure 2 (RMSD/RMSF/Rg replica-averaged)
-  6. Bring the 3 P.P. questions + Fable's candidate answers to Tuesday's meeting
-**Open questions for P.P.:** the 3 items from her June 9 note — secondary-SASA definition, which lab experiments to correlate against (candidate: published literature, not in-house — no wet-lab evidence found in repo), how prescriptive "modify to adsorb" should be. Candidate answers drafted, need her confirmation 2026-08-04.
-**Git at close:** committing 7 script fixes + 15 new R1/R2/R3 analysis `.npz` files + this update now. Left untouched (pre-existing, not this session's concern): `cover_letter.tex/pdf` (intentionally uncommitted), `progress-reports/*` meeting-prep files, the old Kat `drive-download-*` folder, `inputs_CAS/SEP_monoanion_wrong_2026-07-02/` backup, `acs-main_v1_langmuir.bib` (stale template), `scripts/figures/blg_fig_rg.py` (still homework).
+  1. Wait for jobs 6413 (CENTER) / 6416 (R1) production — ~18 days from 2026-08-04/06
+  2. PCA, clustering, H-bonds for BLG R1/R2/R3 (H-bonds is slow, ~3hr+/replica on this machine — run as background/overnight job)
+  3. RMSF cache only has CENTER+R1 — `blg_rmsf.py` hardcodes those paths, needs R2/R3 added (not parameterized like the other scripts)
+  4. No RMSD script exists yet — needs writing to complete the paper's Figure 2 (RMSD/RMSF/Rg replica-averaged)
+  5. Once CASEIN production lands: run `cas_*.py` analysis pipeline (contact, density, dssp, hbonds, nterm_sasa, surface_tension) — scripts already written, mirror the BLG pipeline
+**Open questions for P.P.:** the 3 items from her June 9 note — secondary-SASA definition, which lab experiments to correlate against (candidate: published literature, not in-house — no wet-lab evidence found in repo), how prescriptive "modify to adsorb" should be. Candidate answers drafted (see `docs/paper1_expansion_plan.md`), still awaiting her confirmation.
+**Git at close:** clean except pre-existing untracked files unrelated to this session (`cover_letter.tex/pdf` intentionally uncommitted, `progress-reports/*` meeting-prep files including this session's new report PDF, the old Kat `drive-download-*` folder, `inputs_CAS/SEP_monoanion_wrong_2026-07-02/` backup, `acs-main_v1_langmuir.bib` stale template, `scripts/figures/blg_fig_rg.py` homework, `inputs_CAS/mdout.mdp`, `scripts/.claude/`). All of this session's actual CASEIN file changes live under gitignored `outputs_CAS/` — nothing new to commit besides this handoff update.
 
 ---
 

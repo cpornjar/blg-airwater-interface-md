@@ -1,6 +1,7 @@
 """
-precompute_rmsf.py — compute per-residue RMSF for CENTER and R1, save to cache.
-Processes one trajectory at a time (no simultaneous universes) to avoid OOM.
+precompute_rmsf.py — compute per-residue RMSF for all 4 BLG replicas
+(CENTER, R1, R2, R3), save to cache. Processes one trajectory at a time
+(no simultaneous universes) to avoid OOM — gotcha #2, 8GB machine.
 Cache files: results/gate_analysis/rmsf_{label}.resids.npy + .rmsf.npy
 """
 import sys
@@ -21,6 +22,15 @@ CENTER_XTC  = ROOT / "outputs_BLG/CENTER/MD1000/traj_comp.xtc"
 R1_TPR      = ROOT / "outputs_BLG/REPLICA/MD/MD1/md_replica1.tpr"
 R1_XTC_LIST = [ROOT / "outputs_BLG/REPLICA/MD/MD1/traj_comp.xtc"] + \
               sorted((ROOT / "outputs_BLG/REPLICA/MD/MD1").glob("md_replica1_amd.part00*.xtc"))
+# R2/R3 use the base (non-_ext) tpr — the _ext.tpr files are tpx version 138,
+# unreadable by the local GROMACS 2020.4 install (tpx 119). Same fix already
+# applied in blg_density/rg/pca/cluster/hbonds/dssp/calyx_sasa.py.
+R2_TPR      = ROOT / "outputs_BLG/REPLICA/MD/MD2/md_replica2.tpr"
+R2_XTC_LIST = [ROOT / "outputs_BLG/REPLICA/MD/MD2/traj_comp.xtc",
+               ROOT / "outputs_BLG/REPLICA/MD/MD2/md_replica2_ext.part0002.xtc"]
+R3_TPR      = ROOT / "outputs_BLG/REPLICA/MD/MD3/md_replica3.tpr"
+R3_XTC_LIST = [ROOT / "outputs_BLG/REPLICA/MD/MD3/traj_comp.xtc",
+               ROOT / "outputs_BLG/REPLICA/MD/MD3/md_replica3_ext.part0002.xtc"]
 
 STRIDE = 10   # 1 ns resolution — sufficient for RMSF
 
@@ -70,4 +80,8 @@ if __name__ == "__main__":
                       str(CACHE_DIR / "rmsf_center"))
     compute_and_cache("R1",     R1_TPR,     R1_XTC_LIST,
                       str(CACHE_DIR / "rmsf_r1"))
+    compute_and_cache("R2",     R2_TPR,     R2_XTC_LIST,
+                      str(CACHE_DIR / "rmsf_r2"))
+    compute_and_cache("R3",     R3_TPR,     R3_XTC_LIST,
+                      str(CACHE_DIR / "rmsf_r3"))
     print("Done.")

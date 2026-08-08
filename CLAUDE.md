@@ -10,40 +10,46 @@
 > Auto-updated by `/end-session`. This is the handoff between machines/sessions — whichever
 > machine (Mac Mini or MacBook) pulls latest `main` next should read this before doing anything else.
 
-**Closed:** 2026-08-06, Mac Mini
+**Closed:** 2026-08-08, Mac Mini
 **Done:**
-  - Confirmed job 6407 (NVT_SLAB_v2, CENTER) finished; grompp'd CENTER production
-  - Ran an independent Fable-model review as a methodology/direction checkpoint (per explicit
-    user request) before committing an 18-day GPU run — checked the BLG→CAS pivot against P.P.'s
-    actual June 9 meeting notes, not just prior assumptions
-  - Fable review caught two real bugs: (1) `outputs_CAS/CENTER/MD1000/md_1000ns.tpr` was still on
-    the pre-fix monoanionic SEP topology, sitting next to the correct `md_1000ns_v2.tpr` (SP2) with
-    no safeguard — quarantined as `.tpr.bak`; (2) same bug independently in
-    `outputs_CAS/R1/NVT_SLAB/nvt_slab.tpr` — quarantined, rebuilt as `nvt_slab_r1_v2.tpr`
-  - Added `-cpi state.cpt` to all three CASEIN sbatch scripts (CENTER MD1000, R1 NVT_SLAB, R1
-    MD1000) for auto-resume protection on the long production runs
-  - First CENTER production submission (job 6411) failed immediately — the new `-cpi` flag
-    correctly refused to resume against orphaned checkpoint files left over from the June 25
-    cancelled job (6275, wrong topology) that were never cleaned up. Moved to a quarantine folder
-    on the cluster, resubmitted cleanly as **job 6413** (gpu1, RUNNING)
-  - Submitted R1's NVT_SLAB in parallel as **job 6412** (gpu2) — finished cleanly 2026-08-06, no
-    LINCS/NaN warnings. Pulled the output down, grompp'd R1 production (`md_1000ns_r1_v2.tpr`,
-    verified SP2 + matching residue counts), submitted as **job 6416** (gpu2, PENDING)
-  - **Both CASEIN replicas are now in production** — 6413 (CENTER) and 6416 (R1), ~18 days out
-  - Built and published a research-status dashboard Artifact (BLG results, live CAS pipeline, open
-    P.P. decisions, cluster jobs, paper roadmap) and a session-narrative recap PDF
-    (`progress-reports/session_report_2026-08-05_1349.pdf`, also published as an Artifact)
-**Next action:** Check `ssh ku-cluster "squeue -j 6413,6416"`. If both still running/pending,
-there is nothing to do — wait for one to finish or fail before touching the CASEIN pipeline again.
-CASEIN analysis (6 scripts written, 0 outputs) is entirely blocked on this trajectory data.
+  - CASEIN production untouched/unblocking this session — job 6413 (CENTER) running clean at
+    ~23% (231.5/1000ns), job 6416 (R1) still queued (PENDING, not stalled). Everything below
+    happened on the BLG side in parallel, since none of it needs 6413/6416 to finish.
+  - Fable review (fresh instance) sanity-checked a figure/lit-review plan before building it.
+    Found `results/figures/pubready/` (July 23 redesign) was orphaned — never cited in any
+    `.tex` file. User confirmed: clear `pubready/`, keep `results/figures/paper/` (what
+    `main.tex` actually compiles against). Done — see below.
+  - **Figure 1 (schematic) built end-to-end** — `results/figures/paper/PAPER_FIG1_SCHEMATIC.
+    {png,pdf}`. Panel A: real VMD renders of the actual structures (BLG 1BEB, CAS SP2) with
+    calyx/N-term patch highlighted. Panel B: VACUUM|MOLECULE|WATER|VACUUM box schematic, box
+    dimensions read directly from the real `confout.gro` files, not estimated.
+  - Built `scripts/figures/utils.py` — shared BLG/CAS figure infrastructure (loaders, replica
+    color/label convention, `pending_panel()` for CAS panels before production data lands).
+    Fig 2-4 should build on this rather than re-deriving loader boilerplate per script.
+  - Literature review answered Open Decision 2 (`docs/paper1_expansion_plan.md`) — verdict:
+    literature supports the "disorder + hydrophobic patches lower the adsorption barrier"
+    framing as already hedged. 4 new DOI-verified citations added to `references.bib`.
+  - **Real bug caught: all 6 `cas_*.py` scripts pointed at a stale tpr** quarantined back on
+    Aug 4 (`md_1000ns.tpr` no longer exists, only `md_1000ns_v2.tpr` does) — would have failed
+    the moment anyone ran them post-production. Fixed all 6, added R1 entries.
+  - RMSF extended to all 4 BLG replicas (was CENTER+R1 only) — R2/R3 ran clean, cached.
+  - `scripts/analysis/blg_rmsd.py` written (4-region methodology from `docs/METHODS.md:66-67`,
+    never previously scripted) — **NOT yet executed.**
+**Next action:** Run
+`/Users/mac2022-1/opt/anaconda3/envs/research-env/bin/python3 -u scripts/analysis/blg_rmsd.py`
+(one universe at a time, script already handles this), inspect the printed per-region means for
+sanity, then build `scripts/figures/blg_fig2_dynamics.py` on `utils.py` — BLG panels real, CAS
+via `pending_panel()`. Not blocked on CASEIN production.
 **Pending:**
-  1. Wait for jobs 6413 (CENTER) / 6416 (R1) production — ~18 days from 2026-08-04/06
-  2. PCA, clustering, H-bonds for BLG R1/R2/R3 (H-bonds is slow, ~3hr+/replica on this machine — run as background/overnight job)
-  3. RMSF cache only has CENTER+R1 — `blg_rmsf.py` hardcodes those paths, needs R2/R3 added (not parameterized like the other scripts)
-  4. No RMSD script exists yet — needs writing to complete the paper's Figure 2 (RMSD/RMSF/Rg replica-averaged)
-  5. Once CASEIN production lands: run `cas_*.py` analysis pipeline (contact, density, dssp, hbonds, nterm_sasa, surface_tension) — scripts already written, mirror the BLG pipeline
+  1. Run `blg_rmsd.py`, then build Fig 2 (RMSD/RMSF/Rg, replica-averaged)
+  2. PCA, clustering, H-bonds for BLG R2/R3 (only CENTER done for these three)
+  3. Build Fig 4's comparison table with BLG columns populated, CAS columns stubbed
+  4. Wait for jobs 6413 (CENTER) / 6416 (R1) production — ~14 more days as of 2026-08-08
+  5. Once CASEIN production lands: run `cas_*.py` pipeline (paths now fixed, R1 wired in)
+  6. `docs/paper1_expansion_plan.md`'s Open Decision 1 text is stale — reads as unresolved but
+     R2 replica was actually kept (see "Locked decisions" in that file) — quick doc fix pending
 **Open questions for P.P.:** the 3 items from her June 9 note — secondary-SASA definition, which lab experiments to correlate against (candidate: published literature, not in-house — no wet-lab evidence found in repo), how prescriptive "modify to adsorb" should be. Candidate answers drafted (see `docs/paper1_expansion_plan.md`), still awaiting her confirmation.
-**Git at close:** clean except pre-existing untracked files unrelated to this session (`cover_letter.tex/pdf` intentionally uncommitted, `progress-reports/*` meeting-prep files including this session's new report PDF, the old Kat `drive-download-*` folder, `inputs_CAS/SEP_monoanion_wrong_2026-07-02/` backup, `acs-main_v1_langmuir.bib` stale template, `scripts/figures/blg_fig_rg.py` homework, `inputs_CAS/mdout.mdp`, `scripts/.claude/`). All of this session's actual CASEIN file changes live under gitignored `outputs_CAS/` — nothing new to commit besides this handoff update.
+**Git at close:** clean except pre-existing untracked files unrelated to this session (`cover_letter.tex/pdf` intentionally uncommitted, `progress-reports/*` meeting-prep files, the old Kat `drive-download-*` folder, `inputs_CAS/SEP_monoanion_wrong_2026-07-02/` backup, `acs-main_v1_langmuir.bib` stale template, `scripts/figures/blg_fig_rg.py` homework, `inputs_CAS/mdout.mdp`, `scripts/.claude/`, uncropped/raw VMD render intermediates in `results/figures/render/`).
 
 ---
 

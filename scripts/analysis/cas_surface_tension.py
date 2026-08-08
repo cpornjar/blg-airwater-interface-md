@@ -31,12 +31,19 @@ GMX = str(Path.home() / "opt/gromacs-2020.4/bin/gmx")
 OUT = ROOT / "results" / "analysis"
 OUT.mkdir(parents=True, exist_ok=True)
 
-# Add R1 here once outputs_CAS/R1/MD1000/ is set up
+# NOTE 2026-08-08: TPRS filename fixed from md_1000ns.tpr (stale pre-Aug-4
+# SEP-charge topology, quarantined as .tpr.bak on 2026-08-04) to the
+# correct md_1000ns_v2.tpr (SP2, q=-2). EDR filenames were unaffected by
+# that bug (ener.edr isn't versioned). R1 added — paths are where
+# production job 6416 will write once it runs (mirrors CENTER's default
+# mdrun output naming, no -deffnm in the sbatch script).
 EDRS = {
     "CENTER": ROOT / "outputs_CAS/CENTER/MD1000/ener.edr",
+    "R1": ROOT / "outputs_CAS/R1/MD1000/ener.edr",
 }
 TPRS = {
-    "CENTER": ROOT / "outputs_CAS/CENTER/MD1000/md_1000ns.tpr",
+    "CENTER": ROOT / "outputs_CAS/CENTER/MD1000/md_1000ns_v2.tpr",
+    "R1": ROOT / "outputs_CAS/R1/MD1000/md_1000ns_r1_v2.tpr",
 }
 
 QUANTITIES = ["Pres-XX", "Pres-YY", "Pres-ZZ"]

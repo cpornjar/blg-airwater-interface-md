@@ -44,11 +44,19 @@ OUT.mkdir(parents=True, exist_ok=True)
 STRIDE = 5
 INTERFACE_WINDOW_NM = 1.5
 
-# Add R1 here once outputs_CAS/R1/MD1000/ is set up
+# NOTE 2026-08-08: tpr filename fixed from md_1000ns.tpr (stale pre-Aug-4
+# SEP-charge topology, quarantined as .tpr.bak on 2026-08-04) to the
+# correct md_1000ns_v2.tpr (SP2, q=-2). R1 added — xtc path is where
+# production job 6416 will write once it runs (mirrors CENTER's default
+# mdrun output naming, no -deffnm in the sbatch script).
 TRAJS = {
     "CENTER": {
-        "tpr": ROOT / "outputs_CAS/CENTER/MD1000/md_1000ns.tpr",
+        "tpr": ROOT / "outputs_CAS/CENTER/MD1000/md_1000ns_v2.tpr",
         "xtc": [ROOT / "outputs_CAS/CENTER/MD1000/traj_comp.xtc"],
+    },
+    "R1": {
+        "tpr": ROOT / "outputs_CAS/R1/MD1000/md_1000ns_r1_v2.tpr",
+        "xtc": [ROOT / "outputs_CAS/R1/MD1000/traj_comp.xtc"],
     },
 }
 

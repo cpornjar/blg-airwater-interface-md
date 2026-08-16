@@ -10,31 +10,13 @@
 > Auto-updated by `/end-session`. This is the handoff between machines/sessions — whichever
 > machine (Mac Mini or MacBook) pulls latest `main` next should read this before doing anything else.
 
-**Closed:** 2026-08-08, Mac Mini
-**Done:**
-  - CASEIN production untouched/unblocking this session — job 6413 (CENTER) running clean at
-    ~23% (231.5/1000ns), job 6416 (R1) still queued (PENDING, not stalled). Everything below
-    happened on the BLG side in parallel, since none of it needs 6413/6416 to finish.
-  - Fable review (fresh instance) sanity-checked a figure/lit-review plan before building it.
-    Found `results/figures/pubready/` (July 23 redesign) was orphaned — never cited in any
-    `.tex` file. User confirmed: clear `pubready/`, keep `results/figures/paper/` (what
-    `main.tex` actually compiles against). Done — see below.
-  - **Figure 1 (schematic) built end-to-end** — `results/figures/paper/PAPER_FIG1_SCHEMATIC.
-    {png,pdf}`. Panel A: real VMD renders of the actual structures (BLG 1BEB, CAS SP2) with
-    calyx/N-term patch highlighted. Panel B: VACUUM|MOLECULE|WATER|VACUUM box schematic, box
-    dimensions read directly from the real `confout.gro` files, not estimated.
-  - Built `scripts/figures/utils.py` — shared BLG/CAS figure infrastructure (loaders, replica
-    color/label convention, `pending_panel()` for CAS panels before production data lands).
-    Fig 2-4 should build on this rather than re-deriving loader boilerplate per script.
-  - Literature review answered Open Decision 2 (`docs/paper1_expansion_plan.md`) — verdict:
-    literature supports the "disorder + hydrophobic patches lower the adsorption barrier"
-    framing as already hedged. 4 new DOI-verified citations added to `references.bib`.
-  - **Real bug caught: all 6 `cas_*.py` scripts pointed at a stale tpr** quarantined back on
-    Aug 4 (`md_1000ns.tpr` no longer exists, only `md_1000ns_v2.tpr` does) — would have failed
-    the moment anyone ran them post-production. Fixed all 6, added R1 entries.
-  - RMSF extended to all 4 BLG replicas (was CENTER+R1 only) — R2/R3 ran clean, cached.
-  - `scripts/analysis/blg_rmsd.py` written (4-region methodology from `docs/METHODS.md:66-67`,
-    never previously scripted) — **NOT yet executed.**
+**Closed:** 2026-08-16, Mac Mini
+**Done:** Nothing — this was a status-check-only session (`/start-research`), no analysis run, no
+files changed. Flagging plainly per standing cadence rule rather than skipping past it: no work
+has landed since the 2026-08-08 session below. `blg_rmsd.py` is still written but not executed.
+One new observation: job 6416 (R1 production) has now been PENDING 10 days (since 2026-08-06);
+likely cause is gpu2 being occupied continuously for 38–39 days by two other labs' jobs (6153,
+6303) — not yet confirmed via `scontrol`, not yet at the 20-day stuck threshold.
 **Next action:** Run
 `/Users/mac2022-1/opt/anaconda3/envs/research-env/bin/python3 -u scripts/analysis/blg_rmsd.py`
 (one universe at a time, script already handles this), inspect the printed per-region means for
@@ -44,7 +26,7 @@ via `pending_panel()`. Not blocked on CASEIN production.
   1. Run `blg_rmsd.py`, then build Fig 2 (RMSD/RMSF/Rg, replica-averaged)
   2. PCA, clustering, H-bonds for BLG R2/R3 (only CENTER done for these three)
   3. Build Fig 4's comparison table with BLG columns populated, CAS columns stubbed
-  4. Wait for jobs 6413 (CENTER) / 6416 (R1) production — ~14 more days as of 2026-08-08
+  4. Wait for jobs 6413 (CENTER, running healthy) / 6416 (R1, still queued 10 days)
   5. Once CASEIN production lands: run `cas_*.py` pipeline (paths now fixed, R1 wired in)
   6. `docs/paper1_expansion_plan.md`'s Open Decision 1 text is stale — reads as unresolved but
      R2 replica was actually kept (see "Locked decisions" in that file) — quick doc fix pending

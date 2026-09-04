@@ -64,7 +64,7 @@
 | secondary dasa | Secondary-structure SASA? Or DSSP + per-residue SASA? | [CONFIRM WITH P.P.] |
 | Calyx → Cluster | Cluster calyx-region conformations specifically (not whole protein) | [CONFIRM WITH P.P.] |
 | DSSP | `gmx do_dssp` or MDAnalysis secondary structure | confirmed |
-| Surface tension water | From .edr pressure tensor: γ = (Lz/2)·[(Pxx+Pyy)/2 − Pzz] | confirmed |
+| Surface tension water | From .edr pressure tensor: γ = (Lz/2)·[Pzz − (Pxx+Pyy)/2] | confirmed |
 | SASA | Already done for BLG; needed for CAS | confirmed |
 | CONTACT | Already done for BLG (613 events); needed for CAS | confirmed |
 | Improve/fix Calyx SASA + Orientation — too messy | Refactor orientation figure; cluster calyx conformations | confirmed |
@@ -75,7 +75,14 @@
 
 ### Open Decision 1 — R2 Replica (bring to team)
 
-**Situation:** R2 SASA trend is downward/stable. R1 and R3 trend upward. Three options:
+**RESOLVED (confirmed by 2026-08-08, doc text left stale until now — fixed 2026-08-23):**
+**Option C — Keep all 3.** R2 has 101 contact events, comparable to R3's 99 — not an
+outlier, not a "did not commit" trajectory. The headline numbers (613 contacts, SASA
+24–37 nm², Pearson r +0.006) already reflect CENTER+R1+R2+R3 as originally computed; no
+recompute was needed. The options/risk analysis below is kept for the trail, not as an
+open question.
+
+**Situation (historical, at time of framing):** R2 SASA trend is downward/stable. R1 and R3 trend upward. Three options:
 
 | Option | What it means | Risk |
 |--------|--------------|------|
@@ -128,7 +135,7 @@
 | **Z-density profile** | ✗ needed | write `blg_density.py` | `gmx density` or MDAnalysis |
 | **PCA** | ✗ needed | write `blg_pca.py` | `gmx covar` → `gmx anaeig -proj` |
 | **DSSP** | ✗ needed | write `blg_dssp.py` | `gmx do_dssp` or MDAnalysis |
-| **Surface tension** | ✗ needed | write `blg_surface_tension.py` | from `.edr`: γ = (Lz/2)·[(Pxx+Pyy)/2 − Pzz] |
+| **Surface tension** | ✗ needed | write `blg_surface_tension.py` | from `.edr`: γ = (Lz/2)·[Pzz − (Pxx+Pyy)/2] |
 | **HB counts** | ✗ needed | write `blg_hbonds.py` | `gmx hbond` — 3 groups: wat-wat, wat-prot, prot-prot |
 | **Clustering** | ✗ needed | write `blg_cluster.py` | `gmx cluster` — 100 representative frames |
 | **Calyx orientation** | ✗ refactor | improve existing | current figure "too messy" per P.P. |

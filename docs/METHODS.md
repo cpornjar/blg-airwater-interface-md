@@ -61,7 +61,7 @@ All simulations were performed using GROMACS 2020.4^[12] with GPU acceleration. 
 All analyses were performed in Python 3.11 using MDAnalysis 2.10.0^[10,11] and custom scripts. Trajectories were first corrected for periodic boundary conditions using the `unwrap` transformation before any distance or RMSD calculations.
 
 **Z-position and adsorption detection:**
-The protein centre of mass Z-coordinate was tracked every 100 ps. The upper air-water interface position was defined as the 99th percentile of water oxygen Z-coordinates. The minimum protein–interface distance was defined as the difference between the lowest protein heavy-atom Z-coordinate and the interface position. Adsorption was defined as sustained contact (minimum distance ≤ 0.5 nm for ≥ 10 consecutive ns).
+The protein centre of mass Z-coordinate was tracked every 100 ps. The upper air-water interface position was defined as the 98th percentile of water oxygen Z-coordinates (2nd percentile for the lower interface). The minimum protein–interface distance was defined as the difference between the lowest protein heavy-atom Z-coordinate and the interface position. Adsorption was defined as sustained contact (minimum distance ≤ 0.5 nm for ≥ 10 consecutive ns).
 
 **RMSD analysis:**
 Root-mean-square deviation (RMSD) of Cα atoms was calculated for four regions: full backbone, β-sheet residues (strands A–I of the β-barrel core), the single α-helix (residues 130–140), and the hydrophobic calyx patch (residues 39, 41, 56, 58, 92, 103, 105, 107, 125). Reference structure was the first frame of each trajectory after equilibration.

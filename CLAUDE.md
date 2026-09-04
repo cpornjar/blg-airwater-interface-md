@@ -11,43 +11,57 @@
 > machine (Mac Mini or MacBook) pulls latest `main` next should read this before doing anything else.
 
 **Closed:** 2026-09-04, Mac Mini
-**Done:**
-  - CASEIN CENTER production (job 6413, 1000ns) completed 2026-08-22 after 18d07h — validated
-    clean (T=298.000K exact, no LINCS/NaN), synced locally (7.46GB).
-  - `blg_rmsd.py` run for all 4 replicas. Real finding: R1's calyx-patch RMSD (0.347nm) is
-    elevated vs CENTER/R2/R3 (0.20–0.28nm) — traced to R1 having 4 of the project's 6 total
-    long (≥10ns) contact events; patch RMSD steps up permanently after R1's longest event and
-    never returns to baseline, while calyx SASA stays in-range. Real conformational
-    rearrangement correlated with sustained contact, not noise — don't average it away in Fig 2.
-  - First-ever full CASEIN analysis pass: all 7 CENTER scripts now done (density, surface
-    tension, DSSP, contact, N-term SASA, new `cas_rg.py`, hbonds). CAS Rg shows a normal
-    relaxation transient from the extended AlphaFold start (3.03nm → stabilizes 2.5–2.7nm by
-    100ns), not runaway compaction — reassuring, but n=1 (CENTER only) until R1 lands.
-  - **Fixed 2 real bugs in `blg_hbonds.py`/`cas_hbonds.py`** while solving the RAM-thrashing
-    problem that killed 3 prior attempts: switched protein-protein/protein-water stages to
-    native `gmx hbond` (fixes MDAnalysis's donor-guesser silently missing all backbone amide N
-    donors, and a bulk-water-contaminated protein-water term) — also ~1000x faster, full BLG
-    CENTER run in <90s vs. multi-hour unfinishable runs. Old buggy BLG hbonds value quarantined,
-    not cited anywhere. See `docs/METHODS.md`/[[feedback-mac-technical]] memory for detail.
-  - Doc fixes: `METHODS.md` interface percentile corrected to match code (98th, was stale 99th);
-    `paper1_expansion_plan.md` surface-tension sign fixed to match verified code; Open Decision 1
-    (R2 replica) marked resolved in the doc itself (was stale since 08-08 despite repeated flags).
-  - All of the above committed at `d5c9940`, pushed to origin.
-**Next action:** Decide the SASA-normalization question (CAS N-term 25-residue span vs BLG
-calyx 9-residue patch — currently an apples-to-oranges raw comparison, flagged by an independent
-review, not yet resolved), OR build `scripts/figures/blg_fig2_dynamics.py` on `utils.py` — all
-4 BLG RMSD/RMSF/Rg datasets are ready and this is independent of the CAS decision.
+**Done (workflow-infrastructure session — no science work today, see session 13's entries
+above in git history for the last real analysis progress):**
+  - Built a 5-role workflow system at the user's request, before resuming research work.
+    Role 2 (P.P. feedback): `docs/PP_FEEDBACK_LOG.md` created and backfilled across 3 passes
+    (6 open items, 7 resolved, 5 flagged) + `/pp-feedback` command. Role 3 (reports):
+    `/pp-report` generates a supervisor-facing PDF reading numbers live from
+    `results/analysis/*.npz` — tested, produced `for_PP_2026-09-04.pdf`; fixed the
+    `session_report_*` (personal, `/journey`) vs `for_PP_*` (supervisor, `/pp-report`)
+    filename split going forward. Role 4 (teaching): analysis/figure/VMD code elevated to
+    active-teaching mode in memory — user writes it, Claude teaches/reviews, doesn't write
+    it for him. Role 5 (Fable advisor): `/fable-review` spawns a fresh (never forked) agent
+    on the Fable model for independent review. Plus `/sync-macbook` (not one of the 5 roles,
+    built on request) for dry-run-first Mac Mini → MacBook syncs.
+  - Also produced `docs/WORKFLOW_MANUAL_2026-09-04.pdf` (6 pages, all 14 commands) and a
+    from-scratch BLG results workbook, `progress-reports/BLG_core_validation_workbook_2026-09-04.pdf`.
+  - Real gap found during the P.P.-feedback backfill: no record anywhere shows P.P. ever
+    confirmed IFSC2026 participation after a July 16 report asked her to pick a poster
+    framing — added to the Submission Checklist area below; needs the user to actually ask
+    her, 21 days to the Sept 25 abstract deadline as of today.
+  - Technical: `ku-ai` (Nontri) confirmed running GROMACS 2022.6/2024.1 vs. `ku-cluster`'s
+    2020.4 (matches local) — documented the compatibility rule if `ku-ai` is ever used as
+    CAS-production backup. `macbook` LAN alias timed out again (DHCP drift, 2nd time) —
+    `macbook-ts` (Tailscale) is now the default path, baked into `/sync-macbook`.
+**Next action:** Pick a Role 4 pilot to actually start — **not yet decided**, discussed but
+not committed: `scripts/figures/blg_fig2_dynamics.py` (matplotlib, all 4 BLG RMSD/RMSF/Rg
+datasets ready, current official next research step) vs. a VMD before/after render
+bracketing R1's long contact event (362–419.5 ns). Ask the user which first, don't assume.
 **Pending:**
-  1. `blg_fig2_dynamics.py` (BLG panels real, CAS via `pending_panel()`)
+  1. Role 4 pilot (see Next action)
   2. SASA-normalization decision (per-residue or relative-SASA) before it's the paper's
      headline comparative metric — needs a real methodology choice, not a silent default
   3. No extended-chain SASA reference exists yet to anchor the "open chain" claim — needs writing
-  4. Job 6416 (R1 CASEIN production) still RUNNING as of 2026-09-04, 18d06h elapsed — very
+  4. Job 6416 (R1 CASEIN production) still RUNNING as of 2026-09-04, 18d15h41m elapsed — very
      close to done at CENTER's observed ~54.6 ns/day rate (~18.3 days expected for 1000ns)
   5. Once R1 lands: rerun full `cas_*.py` pipeline (all 7 scripts) with `--label R1`
   6. Build Fig 4's comparison table with BLG columns populated, CAS columns stubbed until R1
-**Open questions for P.P.:** the 3 items from her June 9 note — secondary-SASA definition, which lab experiments to correlate against (candidate: published literature, not in-house — no wet-lab evidence found in repo), how prescriptive "modify to adsorb" should be. Candidate answers drafted (see `docs/paper1_expansion_plan.md`), still awaiting her confirmation.
-**Git at close:** clean except pre-existing untracked files unrelated to this session (`cover_letter.tex/pdf` intentionally uncommitted, `progress-reports/*` meeting-prep files, the old Kat `drive-download-*` folder, `inputs_CAS/SEP_monoanion_wrong_2026-07-02/` backup, `acs-main_v1_langmuir.bib` stale template, `scripts/figures/blg_fig_rg.py` homework, `inputs_CAS/mdout.mdp`, `scripts/.claude/`, uncropped/raw VMD render intermediates in `results/figures/render/`).
+**Open questions for P.P.:** now tracked canonically in `docs/PP_FEEDBACK_LOG.md` (6 open
+items) — check that file directly, don't rely on this summary. Highest-priority: (1) IFSC2026
+— is this happening at all, 21 days to abstract deadline, no confirmed reply from her on
+poster framing; (2) secondary-SASA definition; (3) which lab experiments to correlate
+against; (4) how prescriptive the "modify to adsorb" claim should be.
+**Git at close:** committing `CLAUDE.md`, `docs/PP_FEEDBACK_LOG.md`,
+`docs/WORKFLOW_MANUAL_2026-09-04.pdf`, `progress-reports/for_PP_2026-09-04.pdf`,
+`progress-reports/BLG_core_validation_workbook_2026-09-04.pdf` this session. Leaving
+uncommitted (personal logs, not meant for git per the `session_report_*` convention):
+`progress-reports/session_report_2026-09-04_{1327,2219}.pdf`. Also still uncommitted, all
+pre-existing and unrelated to this session (`cover_letter.tex/pdf` intentionally
+uncommitted, older `progress-reports/*` meeting-prep files, the old Kat `drive-download-*`
+folder, `inputs_CAS/SEP_monoanion_wrong_2026-07-02/` backup, `acs-main_v1_langmuir.bib`
+stale template, `scripts/figures/blg_fig_rg.py` homework, `inputs_CAS/mdout.mdp`,
+`scripts/.claude/`, uncropped/raw VMD render intermediates in `results/figures/render/`).
 
 ---
 
@@ -92,6 +106,15 @@ review, not yet resolved), OR build `scripts/figures/blg_fig2_dynamics.py` on `u
 - Your directories only: `/comfha/users/guest/PAO/` (ku-cluster) and `~/PAO/` (ku-ai)
 - Never touch: `TK/`, `dodo/`, `Ben/`, `Prin/`, `S_coco/`, `paii/`, `Nan/`, `NAN/`, `nil/`
 
+### P.P. Feedback Discipline
+- `docs/PP_FEEDBACK_LOG.md` is the **canonical** record of supervisor feedback — not
+  CLAUDE.md's "Last Session" section, not memory. Those may summarize it, but this file is
+  the source of truth.
+- Any time P.P. gives feedback (meeting, LINE, email) — log it the same day via
+  `/pp-feedback log "..."`, don't let it live only in chat/memory.
+- Read the 🔴 OPEN section at the start of every session (`/start-research` does this
+  automatically) — don't rediscover the same open question twice.
+
 ### Analysis Discipline
 - Always activate: `conda activate research-env` (Python 3.12, MDAnalysis 2.10.0)
 - Always use `python -u` when piping stdout to tee (prevents silent buffering)
@@ -99,17 +122,28 @@ review, not yet resolved), OR build `scripts/figures/blg_fig2_dynamics.py` on `u
 - Never load CENTER + R1 universe simultaneously — 8 GB RAM, guaranteed OOM
 - Key verified numbers — never change without rerunning analysis: 613 contacts, 6 long events, SASA 24–37 nm², Pearson r +0.006
 
-### Slash Commands (8 custom — `~/.claude/commands/`)
+### Slash Commands (14 custom — `~/.claude/commands/`)
 | Command | What it does |
 |---------|-------------|
-| `/start-research` | Full session init: health check + cluster status + recommendation |
-| `/journey` | Research journey board (milestones ✓/→/○ from actual files) + narrative session-recap PDF to `progress-reports/`. Use at end of session: start-research → work → journey → end-session |
+| `/start-research` | Full session init: health check + cluster status + P.P. feedback flags + recommendation |
+| `/journey` | Research journey board (milestones ✓/→/○ from actual files) + narrative session-recap PDF (**personal/technical log for the user** — every command, every mistake) to `progress-reports/session_report_*.pdf`. Use at end of session: start-research → work → journey → end-session |
+| `/pp-report [BLG\|CAS\|all]` | **P.P.-facing progress report** — results + open questions only, no command-level detail. Numbers read live from `results/analysis/*.npz`, never hardcoded. Output: `progress-reports/for_PP_<date>.pdf`. Supersedes the stale `scripts/make_progress_pdf.py` (had old buggy hbonds numbers baked in) |
+| `/end-session` | Save memory, update `PP_FEEDBACK_LOG.md`, verify git state, write "Last Session" handoff, commit+push |
+| `/self-check` | Full self-validation diagnostic (identity → integrity → deviation check) |
+| `/pp-feedback [status\|log <text>\|apply]` | Canonical supervisor-feedback tracker — `docs/PP_FEEDBACK_LOG.md`. No arg = open items; `log` = record new feedback; `apply` = cross-check current work against open items |
 | `/check-cluster` | Live squeue from both clusters |
 | `/sync-results <run>` | Dry-run then sync cluster → Mac Mini |
+| `/sync-macbook <what>` | Dry-run then sync docs/reports Mac Mini → MacBook (`macbook-ts` first — the `macbook` LAN alias has drifted twice via DHCP, don't try it first) |
 | `/submit-job <args>` | Generate + review + submit SLURM job |
 | `/analyze <type>` | Run analysis script for gate/rmsd/rmsf/sasa/fig2/fig3/fig4 |
 | `/paper-review <focus>` | Structured review against JCIS checklist |
 | `/new-sim <args>` | Scaffold new simulation on local + cluster |
+| `/fable-review <what>` | Independent direction checkpoint — spawns a FRESH agent (model: fable, never a fork) to review a decision/plan/work with zero inherited framing, per this project's own track record of catching real bugs this way |
+
+**Report naming convention (fixed 2026-09-04):** `session_report_*.pdf` = personal log
+(`/journey`), always. `for_PP_*.pdf` = supervisor-facing (`/pp-report`), always. Before this
+split, the two were mixed under `session_report_*` (e.g. `session_report_2026-07-16_1026.pdf`
+actually went to P.P.) — don't let that recur.
 
 ### ARIS Skills (27 — paper/research, from `~/aris_repo`)
 | Skill | Use |
@@ -304,6 +338,13 @@ State: `review-stage/REVIEW_STATE.json`
 - [ ] Cover letter — Claude can draft
 - [ ] Final `pdflatex` compile + check PDF
 - [ ] Submit at editorialmanager.com/jcis
+
+## ⚠ Other Deadlines (not JCIS, easy to lose track of)
+
+- [ ] **IFSC2026 conference abstract — Sept 25, 2026** (verify this date is still live before
+  relying on it, last checked 2026-07-15 at sci.ku.ac.th/ifsc2026/#registration). Poster
+  60×110cm portrait, conference Nov 12–13. See `docs/PP_FEEDBACK_LOG.md` item 1 for full
+  context — this is exactly the kind of item that log exists to keep visible.
 
 ---
 

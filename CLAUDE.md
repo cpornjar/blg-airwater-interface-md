@@ -10,26 +10,42 @@
 > Auto-updated by `/end-session`. This is the handoff between machines/sessions — whichever
 > machine (Mac Mini or MacBook) pulls latest `main` next should read this before doing anything else.
 
-**Closed:** 2026-08-16, Mac Mini
-**Done:** Nothing — this was a status-check-only session (`/start-research`), no analysis run, no
-files changed. Flagging plainly per standing cadence rule rather than skipping past it: no work
-has landed since the 2026-08-08 session below. `blg_rmsd.py` is still written but not executed.
-One new observation: job 6416 (R1 production) has now been PENDING 10 days (since 2026-08-06);
-likely cause is gpu2 being occupied continuously for 38–39 days by two other labs' jobs (6153,
-6303) — not yet confirmed via `scontrol`, not yet at the 20-day stuck threshold.
-**Next action:** Run
-`/Users/mac2022-1/opt/anaconda3/envs/research-env/bin/python3 -u scripts/analysis/blg_rmsd.py`
-(one universe at a time, script already handles this), inspect the printed per-region means for
-sanity, then build `scripts/figures/blg_fig2_dynamics.py` on `utils.py` — BLG panels real, CAS
-via `pending_panel()`. Not blocked on CASEIN production.
+**Closed:** 2026-09-04, Mac Mini
+**Done:**
+  - CASEIN CENTER production (job 6413, 1000ns) completed 2026-08-22 after 18d07h — validated
+    clean (T=298.000K exact, no LINCS/NaN), synced locally (7.46GB).
+  - `blg_rmsd.py` run for all 4 replicas. Real finding: R1's calyx-patch RMSD (0.347nm) is
+    elevated vs CENTER/R2/R3 (0.20–0.28nm) — traced to R1 having 4 of the project's 6 total
+    long (≥10ns) contact events; patch RMSD steps up permanently after R1's longest event and
+    never returns to baseline, while calyx SASA stays in-range. Real conformational
+    rearrangement correlated with sustained contact, not noise — don't average it away in Fig 2.
+  - First-ever full CASEIN analysis pass: all 7 CENTER scripts now done (density, surface
+    tension, DSSP, contact, N-term SASA, new `cas_rg.py`, hbonds). CAS Rg shows a normal
+    relaxation transient from the extended AlphaFold start (3.03nm → stabilizes 2.5–2.7nm by
+    100ns), not runaway compaction — reassuring, but n=1 (CENTER only) until R1 lands.
+  - **Fixed 2 real bugs in `blg_hbonds.py`/`cas_hbonds.py`** while solving the RAM-thrashing
+    problem that killed 3 prior attempts: switched protein-protein/protein-water stages to
+    native `gmx hbond` (fixes MDAnalysis's donor-guesser silently missing all backbone amide N
+    donors, and a bulk-water-contaminated protein-water term) — also ~1000x faster, full BLG
+    CENTER run in <90s vs. multi-hour unfinishable runs. Old buggy BLG hbonds value quarantined,
+    not cited anywhere. See `docs/METHODS.md`/[[feedback-mac-technical]] memory for detail.
+  - Doc fixes: `METHODS.md` interface percentile corrected to match code (98th, was stale 99th);
+    `paper1_expansion_plan.md` surface-tension sign fixed to match verified code; Open Decision 1
+    (R2 replica) marked resolved in the doc itself (was stale since 08-08 despite repeated flags).
+  - All of the above committed at `d5c9940`, pushed to origin.
+**Next action:** Decide the SASA-normalization question (CAS N-term 25-residue span vs BLG
+calyx 9-residue patch — currently an apples-to-oranges raw comparison, flagged by an independent
+review, not yet resolved), OR build `scripts/figures/blg_fig2_dynamics.py` on `utils.py` — all
+4 BLG RMSD/RMSF/Rg datasets are ready and this is independent of the CAS decision.
 **Pending:**
-  1. Run `blg_rmsd.py`, then build Fig 2 (RMSD/RMSF/Rg, replica-averaged)
-  2. PCA, clustering, H-bonds for BLG R2/R3 (only CENTER done for these three)
-  3. Build Fig 4's comparison table with BLG columns populated, CAS columns stubbed
-  4. Wait for jobs 6413 (CENTER, running healthy) / 6416 (R1, still queued 10 days)
-  5. Once CASEIN production lands: run `cas_*.py` pipeline (paths now fixed, R1 wired in)
-  6. `docs/paper1_expansion_plan.md`'s Open Decision 1 text is stale — reads as unresolved but
-     R2 replica was actually kept (see "Locked decisions" in that file) — quick doc fix pending
+  1. `blg_fig2_dynamics.py` (BLG panels real, CAS via `pending_panel()`)
+  2. SASA-normalization decision (per-residue or relative-SASA) before it's the paper's
+     headline comparative metric — needs a real methodology choice, not a silent default
+  3. No extended-chain SASA reference exists yet to anchor the "open chain" claim — needs writing
+  4. Job 6416 (R1 CASEIN production) still RUNNING as of 2026-09-04, 18d06h elapsed — very
+     close to done at CENTER's observed ~54.6 ns/day rate (~18.3 days expected for 1000ns)
+  5. Once R1 lands: rerun full `cas_*.py` pipeline (all 7 scripts) with `--label R1`
+  6. Build Fig 4's comparison table with BLG columns populated, CAS columns stubbed until R1
 **Open questions for P.P.:** the 3 items from her June 9 note — secondary-SASA definition, which lab experiments to correlate against (candidate: published literature, not in-house — no wet-lab evidence found in repo), how prescriptive "modify to adsorb" should be. Candidate answers drafted (see `docs/paper1_expansion_plan.md`), still awaiting her confirmation.
 **Git at close:** clean except pre-existing untracked files unrelated to this session (`cover_letter.tex/pdf` intentionally uncommitted, `progress-reports/*` meeting-prep files, the old Kat `drive-download-*` folder, `inputs_CAS/SEP_monoanion_wrong_2026-07-02/` backup, `acs-main_v1_langmuir.bib` stale template, `scripts/figures/blg_fig_rg.py` homework, `inputs_CAS/mdout.mdp`, `scripts/.claude/`, uncropped/raw VMD render intermediates in `results/figures/render/`).
 

@@ -10,22 +10,35 @@
 > Auto-updated by `/end-session`. This is the handoff between machines/sessions — whichever
 > machine (Mac Mini or MacBook) pulls latest `main` next should read this before doing anything else.
 
-**Closed:** 2026-09-09, Mac Mini
-**Done:** Nothing — this was a status-check-only close, no work session happened between
-2026-09-04 and this `/end-session` call. But checking cluster state on close caught
-something real:
-  - **Job 6416 (CASEIN R1 production, 1000 ns) COMPLETED 2026-09-06T18:16:10** (`sacct -j
-    6416`: `State: COMPLETED`, `Elapsed: 20d11h37m` — a bit longer than the ~18.3-day
-    estimate, but finished clean, not stuck). **Sitting unvalidated for 3 days** — nobody
-    checked the log, synced the trajectory, or ran any CAS analysis on it yet.
-**Next action:** Validate R1's production log first (T≈298K, no LINCS/NaN, "Finished
-mdrun") before trusting the data at all — check
-`outputs_CAS/R1/MD1000/` on the cluster for the exact log path, same validation pattern used
-for CENTER (job 6413). Only after that: dry-run rsync the trajectory locally, then rerun the
-full `cas_*.py` pipeline (7 scripts) with `--label R1` — first time CAS gets n=2, not n=1,
-on every headline number.
+**Closed:** 2026-09-09, Mac Mini (second close today — this session picked up right where
+the earlier status-check-only close left off)
+**Done:**
+  - **Validated R1's production log — clean.** `grep` for `WARNING`/`Fatal error`/`nan`/`NaN`
+    in `md_1000ns_r1_v2.log`: zero real matches (an earlier `grep -ic` count of 7 was just
+    the word "Lincs" in the performance-timing table, not warnings — don't be fooled by that
+    again). "Finished mdrun on rank 0 Sun Sep 6 18:16:09 2026" confirmed, final temperature
+    samples 297.3–298.9K, matches CENTER's validated pattern. **Data is trustworthy.**
+  - Synced `confout.gro` (13.7MB) + `md_1000ns_r1_v2.log` (6.2MB) to
+    `outputs_CAS/R1/MD1000/` locally — done. `traj_comp.xtc` (7.46GB) is still transferring:
+    first attempt via a tool-tracked background rsync had wildly variable speed
+    (0.3–6MB/s) and was at real risk of the known ~1.5h background-task cap
+    ([[feedback-mac-technical]] #16) — killed proactively and **relaunched via
+    `nohup ... & disown`** (detached, survives past this interactive session), logging to
+    `/tmp/r1_casein_xtc_sync.log`, with `--partial` so a future interruption can resume
+    rather than restart from 0.
+  - Sent the user `docs/WORKFLOW_MANUAL_2026-09-04.pdf` directly via SendUserFile on request.
+**Next action:** Check whether the detached trajectory sync finished —
+```bash
+ls -lh ~/Workspace/MILK_FROTHING/outputs_CAS/R1/MD1000/traj_comp.xtc   # ~7.46GB if done
+tail -20 /tmp/r1_casein_xtc_sync.log
+ps aux | grep traj_comp.xtc   # still running?
+```
+If done: rerun the full `cas_*.py` pipeline (7 scripts) with `--label R1` — first time CAS
+gets n=2, not n=1, on every headline number. If still running/stalled: resume with the same
+`nohup rsync --partial ...` command (see [[project-paper1-expansion]] session 16 for the
+exact command).
 **Pending:**
-  1. Validate + sync + analyze R1 CASEIN (see Next action) — this is now ahead of everything below
+  1. Finish + analyze R1 CASEIN sync (see Next action) — ahead of everything below
   2. Role 4 pilot choice from session 14, still not decided: `scripts/figures/blg_fig2_dynamics.py`
      (matplotlib, all 4 BLG RMSD/RMSF/Rg datasets ready) vs. a VMD before/after render
      bracketing R1's long contact event (362–419.5 ns) — ask the user, don't assume

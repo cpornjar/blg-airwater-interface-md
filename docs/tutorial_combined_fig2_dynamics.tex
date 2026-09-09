@@ -1,0 +1,365 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage{thai}
+\setotherlanguage{english}
+\setmainfont{Thonburi}
+\newfontfamily\thaifont{Thonburi}
+\newfontfamily\thaifonttt{Thonburi}
+\newfontfamily\codefont{Menlo}
+\usepackage{geometry}
+\geometry{margin=2.2cm}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue!50!black, urlcolor=blue!50!black}
+
+\definecolor{codebg}{RGB}{246,246,246}
+\definecolor{codekw}{RGB}{0,90,150}
+\definecolor{codestr}{RGB}{140,90,20}
+\definecolor{codecom}{RGB}{110,110,110}
+
+\lstset{
+  basicstyle=\codefont\footnotesize,
+  backgroundcolor=\color{codebg},
+  keywordstyle=\color{codekw}\bfseries,
+  commentstyle=\color{codecom}\itshape,
+  stringstyle=\color{codestr},
+  showstringspaces=false,
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{black!15},
+  framesep=6pt,
+  xleftmargin=8pt,
+  xrightmargin=8pt,
+  numbers=none,
+  language=Python,
+  tabsize=4,
+}
+
+\titleformat{\section}{\Large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{0.5em}{}
+
+\title{\textbf{สร้างกราฟ Fig 2: RMSD / RMSF / Rg ด้วย matplotlib}\\
+\large บทเรียน matplotlib ฉบับมือใหม่ — สำหรับ \texttt{combined\_fig2\_dynamics.py}}
+\author{COMFHA — MILK\_FROTHING Project}
+\date{9 กันยายน 2026}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\textit{เอกสารนี้เขียนคู่กับ session สอนสด — อ่านตามไปทีละหัวข้อ แล้วลองเขียนโค้ดเองในไฟล์\\
+\texttt{scripts/figures/combined\_fig2\_dynamics.py} ตามที่แต่ละหัวข้อบอก}
+\end{center}
+
+\tableofcontents
+\vspace{1em}
+
+%======================================================
+\section{เป้าหมาย: เรากำลังสร้างอะไร}
+%======================================================
+Figure 2 ของ Paper 1 ต้องแสดง \textbf{โครงสร้างพลศาสตร์ (structural dynamics)} ของโปรตีน BLG
+เทียบกับ ${}$CAS ผ่าน 3 ตัวชี้วัด:
+
+\begin{itemize}
+  \item \textbf{RMSD} (Root Mean Square Deviation) — โปรตีนเปลี่ยนรูปร่างไปจากจุดเริ่มต้นแค่ไหน ตามเวลา
+  \item \textbf{RMSF} (Root Mean Square Fluctuation) — แต่ละ residue สั่นไหวมากน้อยแค่ไหน (เฉลี่ยตลอด trajectory)
+  \item \textbf{Rg} (Radius of Gyration) — โปรตีนกระชับ/คลายตัวแค่ไหน ตามเวลา
+\end{itemize}
+
+ฝั่ง BLG มีข้อมูลจริงครบทั้ง 4 replica (CENTER, R1, R2, R3) แล้ว ฝั่ง CAS ยังไม่มีข้อมูล
+(trajectory กำลัง sync อยู่) — ดังนั้น panel ฝั่ง CAS จะแสดงเป็น ``data pending'' ไปก่อน
+
+\textbf{ผลลัพธ์สุดท้าย:} รูปเดียว ขนาด 3 แถว $\times$ 2 คอลัมน์ (แถว = RMSD/RMSF/Rg,
+คอลัมน์ = BLG จริง / CAS placeholder) บันทึกเป็นไฟล์ที่ \texttt{results/figures/paper/}
+
+%======================================================
+\section{matplotlib พื้นฐาน 5 นาที}
+%======================================================
+ก่อนแตะโค้ดจริง ต้องเข้าใจ 2 คำนี้ก่อน — เป็นหัวใจของ matplotlib ทั้งหมด:
+
+\begin{itemize}
+  \item \textbf{Figure} = ``กระดาษ'' ทั้งแผ่น — เป็นกรอบนอกสุดที่บรรจุทุกอย่าง
+  \item \textbf{Axes} = ``กราฟย่อยหนึ่งช่อง'' บนกระดาษนั้น — มีแกน x/y ของตัวเอง เส้น จุด legend ของตัวเอง
+\end{itemize}
+
+Figure หนึ่งใบมี Axes กี่ช่องก็ได้ เราต้องการ 3$\times$2 = 6 ช่อง สร้างด้วยคำสั่งเดียว:
+
+\begin{lstlisting}
+import matplotlib.pyplot as plt
+
+fig, axes = plt.subplots(3, 2, figsize=(6.85, 7.5))
+# axes is a numpy array, shape (3, 2)
+# axes[0, 0] = top-left, axes[2, 1] = bottom-right, etc.
+
+axes[0, 0].plot([1, 2, 3], [10, 20, 15])   # draw a line in that one cell only
+axes[0, 0].set_xlabel("Time (ns)")
+axes[0, 0].set_ylabel("RMSD (nm)")
+axes[0, 0].legend()
+
+fig.savefig("test.png")   # saves the whole sheet (all cells together)
+\end{lstlisting}
+
+ลองรันโค้ดข้างบนใน Python interactive (หรือไฟล์ทดสอบ) ดูก่อนได้ ให้เห็นภาพว่า
+\texttt{axes[i, j]} แต่ละช่องคือกราฟแยกกันจริง ๆ
+
+%======================================================
+\section{ข้อมูลของเรา: ไฟล์ .npz คืออะไร}
+%======================================================
+ข้อมูลที่คำนวณไว้แล้วถูกเก็บเป็นไฟล์ \texttt{.npz} (numpy zip) — เปิดด้วย \texttt{numpy.load()}
+แล้วจะได้ dict-like object ที่ดึงค่าด้วยชื่อ key ได้เลย
+
+\subsection{ไฟล์ Rg (\texttt{results/analysis/blg\_rg\_CENTER.npz})}
+\begin{lstlisting}
+import numpy as np
+d = np.load("results/analysis/blg_rg_CENTER.npz")
+# d has keys: time_ns, rg_nm, rg_mean, rg_std
+d["time_ns"]   # array, length 10001 -> time at each frame (ns)
+d["rg_nm"]     # array, length 10001 -> Rg value at that frame (nm)
+d["rg_mean"]   # single number -> mean over whole trajectory (should be ~1.496 for CENTER)
+d["rg_std"]    # single number -> standard deviation
+\end{lstlisting}
+
+\subsection{ไฟล์ RMSD (\texttt{results/analysis/blg\_rmsd\_CENTER.npz})}
+\begin{lstlisting}
+d = np.load("results/analysis/blg_rmsd_CENTER.npz")
+# key: time_ns, rmsd_backbone, rmsd_sheet, rmsd_helix, rmsd_patch,
+#      sheet_resids, helix_resids, patch_resids
+d["time_ns"]        # length 1001 (note: different length from the Rg file! different stride)
+d["rmsd_backbone"]  # RMSD of the whole-protein backbone
+d["rmsd_patch"]     # RMSD of the calyx patch only (should be mean ~0.24 nm)
+\end{lstlisting}
+
+\subsection{ไฟล์ RMSF (\texttt{results/gate\_analysis/rmsf\_center.*.npy})}
+อันนี้ต่างจาก 2 ไฟล์บน — เก็บเป็น \texttt{.npy} เดี่ยว ๆ (ไม่ใช่ .npz) 2 ไฟล์คู่กัน:
+\begin{lstlisting}
+resids = np.load("results/gate_analysis/rmsf_center.resids.npy")  # (156,) residue numbers 1-156
+rmsf   = np.load("results/gate_analysis/rmsf_center.rmsf.npy")    # (156,) RMSF value per residue
+# resids[i] always pairs with rmsf[i] -> plt.plot(resids, rmsf) works directly
+\end{lstlisting}
+
+\textbf{ข้อสังเกตสำคัญ:} ชื่อไฟล์ทั้ง 4 replica คือ \texttt{rmsf\_center}, \texttt{rmsf\_r1},
+\texttt{rmsf\_r2}, \texttt{rmsf\_r3} (ตัวพิมพ์เล็ก) ในขณะที่ RMSD/Rg ใช้ \texttt{CENTER, R1, R2, R3}
+(ตัวพิมพ์ใหญ่) — ต้องแปลงตัวพิมพ์เองตอน loop ผ่าน 4 replica
+
+%======================================================
+\section{เครื่องมือที่มีให้แล้ว: plot\_style.py และ utils.py}
+%======================================================
+โปรเจกต์นี้มีไฟล์ helper 2 ไฟล์ใน \texttt{scripts/} ที่ทำให้ไม่ต้องเขียนโค้ดซ้ำ:
+
+\subsection{\texttt{scripts/plot\_style.py}}
+\begin{lstlisting}
+from plot_style import apply_style, COLORS, double_width, savefig
+
+apply_style()   # sets font, spine width, tick size, etc -- same for every figure in the project
+                # call this once, at the top of the file
+
+COLORS["center"]    # "#5E4FA2" (purple) -> color for replica CENTER
+COLORS["replica1"]  # "#D6604D" (red-orange) -> color for R1
+COLORS["replica2"]  # "#2166AC" (blue)
+COLORS["replica3"]  # "#1B7837" (green)
+
+double_width   # = 6.85 (inches) -> standard width for a 2-column JCIS figure
+
+savefig(fig, "results/figures/paper/PAPER_FIG2.png")  # saves at 300 DPI automatically
+\end{lstlisting}
+
+\subsection{\texttt{scripts/figures/utils.py}}
+ไฟล์นี้ถูกออกแบบมาเฉพาะสำหรับกราฟเทียบ BLG vs CAS แบบนี้:
+\begin{lstlisting}
+from utils import SPECIES, run_color, run_label, load_analysis, pending_panel
+
+SPECIES["BLG"]["replicas"]   # ["CENTER", "R1", "R2", "R3"]  <- loop over this, don't hardcode!
+
+run_color("R1")              # returns the same color as COLORS["replica1"] (does the lookup for you)
+run_label("BLG", "R1")       # returns the string "BLG Replica 1" (use as legend label)
+
+load_analysis("BLG", "rg", "CENTER")
+# equivalent to np.load("results/analysis/blg_rg_CENTER.npz") but shorter,
+# and a clearer error message if the file doesn't exist
+
+pending_panel(axes[0, 1], "CAS")
+# draws a grey box saying "beta-Casein data pending" into that axes cell
+# use this for the 3 right-hand cells (RMSD/RMSF/Rg for CAS) since there is no real data yet
+\end{lstlisting}
+
+\textbf{ทำไมต้องใช้ 2 ไฟล์นี้แทนเขียนเอง:} ทุกกราฟในเปเปอร์ต้องหน้าตาเหมือนกัน (สี ฟอนต์ ขนาด)
+ถ้าต่างคนต่างเขียนสีเอง จะได้กราฟที่สีไม่ตรงกันระหว่าง Figure 1, 2, 3 — \texttt{utils.py} ป้องกัน
+ปัญหานี้โดยบังคับให้ทุกกราฟดึงสีจากที่เดียวกัน
+
+%======================================================
+\section{ลงมือเขียน: โครงไฟล์}
+%======================================================
+สร้างไฟล์ \texttt{scripts/figures/combined\_fig2\_dynamics.py} เริ่มจากโครงนี้:
+
+\begin{lstlisting}
+"""
+scripts/figures/combined_fig2_dynamics.py
+==========================================
+Figure 2 - structural dynamics (RMSD/RMSF/Rg), BLG real + CAS pending.
+"""
+from pathlib import Path
+import sys
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "scripts"))
+from plot_style import apply_style, COLORS, double_width, savefig
+from utils import SPECIES, run_color, run_label, load_analysis, pending_panel
+
+apply_style()
+
+fig, axes = plt.subplots(3, 2, figsize=(double_width, 7.5))
+# row 0 = RMSD, row 1 = RMSF, row 2 = Rg
+# column 0 = BLG, column 1 = CAS (pending)
+
+# ===== TODO: Rg panel (axes[2, 0]) =====
+
+# ===== TODO: RMSD panel (axes[0, 0]) =====
+
+# ===== TODO: RMSF panel (axes[1, 0]) =====
+
+# ===== TODO: CAS pending panels (axes[0,1], axes[1,1], axes[2,1]) =====
+
+fig.tight_layout()
+out = ROOT / "results" / "figures" / "paper" / "PAPER_FIG2_DYNAMICS.png"
+savefig(fig, out)
+\end{lstlisting}
+
+\textbf{ทำความเข้าใจ \texttt{sys.path.insert} บรรทัดนั้นก่อน:} ไฟล์นี้อยู่ที่
+\texttt{scripts/figures/combined\_fig2\_dynamics.py} แต่ \texttt{plot\_style.py} และ
+\texttt{utils.py} อยู่ที่ \texttt{scripts/} (สูงกว่าหนึ่งชั้น) Python จะหาไฟล์ import ไม่เจอ
+ถ้าไม่บอก path ตรง ๆ — \texttt{parents[2]} หมายถึง ``ถอยขึ้นไป 2 ชั้นจากไฟล์นี้'' ซึ่งจะได้
+root ของโปรเจกต์ (\texttt{MILK\_FROTHING/}) แล้วค่อยต่อ \texttt{/ "scripts"}
+
+%======================================================
+\section{ตัวอย่างเต็ม: Rg panel}
+%======================================================
+นี่คือ panel เดียวที่จะเขียนให้ดูครบเป็นตัวอย่าง — ที่เหลือ (RMSD, RMSF) ให้ลองเขียนเองในหัวข้อถัดไป
+โดยเทียบโครงสร้างกับอันนี้
+
+\begin{lstlisting}
+ax = axes[2, 0]
+for run in SPECIES["BLG"]["replicas"]:          # ["CENTER", "R1", "R2", "R3"]
+    d = load_analysis("BLG", "rg", run)
+    ax.plot(d["time_ns"], d["rg_nm"],
+            color=run_color(run), lw=0.8, alpha=0.85,
+            label=run_label("BLG", run))
+ax.set_xlabel("Time (ns)")
+ax.set_ylabel(r"$R_g$ (nm)")
+ax.legend(loc="upper right", ncol=2)
+ax.set_title("BLG", fontsize=9)
+\end{lstlisting}
+
+\textbf{อ่านทีละบรรทัด:}
+\begin{enumerate}
+  \item \texttt{for run in SPECIES["BLG"]["replicas"]:} — loop ผ่านชื่อ 4 replica โดยไม่ hardcode
+        list เอง (ถ้าวันหนึ่งเพิ่ม replica R4 โค้ดนี้จะรองรับอัตโนมัติ ไม่ต้องแก้)
+  \item \texttt{load\_analysis("BLG", "rg", run)} — โหลดไฟล์ .npz ของ replica นั้น
+  \item \texttt{ax.plot(x, y, ...)} — วาดเส้นหนึ่งเส้นในช่องกราฟนี้ ทำซ้ำ 4 ครั้ง (4 replica)
+        จะได้ 4 เส้นสีต่างกันซ้อนกันในช่องเดียว
+  \item \texttt{run\_color(run)} — ไม่ต้องเขียน if/else เลือกสีเอง ให้ utils.py จัดการ
+  \item \texttt{ax.legend(...)} — เรียก\textbf{ครั้งเดียวหลัง loop จบ} (ไม่ใช่ในลูป) เพราะแต่ละ
+        \texttt{ax.plot} ใส่ label ของตัวเองไว้แล้ว legend จะไปเก็บมารวมทีเดียว
+\end{enumerate}
+
+\textbf{ทดสอบ:} รันแค่ส่วนนี้ก่อน (คอมเมนต์ TODO อื่นไว้ก่อน) แล้วเปิดไฟล์ PNG ที่ได้ดู
+ควรเห็นเส้น 4 สีที่เริ่มสูง (Rg $\approx 3$ nm สำหรับ AlphaFold start ถ้าเป็น CAS แต่นี่คือ BLG
+ควรจะแบนราบ $\sim 1.5$ nm ตลอด — ดู Section~\ref{sec:sanity} ประกอบ)
+
+%======================================================
+\section{แบบฝึกหัด: RMSD panel}
+%======================================================
+ลองเขียน \texttt{axes[0, 0]} เอง โดยใช้โครงเดียวกับ Rg panel ด้านบน แต่เปลี่ยน:
+\begin{itemize}
+  \item \texttt{kind} จาก \texttt{"rg"} เป็น \texttt{"rmsd"}
+  \item key ของ x คือ \texttt{"time\_ns"} เหมือนเดิม, แต่ key ของ y คือ \texttt{"rmsd\_backbone"}
+        (ไม่ใช่ \texttt{"rg\_nm"})
+  \item \texttt{ylabel} ควรเป็น \texttt{"RMSD (nm)"}
+\end{itemize}
+
+\textbf{คำใบ้เรื่อง patch:} ไฟล์ RMSD มีทั้ง \texttt{rmsd\_backbone} และ \texttt{rmsd\_patch}
+— ถ้าอยากโชว์ทั้งคู่ในช่องเดียว ต้อง plot 2 เส้นต่อ replica (backbone เส้นทึบ, patch เส้นประ)
+ลองดูว่า \texttt{ax.plot(..., ls="--")} วาดเส้นประยังไง แล้วลองใส่ \texttt{alpha} ต่างกันสำหรับ
+backbone vs patch เพื่อไม่ให้ 8 เส้น (4 replica $\times$ 2 region) รกเกินไป
+
+\textbf{เขียนเสร็จแล้วรันดู} ก่อนไปข้อถัดไป — ถ้า error ให้อ่าน traceback บรรทัดสุดท้ายก่อน
+มักจะบอกตรง ๆ ว่า key ไหนพิมพ์ผิด หรือไฟล์ไหนหาไม่เจอ
+
+%======================================================
+\section{แบบฝึกหัด: RMSF panel}
+%======================================================
+อันนี้ต่างจาก 2 อันบนเล็กน้อย เพราะ RMSF ไม่ได้อยู่ใน \texttt{load\_analysis} (มันเป็น .npy
+เดี่ยว ไม่ใช่ .npz ที่ utils.py รองรับ) ต้องโหลดตรงด้วย \texttt{np.load} เอง:
+
+\begin{lstlisting}
+GATE_DIR = ROOT / "results" / "gate_analysis"
+
+# filenames use lowercase, and "center" not "CENTER" -- convert it yourself
+_RMSF_TAG = {"CENTER": "center", "R1": "r1", "R2": "r2", "R3": "r3"}
+\end{lstlisting}
+
+โจทย์: เขียน loop คล้ายเดิม แต่แกน x คือ \texttt{resids} (เลข residue 1-156) แทนเวลา
+เพราะ RMSF ไม่ใช่ time series — มันคือ ``แต่ละตำแหน่งในโปรตีนสั่นมากแค่ไหน (เฉลี่ยทั้ง
+trajectory)'' ดังนั้น xlabel ควรเป็น \texttt{"Residue number"} ไม่ใช่ \texttt{"Time (ns)"}
+
+\textbf{คำใบ้:} ใช้ \texttt{\_RMSF\_TAG[run]} แปลงชื่อ run ก่อนต่อ path เช่น
+\texttt{GATE\_DIR / f"rmsf\_\{\_RMSF\_TAG[run]\}.rmsf.npy"}
+
+%======================================================
+\section{CAS placeholder panels}
+%======================================================
+ส่วนนี้เขียนให้เสร็จเลย ง่ายกว่า 3 อันบนมาก — เรียก \texttt{pending\_panel} 3 ครั้งกับ 3 ช่องขวา:
+
+\begin{lstlisting}
+for row in range(3):
+    pending_panel(axes[row, 1], "CAS")
+axes[0, 1].set_title("CAS (β-Casein)", fontsize=9)
+\end{lstlisting}
+
+%======================================================
+\section{ตรวจคำตอบ: ค่าที่ควรได้ (sanity check)}
+\label{sec:sanity}
+%======================================================
+ก่อนเชื่อกราฟที่ได้ ให้เทียบกับตัวเลขที่ยืนยันแล้วใน \texttt{CLAUDE.md}:
+
+\begin{center}
+\begin{tabular}{lll}
+\hline
+\textbf{ตัวชี้วัด} & \textbf{Replica} & \textbf{ค่าที่ควรได้} \\
+\hline
+Rg (mean) & CENTER & $1.496 \pm 0.009$ nm (เส้นควรแบนราบตลอด ไม่มี trend) \\
+RMSD (patch, mean) & ทุก replica & $\approx 0.24$ nm (แบนราบ ไม่ค่อยขึ้น) \\
+RMSD (patch, R1) & R1 & สูงกว่าอันอื่นเล็กน้อย (0.347 nm) — เป็นของจริง ไม่ใช่ bug \\
+\hline
+\end{tabular}
+\end{center}
+
+ถ้าเส้น Rg ของคุณพุ่งขึ้นเรื่อย ๆ ไม่หยุด หรือค่า mean ต่างจาก 1.496 nm มาก
+(เช่น 3.0 nm) แปลว่าโหลดไฟล์ผิด replica หรือพล็อตแกนสลับ — กลับไปเช็ค Section~3 ก่อน
+
+%======================================================
+\section{ขั้นตอนสุดท้าย: รัน และดูผล}
+%======================================================
+\begin{lstlisting}
+cd ~/Workspace/MILK_FROTHING
+/Users/mac2022-1/opt/anaconda3/envs/research-env/bin/python3 \
+    scripts/figures/combined_fig2_dynamics.py
+\end{lstlisting}
+
+ถ้ารันผ่านไม่มี error จะได้ไฟล์ \texttt{results/figures/paper/PAPER\_FIG2\_DYNAMICS.png}
+เปิดดูด้วย Preview หรือลาก path ไปให้ Claude ช่วยดูก็ได้ (ถามใน session ต่อได้เลย
+``ช่วยดูรูปนี้หน่อย'' พร้อม path)
+
+\vspace{1em}
+\noindent\textbf{เมื่อเขียนเสร็จและรันผ่านแล้ว} ให้เอาโค้ดกลับมาให้ Claude รีวิวใน session
+— จะเช็คให้ว่าตรงกับ convention ของโปรเจกต์ไหม (การตั้งชื่อไฟล์ output, ที่เก็บไฟล์,
+ว่า RMSD/RMSF/Rg ตรงกับตัวเลขที่ล็อกไว้หรือเปล่า) ก่อนจะ commit
+
+\end{document}

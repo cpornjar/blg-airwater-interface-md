@@ -10,52 +10,62 @@
 > Auto-updated by `/end-session`. This is the handoff between machines/sessions — whichever
 > machine (Mac Mini or MacBook) pulls latest `main` next should read this before doing anything else.
 
-**Closed:** 2026-09-09, Mac Mini (second close today — this session picked up right where
-the earlier status-check-only close left off)
+**Closed:** 2026-09-09, Mac Mini (third close today — Role 4 teaching pilot session,
+cut short by the user's next meeting)
 **Done:**
-  - **Validated R1's production log — clean.** `grep` for `WARNING`/`Fatal error`/`nan`/`NaN`
-    in `md_1000ns_r1_v2.log`: zero real matches (an earlier `grep -ic` count of 7 was just
-    the word "Lincs" in the performance-timing table, not warnings — don't be fooled by that
-    again). "Finished mdrun on rank 0 Sun Sep 6 18:16:09 2026" confirmed, final temperature
-    samples 297.3–298.9K, matches CENTER's validated pattern. **Data is trustworthy.**
-  - Synced `confout.gro` (13.7MB) + `md_1000ns_r1_v2.log` (6.2MB) to
-    `outputs_CAS/R1/MD1000/` locally — done. `traj_comp.xtc` (7.46GB) is still transferring:
-    first attempt via a tool-tracked background rsync had wildly variable speed
-    (0.3–6MB/s) and was at real risk of the known ~1.5h background-task cap
-    ([[feedback-mac-technical]] #16) — killed proactively and **relaunched via
-    `nohup ... & disown`** (detached, survives past this interactive session), logging to
-    `/tmp/r1_casein_xtc_sync.log`, with `--partial` so a future interruption can resume
-    rather than restart from 0.
-  - Sent the user `docs/WORKFLOW_MANUAL_2026-09-04.pdf` directly via SendUserFile on request.
-**Next action:** Check whether the detached trajectory sync finished —
+  - Sent the user a Thai-language matplotlib tutorial PDF (`docs/tutorial_combined_fig2_dynamics.tex/.pdf`,
+    xelatex+polyglossia+Thonburi — see [[feedback-mac-technical]] #19 for two real gotchas
+    hit building it) covering the plan for `scripts/figures/combined_fig2_dynamics.py`
+    (BLG real + CAS pending, RMSD/RMSF/Rg, resolves the session-14 Role 4 pilot choice —
+    matplotlib over VMD).
+  - User wrote the Rg panel himself (Role 4: guided, not written for him — 3 small bugs
+    found and explained, user fixed each). Rg panel is correct and complete; reproduces
+    the locked CENTER mean (1.504±0.022 nm) exactly.
+  - **Real bug found while reviewing the resulting plot:** R1/R2/R3 Rg data all stop at
+    500 ns (not the full 1000 ns each replica ran) — `scripts/analysis/blg_rg.py`'s
+    `TRAJS` dict never reads the extension trajectories that exist on disk
+    (`md_replica{1,2,3}_*.part00*.xtc`). Confirmed with the user: "amd" in R1's filenames
+    is the compute hardware (AMD GPU), NOT Accelerated MD — so this is a plain, fixable
+    completeness gap for all 3 replicas, not a methods issue. Full writeup + fix plan in
+    [[project-paper1-expansion]] session 17. Caveat comment added directly in
+    `combined_fig2_dynamics.py` above the Rg panel; **do not treat the R1/R2/R3 Rg means
+    already locked in this repo's history as final 1000 ns numbers** until this is fixed.
+  - By user's explicit choice, stopped at the Rg panel today — RMSD/RMSF panels and the
+    CAS pending placeholders are still `# TODO` in the script, deliberately deferred.
+**Next action:** Quick check first (mechanical, ~30 sec) —
 ```bash
 ls -lh ~/Workspace/MILK_FROTHING/outputs_CAS/R1/MD1000/traj_comp.xtc   # ~7.46GB if done
-tail -20 /tmp/r1_casein_xtc_sync.log
-ps aux | grep traj_comp.xtc   # still running?
+tail -c 500 /tmp/r1_casein_xtc_sync.log   # was 58% (4.3/7.46GB) at this session's close
 ```
-If done: rerun the full `cas_*.py` pipeline (7 scripts) with `--label R1` — first time CAS
-gets n=2, not n=1, on every headline number. If still running/stalled: resume with the same
-`nohup rsync --partial ...` command (see [[project-paper1-expansion]] session 16 for the
-exact command).
+Then the substantive next task: fix `scripts/analysis/blg_rg.py`'s `TRAJS` entries for
+R1/R2/R3 to concatenate the extension `.xtc` files (`gmx trjcat` or MDAnalysis
+multi-file `Universe`) alongside the base file, delete the stale
+`blg_rg_{R1,R2,R3}.npz`, rerun, and check `blg_rmsd.py`/the RMSF precompute script for
+the identical gap before trusting any of their R1/R2/R3 numbers. Full command detail in
+[[project-paper1-expansion]] session 17.
 **Pending:**
-  1. Finish + analyze R1 CASEIN sync (see Next action) — ahead of everything below
-  2. Role 4 pilot choice from session 14, still not decided: `scripts/figures/blg_fig2_dynamics.py`
-     (matplotlib, all 4 BLG RMSD/RMSF/Rg datasets ready) vs. a VMD before/after render
-     bracketing R1's long contact event (362–419.5 ns) — ask the user, don't assume
-  3. SASA-normalization decision (per-residue or relative-SASA) before it's the paper's
+  1. Fix `blg_rg.py`'s R1/R2/R3 trajectory gap (see Next action) — affects locked numbers,
+     do before building more Fig 2 panels on top of it
+  2. Resume `combined_fig2_dynamics.py`: RMSD panel, RMSF panel, CAS pending placeholders
+     (Role 4 teaching continues — guide, don't write it for him)
+  3. Finish + analyze R1 CASEIN sync (see Next action)
+  4. SASA-normalization decision (per-residue or relative-SASA) before it's the paper's
      headline comparative metric — needs a real methodology choice, not a silent default
-  4. No extended-chain SASA reference exists yet to anchor the "open chain" claim — needs writing
-  5. Build Fig 4's comparison table — now unblocked on the CAS side once R1 analysis lands
+  5. No extended-chain SASA reference exists yet to anchor the "open chain" claim — needs writing
+  6. Build Fig 4's comparison table — now unblocked on the CAS side once R1 analysis lands
 **Open questions for P.P.:** tracked canonically in `docs/PP_FEEDBACK_LOG.md` (6 open items)
 — check that file directly, don't rely on this summary. Highest-priority: (1) IFSC2026 — is
 this happening at all, **16 days to the Sept 25 abstract deadline** as of today, no confirmed
 reply from her on poster framing; (2) secondary-SASA definition; (3) which lab experiments to
 correlate against; (4) how prescriptive the "modify to adsorb" claim should be.
-**Git at close:** clean except pre-existing untracked files, unchanged since 2026-09-04's
-close (`f952027`) — cover_letter.tex/pdf intentionally uncommitted, old
-`drive-download-*`/`SEP_monoanion_wrong`/`acs-main_v1_langmuir.bib`/`blg_fig_rg.py` debris,
-render intermediates, `session_report_*.pdf` personal logs. Nothing new to stage this close
-— the R1 discovery above is memory-only until it's actually acted on next session.
+**Git at close:** committed this session's real work product —
+`docs/tutorial_combined_fig2_dynamics.{tex,pdf}` and `scripts/figures/combined_fig2_dynamics.py`
+(WIP, has TODOs + the data-gap caveat comment, intentionally not hidden). Deliberately
+**not** committed: `results/figures/paper/PAPER_FIG2_DYNAMICS.png` — only 1 of 6 panels
+populated, not presentable yet, will regenerate once RMSD/RMSF land. Everything else
+unchanged from 2026-09-04's close (`f952027`) — cover_letter.tex/pdf intentionally
+uncommitted, old `drive-download-*`/`SEP_monoanion_wrong`/`acs-main_v1_langmuir.bib`/
+`blg_fig_rg.py` debris, render intermediates, `session_report_*.pdf` personal logs.
 
 ---
 

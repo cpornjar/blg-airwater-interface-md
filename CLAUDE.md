@@ -10,58 +10,39 @@
 > Auto-updated by `/end-session`. This is the handoff between machines/sessions — whichever
 > machine (Mac Mini or MacBook) pulls latest `main` next should read this before doing anything else.
 
-**Closed:** 2026-09-04, Mac Mini
-**Done (workflow-infrastructure session — no science work today, see session 13's entries
-above in git history for the last real analysis progress):**
-  - Built a 5-role workflow system at the user's request, before resuming research work.
-    Role 2 (P.P. feedback): `docs/PP_FEEDBACK_LOG.md` created and backfilled across 3 passes
-    (6 open items, 7 resolved, 5 flagged) + `/pp-feedback` command. Role 3 (reports):
-    `/pp-report` generates a supervisor-facing PDF reading numbers live from
-    `results/analysis/*.npz` — tested, produced `for_PP_2026-09-04.pdf`; fixed the
-    `session_report_*` (personal, `/journey`) vs `for_PP_*` (supervisor, `/pp-report`)
-    filename split going forward. Role 4 (teaching): analysis/figure/VMD code elevated to
-    active-teaching mode in memory — user writes it, Claude teaches/reviews, doesn't write
-    it for him. Role 5 (Fable advisor): `/fable-review` spawns a fresh (never forked) agent
-    on the Fable model for independent review. Plus `/sync-macbook` (not one of the 5 roles,
-    built on request) for dry-run-first Mac Mini → MacBook syncs.
-  - Also produced `docs/WORKFLOW_MANUAL_2026-09-04.pdf` (6 pages, all 14 commands) and a
-    from-scratch BLG results workbook, `progress-reports/BLG_core_validation_workbook_2026-09-04.pdf`.
-  - Real gap found during the P.P.-feedback backfill: no record anywhere shows P.P. ever
-    confirmed IFSC2026 participation after a July 16 report asked her to pick a poster
-    framing — added to the Submission Checklist area below; needs the user to actually ask
-    her, 21 days to the Sept 25 abstract deadline as of today.
-  - Technical: `ku-ai` (Nontri) confirmed running GROMACS 2022.6/2024.1 vs. `ku-cluster`'s
-    2020.4 (matches local) — documented the compatibility rule if `ku-ai` is ever used as
-    CAS-production backup. `macbook` LAN alias timed out again (DHCP drift, 2nd time) —
-    `macbook-ts` (Tailscale) is now the default path, baked into `/sync-macbook`.
-**Next action:** Pick a Role 4 pilot to actually start — **not yet decided**, discussed but
-not committed: `scripts/figures/blg_fig2_dynamics.py` (matplotlib, all 4 BLG RMSD/RMSF/Rg
-datasets ready, current official next research step) vs. a VMD before/after render
-bracketing R1's long contact event (362–419.5 ns). Ask the user which first, don't assume.
+**Closed:** 2026-09-09, Mac Mini
+**Done:** Nothing — this was a status-check-only close, no work session happened between
+2026-09-04 and this `/end-session` call. But checking cluster state on close caught
+something real:
+  - **Job 6416 (CASEIN R1 production, 1000 ns) COMPLETED 2026-09-06T18:16:10** (`sacct -j
+    6416`: `State: COMPLETED`, `Elapsed: 20d11h37m` — a bit longer than the ~18.3-day
+    estimate, but finished clean, not stuck). **Sitting unvalidated for 3 days** — nobody
+    checked the log, synced the trajectory, or ran any CAS analysis on it yet.
+**Next action:** Validate R1's production log first (T≈298K, no LINCS/NaN, "Finished
+mdrun") before trusting the data at all — check
+`outputs_CAS/R1/MD1000/` on the cluster for the exact log path, same validation pattern used
+for CENTER (job 6413). Only after that: dry-run rsync the trajectory locally, then rerun the
+full `cas_*.py` pipeline (7 scripts) with `--label R1` — first time CAS gets n=2, not n=1,
+on every headline number.
 **Pending:**
-  1. Role 4 pilot (see Next action)
-  2. SASA-normalization decision (per-residue or relative-SASA) before it's the paper's
+  1. Validate + sync + analyze R1 CASEIN (see Next action) — this is now ahead of everything below
+  2. Role 4 pilot choice from session 14, still not decided: `scripts/figures/blg_fig2_dynamics.py`
+     (matplotlib, all 4 BLG RMSD/RMSF/Rg datasets ready) vs. a VMD before/after render
+     bracketing R1's long contact event (362–419.5 ns) — ask the user, don't assume
+  3. SASA-normalization decision (per-residue or relative-SASA) before it's the paper's
      headline comparative metric — needs a real methodology choice, not a silent default
-  3. No extended-chain SASA reference exists yet to anchor the "open chain" claim — needs writing
-  4. Job 6416 (R1 CASEIN production) still RUNNING as of 2026-09-04, 18d15h41m elapsed — very
-     close to done at CENTER's observed ~54.6 ns/day rate (~18.3 days expected for 1000ns)
-  5. Once R1 lands: rerun full `cas_*.py` pipeline (all 7 scripts) with `--label R1`
-  6. Build Fig 4's comparison table with BLG columns populated, CAS columns stubbed until R1
-**Open questions for P.P.:** now tracked canonically in `docs/PP_FEEDBACK_LOG.md` (6 open
-items) — check that file directly, don't rely on this summary. Highest-priority: (1) IFSC2026
-— is this happening at all, 21 days to abstract deadline, no confirmed reply from her on
-poster framing; (2) secondary-SASA definition; (3) which lab experiments to correlate
-against; (4) how prescriptive the "modify to adsorb" claim should be.
-**Git at close:** committing `CLAUDE.md`, `docs/PP_FEEDBACK_LOG.md`,
-`docs/WORKFLOW_MANUAL_2026-09-04.pdf`, `progress-reports/for_PP_2026-09-04.pdf`,
-`progress-reports/BLG_core_validation_workbook_2026-09-04.pdf` this session. Leaving
-uncommitted (personal logs, not meant for git per the `session_report_*` convention):
-`progress-reports/session_report_2026-09-04_{1327,2219}.pdf`. Also still uncommitted, all
-pre-existing and unrelated to this session (`cover_letter.tex/pdf` intentionally
-uncommitted, older `progress-reports/*` meeting-prep files, the old Kat `drive-download-*`
-folder, `inputs_CAS/SEP_monoanion_wrong_2026-07-02/` backup, `acs-main_v1_langmuir.bib`
-stale template, `scripts/figures/blg_fig_rg.py` homework, `inputs_CAS/mdout.mdp`,
-`scripts/.claude/`, uncropped/raw VMD render intermediates in `results/figures/render/`).
+  4. No extended-chain SASA reference exists yet to anchor the "open chain" claim — needs writing
+  5. Build Fig 4's comparison table — now unblocked on the CAS side once R1 analysis lands
+**Open questions for P.P.:** tracked canonically in `docs/PP_FEEDBACK_LOG.md` (6 open items)
+— check that file directly, don't rely on this summary. Highest-priority: (1) IFSC2026 — is
+this happening at all, **16 days to the Sept 25 abstract deadline** as of today, no confirmed
+reply from her on poster framing; (2) secondary-SASA definition; (3) which lab experiments to
+correlate against; (4) how prescriptive the "modify to adsorb" claim should be.
+**Git at close:** clean except pre-existing untracked files, unchanged since 2026-09-04's
+close (`f952027`) — cover_letter.tex/pdf intentionally uncommitted, old
+`drive-download-*`/`SEP_monoanion_wrong`/`acs-main_v1_langmuir.bib`/`blg_fig_rg.py` debris,
+render intermediates, `session_report_*.pdf` personal logs. Nothing new to stage this close
+— the R1 discovery above is memory-only until it's actually acted on next session.
 
 ---
 

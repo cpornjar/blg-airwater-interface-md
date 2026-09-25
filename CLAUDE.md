@@ -10,64 +10,71 @@
 > Auto-updated by `/end-session`. This is the handoff between machines/sessions — whichever
 > machine (Mac Mini or MacBook) pulls latest `main` next should read this before doing anything else.
 
-**Closed:** 2026-09-25, Mac Mini (status-check-only close — no work happened between the
-last real session on 2026-09-12 and today; same "external event, not a work session"
-pattern as the 2026-09-09/session-15 gap)
-**Done (2026-09-11/12, session 19 — the last real work):**
-  - Ran the full 7-script CASEIN analysis pipeline with `--label R1` (density, DSSP,
-    surface tension, contact, N-term SASA, Rg, hbonds) — CASEIN now has n=2 for every
-    headline metric, not just CENTER. Numbers agree closely across replicas (e.g. N-term
-    SASA 24.77±1.40 vs. 25.41±1.97 nm²), reinforcing the "open chain" claim with real
-    replication for the first time.
-  - Built a full P.P. progress update in 4 files: `for_PP_2026-09-11.{tex,pdf,docx}` (full,
-    English+Thai) and `update_progress_2026-09-11.{tex,pdf,docx}` (short, BLG+CASEIN
-    results only, per user's request) — 8 figures total (VMD renders, 3 comparative bar
-    charts, 4 time-series trend plots), 2 tables.
-  - **Teaching-scope change, user's own words, not inferred:** for `scripts/figures/*.py`
-    (matplotlib) specifically, Claude now writes the code directly and explains the
-    resulting science, instead of the Role 4 "teach, don't write" pattern — user's stated
-    priority is understanding the science/computational chemistry, not matplotlib skill.
-    `scripts/analysis/*.py` and VMD/`*.tcl` are **unchanged**, still actively taught. Full
-    quote and reasoning in [[feedback-teaching-coding]] "CORRECTION 2026-09-11."
-  - **Real bug found and fixed while building the contact time-series figure:**
-    `dmin_nm`/`min_dist` (both `cas_contact.py` and `blg_gate_analysis.py`, identical
-    formula) is a *signed* gap to the water region's percentile edge, not a plain
-    distance — negative means the protein already protrudes past the interface. First
-    figure draft used a positive-only y-axis, making CASEIN's trace (mean ≈ −0.6 nm)
-    appear to vanish. Fixed; the corrected figure is a stronger result than intended
-    (BLG mostly positive with brief dips = its 613 events; CASEIN persistently negative
-    throughout).
-  - Two fresh `/fable-review` checkpoints run, both partially confirmed real issues (a
-    confusing table-label design, a stale day-count in `PP_FEEDBACK_LOG.md`) — full
-    writeup with the false-alarm nuance in [[project-paper1-expansion]] session 19.
-  - **Still not done from session 19:** trim the closing CASEIN paragraph in
-    `update_progress_2026-09-11.tex` (now redundant with Figures 5/8's captions down to
-    just the hbonds sentence) — agreed with user, never applied, session ended first.
-**Resolved this close:** IFSC2026 — asked the user directly. **Did not participate this
-cycle**, deadline passed with no abstract submitted. Logged as `R9` (resolved) in
-`docs/PP_FEEDBACK_LOG.md`; removed from the open-items count and from
-`CLAUDE.md`'s "Other Deadlines" section below. Don't resurrect this as a live item —
-a future conference opportunity is a new item, not a revival.
-**Next action:** trim `update_progress_2026-09-11.tex`'s closing CASEIN paragraph
-(redundant with Figures 5/8's captions — session 19, agreed with user, never applied),
-then fix `blg_rg.py`/`blg_surface_tension.py`'s R1/R2/R3 500ns TRAJS gap.
+**Closed:** 2026-09-25, Mac Mini (real work session — session 21, same day as an earlier
+status-check-only close)
+**Done (2026-09-25, session 21):**
+  - **Closed `blg_rg.py`'s R1/R2/R3 500ns TRAJS gap for real.** All 3 replicas now cover
+    the full 1000 ns (`gmx trjcat` to concatenate segments, since `gmx gyrate -f` rejects
+    multiple files directly — tested, doesn't work like MDAnalysis's multi-file `Universe`).
+    New Rg: R1 1.497±0.009 (unchanged), R2 1.494±0.009, R3 1.507±0.014 (was 1.499±0.012 —
+    real small shift). Same qualitative picture. **`blg_surface_tension.py`'s matching gap
+    is NOT closed** — needs the extension `.edr` files synced from `ku-cluster` first
+    (confirmed present there, never synced locally).
+  - Trimmed `update_progress_2026-09-11.tex`'s redundant closing paragraph (session 19
+    loose end, finally applied) and recompiled.
+  - Built `for_PP_2026-09-25.{tex,pdf,docx}` — caught and fixed a real accuracy bug before
+    send: the first draft's headline ("CASEIN now has 2 replicas for the first time") was
+    **stale**, already reported 2 weeks ago in the Sep 11 update. Rewrote to a proper
+    "changes since last update" framing instead of re-presenting old news.
+  - **Ran a cloud-session citation audit on `main.tex`** (user's first real use of the
+    $100 cloud credits tied to the GitHub repo) — 40 cited entries, 0 hallucinated/
+    wrong-context, 3 metadata/precision fixes found and **applied**
+    (`references.bib`/`main.tex`, recompiled clean). Neither the documented `gemini-review`
+    MCP nor Codex MCP was actually connected this session, so the audit ran as a fresh
+    zero-context Claude subagent instead. **main.tex/references.bib changes are
+    uncommitted** — paper work is still paused per the June 11 pivot; commit timing
+    undecided.
+  - **Found and fixed a real VMD bug:** `render_blg.tcl`/`render_cas.tcl` had been
+    silently rendering at 512×512 px this whole time (headless VMD's default framebuffer,
+    not a script problem — fix is the `-size` launch flag, not `display resize`, which is
+    fatal in text mode). Re-rendered both at 3008×2400, rebuilt `PAPER_FIG1_SCHEMATIC`,
+    folded into today's report as a new "Structural Overview" section.
+  - Researched P.P.'s academic background/publication history, saved to
+    `project_pp_research_profile.md` (local memory only, not synced). Learned her figure
+    style is unverifiable (paywalled) but her methodology (GROMACS+VMD, self-referenced
+    Cα RMSD) matches this project's own conventions exactly.
+  - **User sent back an edited copy of the P.P. report specifically to teach reporting
+    style** — diffed and learned: cut almost all narrative prose (keep table+figure+
+    original caption only), drop the "Questions for P.P." section from the written
+    document entirely, drop "Prepared for" + footer disclaimer, title as just "Progress
+    Update." Saved to `feedback_pp_report_style.md` (local memory).
+  - Reorganized `progress-reports/`: pulled loose images into `legacy_assets/`/
+    `screenshots/`, date-prefixed old undated report filenames, flattened 2 stray
+    subdirectories, moved 2 non-report `.pdb` files to
+    `inputs_CAS/reference/2026-07-13_PP_meeting_structures/`.
+**Next action:** rsync the extension `.edr` files for R1/R2/R3 from `ku-cluster`
+(`md_replica1_amd.part0002-0007.edr`, `md_replica2_ext.part0002.edr`,
+`md_replica3_ext.part0002.edr`), then apply the same `trjcat`-based fix to
+`blg_surface_tension.py` that closed `blg_rg.py` today.
 **Pending:**
-  1. Trim `update_progress_2026-09-11.tex`'s closing paragraph (session 19, unfinished)
-  2. Fix `blg_rg.py`/`blg_surface_tension.py`'s R1/R2/R3 500ns TRAJS gap (still the only
-     two scripts affected — RMSD/calyx SASA already fixed, confirmed session 19)
+  1. Sync extension `.edr` files + fix `blg_surface_tension.py`'s R1/R2/R3 500ns gap
+  2. Decide whether/when to commit today's `main.tex`/`references.bib` citation fixes
   3. Resume `combined_fig2_dynamics.py`: RMSD panel, RMSF panel, CAS pending placeholders
   4. SASA-normalization decision (per-residue or relative-SASA) — needs a real
      methodology choice, not a silent default
   5. No extended-chain SASA reference exists yet to anchor the "open chain" claim
 **Open questions for P.P.:** tracked canonically in `docs/PP_FEEDBACK_LOG.md` (5 open
-items, IFSC2026 now resolved) — check that file directly. Highest-priority: (1)
+items, unchanged this session) — check that file directly. Highest-priority: (1)
 secondary-SASA definition; (2) which lab experiments to correlate against; (3) how
 prescriptive the "modify to adsorb" claim should be.
-**Git at close:** ~15 real files from session 19, committed and pushed this close (see
-commit for the exact list). Pre-existing debris untouched as always: `cover_letter.tex/pdf`
-(intentional), `drive-download-*`/`SEP_monoanion_wrong`/`acs-main_v1_langmuir.bib`/
-`blg_fig_rg.py` (homework, do not touch), render intermediates, `session_report_*.pdf`
-personal logs, `Screenshot *.png` (personal).
+**Git at close:** real work from session 21 committed and pushed this close (see commit for
+the exact file list) — includes the `blg_rg.py` fix, the `progress-reports/` reorg (staged
+as renames where files were previously tracked), and today's new `for_PP_2026-09-25`
+report. `main.tex`/`references.bib`/`main.pdf` citation fixes deliberately left uncommitted
+(undecided). Pre-existing debris untouched as always: `cover_letter.tex/pdf` (intentional),
+`drive-download-*`/`SEP_monoanion_wrong`/`acs-main_v1_langmuir.bib`/`blg_fig_rg.py`
+(homework, do not touch), `session_report_*.pdf` personal logs, `screenshots/` (personal),
+`progress-reports/frommacbook/` (user's returned edited copy, not a permanent artifact).
 
 ---
 

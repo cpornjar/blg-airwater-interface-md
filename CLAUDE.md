@@ -10,62 +10,64 @@
 > Auto-updated by `/end-session`. This is the handoff between machines/sessions — whichever
 > machine (Mac Mini or MacBook) pulls latest `main` next should read this before doing anything else.
 
-**Closed:** 2026-09-09, Mac Mini (third close today — Role 4 teaching pilot session,
-cut short by the user's next meeting)
-**Done:**
-  - Sent the user a Thai-language matplotlib tutorial PDF (`docs/tutorial_combined_fig2_dynamics.tex/.pdf`,
-    xelatex+polyglossia+Thonburi — see [[feedback-mac-technical]] #19 for two real gotchas
-    hit building it) covering the plan for `scripts/figures/combined_fig2_dynamics.py`
-    (BLG real + CAS pending, RMSD/RMSF/Rg, resolves the session-14 Role 4 pilot choice —
-    matplotlib over VMD).
-  - User wrote the Rg panel himself (Role 4: guided, not written for him — 3 small bugs
-    found and explained, user fixed each). Rg panel is correct and complete; reproduces
-    the locked CENTER mean (1.504±0.022 nm) exactly.
-  - **Real bug found while reviewing the resulting plot:** R1/R2/R3 Rg data all stop at
-    500 ns (not the full 1000 ns each replica ran) — `scripts/analysis/blg_rg.py`'s
-    `TRAJS` dict never reads the extension trajectories that exist on disk
-    (`md_replica{1,2,3}_*.part00*.xtc`). Confirmed with the user: "amd" in R1's filenames
-    is the compute hardware (AMD GPU), NOT Accelerated MD — so this is a plain, fixable
-    completeness gap for all 3 replicas, not a methods issue. Full writeup + fix plan in
-    [[project-paper1-expansion]] session 17. Caveat comment added directly in
-    `combined_fig2_dynamics.py` above the Rg panel; **do not treat the R1/R2/R3 Rg means
-    already locked in this repo's history as final 1000 ns numbers** until this is fixed.
-  - By user's explicit choice, stopped at the Rg panel today — RMSD/RMSF panels and the
-    CAS pending placeholders are still `# TODO` in the script, deliberately deferred.
-**Next action:** Quick check first (mechanical, ~30 sec) —
-```bash
-ls -lh ~/Workspace/MILK_FROTHING/outputs_CAS/R1/MD1000/traj_comp.xtc   # ~7.46GB if done
-tail -c 500 /tmp/r1_casein_xtc_sync.log   # was 58% (4.3/7.46GB) at this session's close
-```
-Then the substantive next task: fix `scripts/analysis/blg_rg.py`'s `TRAJS` entries for
-R1/R2/R3 to concatenate the extension `.xtc` files (`gmx trjcat` or MDAnalysis
-multi-file `Universe`) alongside the base file, delete the stale
-`blg_rg_{R1,R2,R3}.npz`, rerun, and check `blg_rmsd.py`/the RMSF precompute script for
-the identical gap before trusting any of their R1/R2/R3 numbers. Full command detail in
-[[project-paper1-expansion]] session 17.
+**Closed:** 2026-09-25, Mac Mini (status-check-only close — no work happened between the
+last real session on 2026-09-12 and today; same "external event, not a work session"
+pattern as the 2026-09-09/session-15 gap)
+**Done (2026-09-11/12, session 19 — the last real work):**
+  - Ran the full 7-script CASEIN analysis pipeline with `--label R1` (density, DSSP,
+    surface tension, contact, N-term SASA, Rg, hbonds) — CASEIN now has n=2 for every
+    headline metric, not just CENTER. Numbers agree closely across replicas (e.g. N-term
+    SASA 24.77±1.40 vs. 25.41±1.97 nm²), reinforcing the "open chain" claim with real
+    replication for the first time.
+  - Built a full P.P. progress update in 4 files: `for_PP_2026-09-11.{tex,pdf,docx}` (full,
+    English+Thai) and `update_progress_2026-09-11.{tex,pdf,docx}` (short, BLG+CASEIN
+    results only, per user's request) — 8 figures total (VMD renders, 3 comparative bar
+    charts, 4 time-series trend plots), 2 tables.
+  - **Teaching-scope change, user's own words, not inferred:** for `scripts/figures/*.py`
+    (matplotlib) specifically, Claude now writes the code directly and explains the
+    resulting science, instead of the Role 4 "teach, don't write" pattern — user's stated
+    priority is understanding the science/computational chemistry, not matplotlib skill.
+    `scripts/analysis/*.py` and VMD/`*.tcl` are **unchanged**, still actively taught. Full
+    quote and reasoning in [[feedback-teaching-coding]] "CORRECTION 2026-09-11."
+  - **Real bug found and fixed while building the contact time-series figure:**
+    `dmin_nm`/`min_dist` (both `cas_contact.py` and `blg_gate_analysis.py`, identical
+    formula) is a *signed* gap to the water region's percentile edge, not a plain
+    distance — negative means the protein already protrudes past the interface. First
+    figure draft used a positive-only y-axis, making CASEIN's trace (mean ≈ −0.6 nm)
+    appear to vanish. Fixed; the corrected figure is a stronger result than intended
+    (BLG mostly positive with brief dips = its 613 events; CASEIN persistently negative
+    throughout).
+  - Two fresh `/fable-review` checkpoints run, both partially confirmed real issues (a
+    confusing table-label design, a stale day-count in `PP_FEEDBACK_LOG.md`) — full
+    writeup with the false-alarm nuance in [[project-paper1-expansion]] session 19.
+  - **Still not done from session 19:** trim the closing CASEIN paragraph in
+    `update_progress_2026-09-11.tex` (now redundant with Figures 5/8's captions down to
+    just the hbonds sentence) — agreed with user, never applied, session ended first.
+**Resolved this close:** IFSC2026 — asked the user directly. **Did not participate this
+cycle**, deadline passed with no abstract submitted. Logged as `R9` (resolved) in
+`docs/PP_FEEDBACK_LOG.md`; removed from the open-items count and from
+`CLAUDE.md`'s "Other Deadlines" section below. Don't resurrect this as a live item —
+a future conference opportunity is a new item, not a revival.
+**Next action:** trim `update_progress_2026-09-11.tex`'s closing CASEIN paragraph
+(redundant with Figures 5/8's captions — session 19, agreed with user, never applied),
+then fix `blg_rg.py`/`blg_surface_tension.py`'s R1/R2/R3 500ns TRAJS gap.
 **Pending:**
-  1. Fix `blg_rg.py`'s R1/R2/R3 trajectory gap (see Next action) — affects locked numbers,
-     do before building more Fig 2 panels on top of it
-  2. Resume `combined_fig2_dynamics.py`: RMSD panel, RMSF panel, CAS pending placeholders
-     (Role 4 teaching continues — guide, don't write it for him)
-  3. Finish + analyze R1 CASEIN sync (see Next action)
-  4. SASA-normalization decision (per-residue or relative-SASA) before it's the paper's
-     headline comparative metric — needs a real methodology choice, not a silent default
-  5. No extended-chain SASA reference exists yet to anchor the "open chain" claim — needs writing
-  6. Build Fig 4's comparison table — now unblocked on the CAS side once R1 analysis lands
-**Open questions for P.P.:** tracked canonically in `docs/PP_FEEDBACK_LOG.md` (6 open items)
-— check that file directly, don't rely on this summary. Highest-priority: (1) IFSC2026 — is
-this happening at all, **16 days to the Sept 25 abstract deadline** as of today, no confirmed
-reply from her on poster framing; (2) secondary-SASA definition; (3) which lab experiments to
-correlate against; (4) how prescriptive the "modify to adsorb" claim should be.
-**Git at close:** committed this session's real work product —
-`docs/tutorial_combined_fig2_dynamics.{tex,pdf}` and `scripts/figures/combined_fig2_dynamics.py`
-(WIP, has TODOs + the data-gap caveat comment, intentionally not hidden). Deliberately
-**not** committed: `results/figures/paper/PAPER_FIG2_DYNAMICS.png` — only 1 of 6 panels
-populated, not presentable yet, will regenerate once RMSD/RMSF land. Everything else
-unchanged from 2026-09-04's close (`f952027`) — cover_letter.tex/pdf intentionally
-uncommitted, old `drive-download-*`/`SEP_monoanion_wrong`/`acs-main_v1_langmuir.bib`/
-`blg_fig_rg.py` debris, render intermediates, `session_report_*.pdf` personal logs.
+  1. Trim `update_progress_2026-09-11.tex`'s closing paragraph (session 19, unfinished)
+  2. Fix `blg_rg.py`/`blg_surface_tension.py`'s R1/R2/R3 500ns TRAJS gap (still the only
+     two scripts affected — RMSD/calyx SASA already fixed, confirmed session 19)
+  3. Resume `combined_fig2_dynamics.py`: RMSD panel, RMSF panel, CAS pending placeholders
+  4. SASA-normalization decision (per-residue or relative-SASA) — needs a real
+     methodology choice, not a silent default
+  5. No extended-chain SASA reference exists yet to anchor the "open chain" claim
+**Open questions for P.P.:** tracked canonically in `docs/PP_FEEDBACK_LOG.md` (5 open
+items, IFSC2026 now resolved) — check that file directly. Highest-priority: (1)
+secondary-SASA definition; (2) which lab experiments to correlate against; (3) how
+prescriptive the "modify to adsorb" claim should be.
+**Git at close:** ~15 real files from session 19, committed and pushed this close (see
+commit for the exact list). Pre-existing debris untouched as always: `cover_letter.tex/pdf`
+(intentional), `drive-download-*`/`SEP_monoanion_wrong`/`acs-main_v1_langmuir.bib`/
+`blg_fig_rg.py` (homework, do not touch), render intermediates, `session_report_*.pdf`
+personal logs, `Screenshot *.png` (personal).
 
 ---
 
@@ -345,10 +347,9 @@ State: `review-stage/REVIEW_STATE.json`
 
 ## ⚠ Other Deadlines (not JCIS, easy to lose track of)
 
-- [ ] **IFSC2026 conference abstract — Sept 25, 2026** (verify this date is still live before
-  relying on it, last checked 2026-07-15 at sci.ku.ac.th/ifsc2026/#registration). Poster
-  60×110cm portrait, conference Nov 12–13. See `docs/PP_FEEDBACK_LOG.md` item 1 for full
-  context — this is exactly the kind of item that log exists to keep visible.
+- **IFSC2026 — resolved 2026-09-25: did not participate this cycle.** No longer a live
+  deadline; see `docs/PP_FEEDBACK_LOG.md` R9 for the full record if this ever needs
+  revisiting. A future conference opportunity is a new item, not a revival of this one.
 
 ---
 

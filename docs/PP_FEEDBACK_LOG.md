@@ -16,54 +16,7 @@
 
 ## 🔴 OPEN — needs action or a decision now
 
-### 1. IFSC2026 abstract deadline — TIME-SENSITIVE, re-verify immediately
-**Date raised:** 2026-07-15 (P.P. relayed via LINE) · **Status:** 🔴 OPEN, urgent
-P.P. relayed that the faculty wants DPST students to present at **IFSC2026** (17th
-International Fundamental Science Congress, Nov 12–13 2026, KU Faculty of Science) and
-asked whether the work would be ready and "enough for a poster." Key dates verified
-against https://www.sci.ku.ac.th/ifsc2026/#registration **on 2026-07-15** (now ~7 weeks
-stale, **re-verify the page before relying on this date**):
-- Abstract deadline: **Sept 25, 2026** — as of this log entry (Sept 4), **21 days away**
-- Notification: Oct 9 · Early-bird registration: Oct 12 · Conference: Nov 12–13
-- Poster size: 60cm(W) × 110cm(H) portrait
-
-**Assessment given at the time:** BLG alone (4µs MD, disproven gate mechanism, backed by
-the July 9 lit review) was poster-ready as of July. CAS was mid-pipeline. 4-month runway
-gave real buffer even with CAS "in progress" on the poster.
-
-**Concrete recommendation already drafted** (`docs/PP_meeting_talking_points_2026-07-16.md`,
-Fable-reviewed prep notes for this exact meeting — found on a second, more thorough pass of
-this backfill, missed the first time): **lead BLG-only as the complete story, present CAS
-as an explicit "in progress" preview, submit the abstract, do NOT headline the comparative
-title ("An Accessible Calyx and an Open Chain") until CAS production data exists.** The
-poster degrades gracefully — BLG stands alone today, any CAS data by November is a bonus.
-That doc also owns 3 self-flagged weak points worth re-reading before any P.P. conversation:
-(1) surface tension "51.9 ± 38.5 mN/m matches literature" overstates precision — ±38.5 is
-the *instantaneous* SD, not SEM on the mean; report block-averaged SEM instead. (2) the null
-result was framed as "decoupled/positive," which a skeptic reads as overreach — soften to
-"no coupling detected within these limits." (3) R2 replica question — already resolved
-per R2 below, this doc just needed the position stated out loud in the room.
-
-**`progress-reports/PP_status_report_IFSC2026_2026-07-16.pdf` (formal version of the same
-July 16 report, checked during this backfill's third pass) closes with 5 explicit "Open
-Questions for P.P.":** (1) poster framing — BLG-only vs. BLG+CAS-in-progress, **still open**,
-(2) is "in progress" acceptable for CAS on a poster, **still open**, (3) R2 replica handling
-— **resolved**, see R2 below, (4) applied-claim scope — same question as item 4 below,
-**still open**, (5) which cluster for CAS production — **resolved 2026-09-04, see R7 below**
-(ku-cluster primary, ku-ai backup with a verified GROMACS-version compatibility precondition).
-
-**No record found anywhere (memory or docs) that P.P. actually answered questions 1/2/4
-above, or that the July 16 meeting produced a decision.** That means the core poster-framing
-question may still be genuinely unanswered from July straight through to today (Sept 4) —
-this is a bigger risk than the date alone: with 21 days left, confirm with P.P. directly
-whether IFSC2026 participation is happening at all before drafting anything, not just
-re-verify the deadline date.
-
-**Not yet done:** abstract draft, confirmation with P.P. that this is actually happening,
-poster content plan. **This was never added to CLAUDE.md's Submission Checklist — that's
-the gap this log exists to close.**
-
-### 2. "Secondary SASA" — exact definition unconfirmed
+### 1. "Secondary SASA" — exact definition unconfirmed
 **Date raised:** 2026-06-09 meeting · **Status:** 🔴 OPEN (raised again 2026-08-01, still open)
 Her raw meeting note said "secondary dasa" as a separate line item from the DSSP table
 row — meaning genuinely ambiguous. Candidate reading (Fable brief, 2026-08-04): SASA
@@ -73,7 +26,7 @@ computable (no completed adsorption event exists in either dataset to take a del
 **Action:** propose the absolute-per-SSE reading to her in one line, don't build it
 speculatively first.
 
-### 3. Which lab experiments to correlate against?
+### 2. Which lab experiments to correlate against?
 **Date raised:** 2026-06-09 meeting · **Status:** 🔴 OPEN
 Direction note: "correlation with lab experiment expected" — unclear whether she means
 COMFHA in-house wet-lab data or published experimental literature. Repo shows **zero
@@ -83,7 +36,7 @@ Ulaganathan2017a for BLG kinetics; Mackie1999 for CAS interfacial rheology; Atki
 for CAS N-terminal neutron reflectivity). **Action:** confirm this reading with her
 directly — repo silence isn't conclusive proof there's no in-house collaboration.
 
-### 4. How prescriptive should the "modify to adsorb" applied claim be?
+### 3. How prescriptive should the "modify to adsorb" applied claim be?
 **Date raised:** 2026-06-09 meeting · **Status:** 🔴 OPEN
 Her direction: paper should "suggest how to modify/improve milk protein adsorption."
 Tension: BLG/CAS data show the **pre-commitment** ensemble only — no completed adsorption
@@ -97,7 +50,7 @@ of Paper 1 and reframing as a testable Paper 4 (enhanced sampling) hypothesis in
 **Action:** confirm which level of prescription she actually wants — changes how much
 needs writing.
 
-### 5. Figure-plan sub-decisions (P.P.'s June 9 note, still unconfirmed)
+### 4. Figure-plan sub-decisions (P.P.'s June 9 note, still unconfirmed)
 **Date raised:** 2026-06-09 meeting · **Status:** 🔴 OPEN (low urgency — resolve before final figure build, not before analysis)
 - Fig 1B (box schematic): both proteins in one box, or separate boxes?
 - Fig 2 (RMSD/RMSF/Rg): BLG and CAS as separate subpanels, or overlaid?
@@ -112,7 +65,7 @@ needs writing.
   the calyx-clustering *residue definition* question above — this is which *metric*, that
   one is which *residues*.
 
-### 6. Co-author review of Paper 1 BLG-only draft — blocking submission
+### 5. Co-author review of Paper 1 BLG-only draft — blocking submission
 **Date raised:** ongoing since June · **Status:** 🔴 OPEN, hard blocker
 Even for the paused BLG-only `main.tex` (10/10 Gemini review, June 2): P.P.'s review of
 title + SET 1D removal + scope claim is still pending, and it's a listed hard blocker
@@ -122,6 +75,20 @@ expansion is in progress, but don't forget it exists.
 ---
 
 ## 🟢 RESOLVED — decisions locked, kept for the trail
+
+### R9. IFSC2026 — did not participate this cycle
+**Date raised:** 2026-07-15 (P.P. relayed via LINE) · **Resolved:** 2026-09-25 (confirmed
+directly with the user at end-session, deadline day itself). **Outcome: did not make the
+Sept 25, 2026 abstract deadline / not participating in IFSC2026 this cycle.** No abstract
+was drafted or submitted; no record either way of whether P.P. ever formally confirmed
+participation before the window closed. The extensive prep work done in July (talking
+points, status report, poster-framing recommendation) was never acted on. **Applied going
+forward:** don't carry this deadline in any live checklist anymore; if a future
+conference/poster opportunity comes up, treat it as a new item, not a revival of this one
+— and this time, confirm participation with P.P. explicitly and early, rather than
+assuming the extended runway (this item sat "assessed as fine, 4-month buffer" from July
+straight through to the deadline with no one ever closing the loop on the actual go/no-go
+decision — that's the mistake to not repeat).
 
 ### R1. Report both BLG and CASEIN (not BLG-only)
 **Date:** 2026-06-09 meeting · **Resolution:** Reporting only BLG is insufficient — both
@@ -164,6 +131,14 @@ different major version. Same failure mode already hit once in this project (rep
 were ever used directly. **Rule going forward if ku-ai is actually invoked:** always
 `grompp` locally (2020.4) and only run `mdrun` on ku-ai (forward-compatible); never `grompp`
 on ku-ai itself. See [[feedback-mac-technical]] item 17 for the full verification.
+
+### R8. Prefer graphs/figures over tables when presenting results
+**Date:** 2026-09-12 · **Resolved, standing practice.** P.P. explicitly requested seeing
+results as graphs rather than tables of numbers. Applies to all future progress updates
+and analysis reporting — default to a figure/chart first, use a table only as backup
+detail (not the primary presentation). Related to item 5's Fig 4 (DSSP: table or
+heatmap?) sub-decision, but broader in scope — this is a general reporting preference,
+not one figure's format choice.
 
 ### R6. SET 1D mention in the abstract — co-author decision (found in `review-stage/AUTO_REVIEW_R4_critique.md`)
 **Date raised:** pre-August (NatComms review round R4) · **Resolved by 2026-06-12

@@ -38,12 +38,18 @@ GMX = str(Path.home() / "opt/gromacs-2020.4/bin/gmx")
 OUT = ROOT / "results" / "analysis"
 OUT.mkdir(parents=True, exist_ok=True)
 
-# .edr files — one per replica (covers the full production run segment)
+# .edr files per replica — R1/R2/R3 concatenate the base segment with the
+# AMD-hardware/extension continuation parts (same gap blg_rg.py had; those
+# .xtc extensions were already being read, but the matching .edr extensions
+# were never synced locally until now).
 EDRS = {
-    "CENTER": ROOT / "outputs_BLG/CENTER/MD1000/ener.edr",
-    "R1":     ROOT / "outputs_BLG/REPLICA/MD/MD1/ener.edr",
-    "R2":     ROOT / "outputs_BLG/REPLICA/MD/MD2/ener.edr",
-    "R3":     ROOT / "outputs_BLG/REPLICA/MD/MD3/ener.edr",
+    "CENTER": [ROOT / "outputs_BLG/CENTER/MD1000/ener.edr"],
+    "R1":     [ROOT / "outputs_BLG/REPLICA/MD/MD1/ener.edr"] +
+              sorted((ROOT / "outputs_BLG/REPLICA/MD/MD1").glob("md_replica1_amd.part00*.edr")),
+    "R2":     [ROOT / "outputs_BLG/REPLICA/MD/MD2/ener.edr",
+               ROOT / "outputs_BLG/REPLICA/MD/MD2/md_replica2_ext.part0002.edr"],
+    "R3":     [ROOT / "outputs_BLG/REPLICA/MD/MD3/ener.edr",
+               ROOT / "outputs_BLG/REPLICA/MD/MD3/md_replica3_ext.part0002.edr"],
 }
 
 # .tpr files — used to read the (constant) box Z dimension.
@@ -88,8 +94,30 @@ def get_box_z(tpr_path):
     raise ValueError(f"Could not find box[2] in gmx dump of {tpr_path}")
 
 
-def extract_pressure(edr_path, out_xvg, tmpdir):
+def concat_edr(edr_list, tmpdir):
+    """gmx energy's -f only accepts one file, same restriction gmx gyrate has
+    for .xtc (see blg_rg.py). Use gmx eneconv first to merge continuation
+    segments into one .edr; eneconv sorts by timestamp and drops the
+    duplicate checkpoint-restart frame by default — tested directly: R2's
+    two segments concatenate to 10001 frames reaching 1000 ns, no duplicate
+    at the 500 ns boundary."""
+    if len(edr_list) == 1:
+        return edr_list[0]
+    out_edr = Path(tmpdir) / "concat.edr"
+    cmd = [GMX, "eneconv", "-f", *[str(e) for e in edr_list], "-o", str(out_edr), "-nobackup"]
+    result = subprocess.run(cmd, capture_output=True, text=True, cwd=tmpdir)
+    if result.returncode != 0:
+        print(f"  [ERROR] gmx eneconv failed")
+        print(result.stderr[-2000:])
+        return None
+    return out_edr
+
+
+def extract_pressure(edr_list, out_xvg, tmpdir):
     """Run gmx energy to extract pressure tensor components and box Z."""
+    edr_path = concat_edr(edr_list, tmpdir)
+    if edr_path is None:
+        return None
     # gmx energy takes selection via stdin (one per line, then 0 to finish)
     selection = "\n".join(QUANTITIES) + "\n0\n"
     cmd = [
@@ -113,10 +141,10 @@ def extract_pressure(edr_path, out_xvg, tmpdir):
 
 
 def analyse_label(label):
-    edr = EDRS[label]
+    edr_list = [p for p in EDRS[label] if p.exists()]
     tpr = TPRS[label]
-    if not edr.exists():
-        print(f"[SKIP] {label}: edr not found at {edr}")
+    if not edr_list:
+        print(f"[SKIP] {label}: no edr files found")
         return
     if not tpr.exists():
         print(f"[SKIP] {label}: tpr not found at {tpr}")
@@ -127,13 +155,13 @@ def analyse_label(label):
         print(f"[CACHED] {label}: {out_npz.name} — skipping")
         return
 
-    print(f"\n=== {label} ===")
+    print(f"\n=== {label} === ({len(edr_list)} edr segment(s): {[p.name for p in edr_list]})")
     lz_nm = get_box_z(tpr)
     print(f"  Box Lz = {lz_nm:.3f} nm (constant, NVT)")
 
     with tempfile.TemporaryDirectory() as tmpdir:
         xvg_path = Path(tmpdir) / f"{label}_pressure.xvg"
-        result = extract_pressure(edr, xvg_path, tmpdir)
+        result = extract_pressure(edr_list, xvg_path, tmpdir)
         if result is None:
             return
         time_ps, vals = result

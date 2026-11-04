@@ -39,11 +39,41 @@ ax.set_xlabel("Time (ns)")
 ax.set_ylabel("Rg (nm)")
 ax.legend(loc="upper right", ncol=2)
 ax.set_title("BLG Rg", fontsize=9)
-# ===== TODO: RMSD panel (axes[0, 0]) =====
+# ===== RMSD panel (axes[0, 0]) =====
+# Solid = whole-backbone, dashed = calyx patch. Per-replica traces, NOT averaged:
+# R1's patch RMSD steps up permanently after its longest contact event
+# (362-419.5 ns), a real rearrangement that a mean would hide.
+ax = axes[0, 0]
+for run in SPECIES["BLG"]["replicas"]:
+    d = load_analysis("BLG", "rmsd", run)
+    ax.plot(d["time_ns"], d["rmsd_backbone"], color=run_color(run),
+            lw=0.8, alpha=0.85, label=run_label("BLG", run))
+    ax.plot(d["time_ns"], d["rmsd_patch"], color=run_color(run),
+            lw=0.8, alpha=0.85, ls="--")
+ax.plot([], [], color="k", lw=0.8, label="backbone")
+ax.plot([], [], color="k", lw=0.8, ls="--", label="calyx patch")
+ax.set_xlabel("Time (ns)")
+ax.set_ylabel("RMSD (nm)")
+ax.legend(loc="upper left", ncol=3, fontsize=6)
+ax.set_title("BLG RMSD (solid: backbone, dashed: calyx patch)", fontsize=9)
 
-# ===== TODO: RMSF panel (axes[1, 0]) =====
+# ===== RMSF panel (axes[1, 0]) =====
+# Per-residue Calpha RMSF caches live in results/gate_analysis/rmsf_<label>.*.npy
+ax = axes[1, 0]
+for run in SPECIES["BLG"]["replicas"]:
+    tag = run.lower()
+    resids = np.load(ROOT / "results" / "gate_analysis" / f"rmsf_{tag}.resids.npy")
+    rmsf = np.load(ROOT / "results" / "gate_analysis" / f"rmsf_{tag}.rmsf.npy")
+    ax.plot(resids, rmsf, color=run_color(run), lw=0.8, alpha=0.85,
+            label=run_label("BLG", run))
+ax.set_xlabel("Residue")
+ax.set_ylabel("RMSF (nm)")
+ax.legend(loc="upper right", ncol=2)
+ax.set_title("BLG RMSF", fontsize=9)
 
-# ===== TODO: CAS pending panels (axes[0,1], axes[1,1], axes[2,1]) =====
+# ===== CAS pending panels (axes[0,1], axes[1,1], axes[2,1]) =====
+for r in range(3):
+    pending_panel(axes[r, 1], "CAS")
 
 fig.tight_layout()
 out = ROOT / "results" / "figures" / "paper" / "PAPER_FIG2_DYNAMICS.png"

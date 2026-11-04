@@ -77,7 +77,12 @@ def analyse_label(label):
          if len(xtc_list) == 1
          else mda.Universe(str(tpr), *[str(p) for p in xtc_list]))
 
+    # 2026-11-04 FIX: MDAnalysis "protein" omits resname SP2 (phosphoserines 15,17,18,19,35),
+    # and DSSP silently drops them (204 columns, not 209) even if SP2 is selected by name.
+    # Backbone geometry is what DSSP uses, so relabel SP2 -> SER in memory only.
+    u.select_atoms("resname SP2").residues.resnames = "SER"
     protein = u.select_atoms("protein")
+    assert protein.n_residues == 209, f"expected 209 residues, got {protein.n_residues}"
     n_res = protein.n_residues
     print(f"  Frames: {u.trajectory.n_frames}  Residues: {n_res}  Stride: {STRIDE}")
 

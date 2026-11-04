@@ -75,7 +75,8 @@ def analyse_label(label):
          if len(xtc_list) == 1
          else mda.Universe(str(tpr), *[str(p) for p in xtc_list]))
 
-    protein = u.select_atoms("protein and not name H*")
+    protein = u.select_atoms("(protein or resname SP2) and not name H*")  # 2026-11-04: include 5 SP2 residues
+    assert protein.n_residues == 209, f"expected 209 residues, got {protein.n_residues}"
     water_o = u.select_atoms("resname SOL and (name OH2 OW O)")
     print(f"  Frames: {u.trajectory.n_frames}  Protein heavy atoms: {len(protein)}")
     print(f"  dt = {u.trajectory.dt:.1f} ps | total = {u.trajectory.totaltime/1000:.1f} ns")

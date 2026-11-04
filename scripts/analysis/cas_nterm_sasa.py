@@ -83,7 +83,13 @@ def analyse_label(label):
          if len(xtc_list) == 1
          else mda.Universe(str(tpr), *[str(p) for p in xtc_list]))
 
-    protein = u.select_atoms("protein")
+    # 2026-11-04 FIX: MDAnalysis "protein" omits resname SP2 (phosphoserines at
+    # 15,17,18,19,35 = 70 atoms; 4 of them inside residues 1-25). All earlier
+    # nterm SASA values (25.41/24.77 nm2) were computed without them. Include
+    # SP2 in BOTH the SASA group and the unwrap group, and assert the full
+    # 3363-atom protein (matches gmx's "Protein" group).
+    protein = u.select_atoms("protein or resname SP2")
+    assert len(protein.atoms) == 3363, f"expected 3363 protein atoms, got {len(protein.atoms)}"
     u.trajectory.add_transformations(mda_unwrap(protein))
 
     nterm_mask = np.array([a.resid in NTERM_RESIDS for a in protein.atoms])

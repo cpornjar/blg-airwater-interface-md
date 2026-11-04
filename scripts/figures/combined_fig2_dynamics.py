@@ -71,9 +71,44 @@ ax.set_ylabel("RMSF (nm)")
 ax.legend(loc="upper right", ncol=2)
 ax.set_title("BLG RMSF", fontsize=9)
 
-# ===== CAS pending panels (axes[0,1], axes[1,1], axes[2,1]) =====
-for r in range(3):
-    pending_panel(axes[r, 1], "CAS")
+# ===== CAS column (axes[:, 1]) =====
+# cas_rmsd.py: frame-0 self-referenced global Calpha fit, SP2 residues included.
+# CAS is intrinsically disordered, so RMSD/RMSF here measure chain mobility,
+# not fold stability -- axes are NOT shared with BLG on purpose.
+ax = axes[0, 1]
+for run in SPECIES["CAS"]["replicas"]:
+    d = load_analysis("CAS", "rmsd", run)
+    ax.plot(d["time_ns"], d["rmsd_backbone"], color=run_color(run), lw=0.8,
+            alpha=0.85, label=run_label("CAS", run))
+    ax.plot(d["time_ns"], d["rmsd_nterm"], color=run_color(run), lw=0.8,
+            alpha=0.85, ls="--")
+ax.plot([], [], color="k", lw=0.8, label="backbone")
+ax.plot([], [], color="k", lw=0.8, ls="--", label="N-term 1-25")
+ax.set_xlabel("Time (ns)")
+ax.set_ylabel("RMSD (nm)")
+ax.legend(loc="lower right", ncol=2, fontsize=6)
+ax.set_title("CAS RMSD (solid: backbone, dashed: N-term 1-25)", fontsize=9)
+
+ax = axes[1, 1]
+for run in SPECIES["CAS"]["replicas"]:
+    d = load_analysis("CAS", "rmsd", run)
+    ax.plot(d["resids"], d["rmsf"], color=run_color(run), lw=0.8, alpha=0.85,
+            label=run_label("CAS", run))
+ax.axvspan(1, 25, color="0.9", zorder=0)
+ax.set_xlabel("Residue")
+ax.set_ylabel("RMSF (nm)")
+ax.legend(loc="upper right")
+ax.set_title("CAS RMSF (shaded: N-term 1-25)", fontsize=9)
+
+ax = axes[2, 1]
+for run in SPECIES["CAS"]["replicas"]:
+    d = load_analysis("CAS", "rg", run)
+    ax.plot(d["time_ns"], d["rg_nm"], color=run_color(run), lw=0.8, alpha=0.85,
+            label=run_label("CAS", run))
+ax.set_xlabel("Time (ns)")
+ax.set_ylabel("Rg (nm)")
+ax.legend(loc="upper right")
+ax.set_title("CAS Rg", fontsize=9)
 
 fig.tight_layout()
 out = ROOT / "results" / "figures" / "paper" / "PAPER_FIG2_DYNAMICS.png"
